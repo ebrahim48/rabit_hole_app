@@ -1,0 +1,19 @@
+import 'dart:ui';
+
+import 'package:flutter/cupertino.dart';
+
+class AppColors{
+  static const Color bgColorWhite = Color(0xffF7F7F7);
+  static const Color bgColor = Color(0xff99DEFE);
+  static const Color splashColor = Color(0xffF7F2E9);
+  static const Color primaryColorC79235 = Color(0xffF9B039);
+  static const Color buttonColorE8A533 = Color(0xffE8A533);
+  static const Color secondary836531 = Color(0xff836531);
+  static const Color textColor000000 = Color(0xff000000);
+  static const Color textColor333333 = Color(0xff333333);
+  static const Color backgColor20272E = Color(0xff20272E);
+  static const Color textColor545454 = Color(0xff545454);
+
+
+
+}
