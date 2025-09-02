@@ -1,6 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
+import 'package:rabbit_hole_app/presentations/screens/auth/register_screen/register_screen.dart';
+import 'package:rabbit_hole_app/presentations/screens/auth/sign_in_screen/sign_in_screen.dart';
+import 'package:rabbit_hole_app/presentations/screens/bottom_navbar/bottom_navbar_screen.dart';
+import 'package:rabbit_hole_app/presentations/screens/home/home_screen.dart';
 
+import '../../../presentations/screens/auth/forget_screen/forget_screen.dart';
+import '../../../presentations/screens/auth/reset_screen/reset_screen.dart';
+import '../../../presentations/screens/auth/verify_screen/verify_screen.dart';
 import '../../../presentations/screens/splash/splash_screen.dart';
 
 
@@ -12,13 +19,15 @@ class AppRoutes {
 
   /// =============================> Auth ================================>
 
-  static const String signUpScreen = "/signUpScreen";
-  static const String logInScreen = "/logInScreen";
+  static const String registerScreen = "/registerScreen";
+  static const String signInScreen = "/signInScreen";
   static const String forgetPasswordScreen = "/forgetPasswordScreen";
   static const String verifyScreen = "/verifyScreen";
   static const String resetPasswordScreen = "/resetPasswordScreen";
   static const String termsServicesScreen = "/termsServicesScreen";
   static const String privacyPolicyScreen = "/privacyPolicyScreen";
+  static const String homeScreen = "/homeScreen";
+  static const String bottomNavbarScreen = "/bottomNavbarScreen";
 
   /// ============================> Home ================================>
 
@@ -81,48 +90,66 @@ class AppRoutes {
     // ),
     // /// =============================================================> Auth  =================================================>
     //
-    // ///<<<=============>>> Sign Up SCREEN <<<===============>>>
-    // GoRoute(
-    //   path: signUpScreen,
-    //   name: signUpScreen,
-    //   pageBuilder: (context, state) =>
-    //       _customTransitionPage( SignUpScreen(), state),
-    // ),
-    // ///<<<=============>>> Log In <<<===============>>>
-    // GoRoute(
-    //   path: logInScreen,
-    //   name: logInScreen,
-    //   pageBuilder: (context, state) =>
-    //       _customTransitionPage( LoginScreen(), state),
-    // ),
-    //
-    // ///<<<=============>>> Forget Password Screen  <<<===============>>>
-    // GoRoute(
-    //   path: forgetPasswordScreen,
-    //   name: forgetPasswordScreen,
-    //   pageBuilder: (context, state) =>
-    //       _customTransitionPage( ForgetPasswordScreen(), state),
-    // ),
-    //
-    //
-    // ///<<<=============>>> Verify Screen  <<<===============>>>
-    // GoRoute(
-    //   path: verifyScreen,
-    //   name: verifyScreen,
-    //   pageBuilder: (context, state) =>
-    //       _customTransitionPage( VerifyScreen(), state),
-    // ),
-    //
-    //
-    // ///<<<=============>>> Reset Password Screen  <<<===============>>>
-    // GoRoute(
-    //   path: resetPasswordScreen,
-    //   name: resetPasswordScreen,
-    //   pageBuilder: (context, state) =>
-    //       _customTransitionPage( ResetPasswordScreen(), state),
-    // ),
-    //
-    //
+    ///<<<=============>>> Sign Up SCREEN <<<===============>>>
+    GoRoute(
+      path: registerScreen,
+      name: registerScreen,
+      pageBuilder: (context, state) =>
+          _customTransitionPage(RegisterScreen(), state),
+    ),
+    ///<<<=============>>> Log In <<<===============>>>
+    GoRoute(
+      path: signInScreen,
+      name: signInScreen,
+      pageBuilder: (context, state) =>
+          _customTransitionPage(SignInScreen(), state),
+    ),
+
+    ///<<<=============>>> Forget Password Screen  <<<===============>>>
+    GoRoute(
+      path: forgetPasswordScreen,
+      name: forgetPasswordScreen,
+      pageBuilder: (context, state) =>
+          _customTransitionPage(ForgetPasswordScreen(), state),
+    ),
+
+
+    ///<<<=============>>> Verify Screen  <<<===============>>>
+    GoRoute(
+      path: verifyScreen,
+      name: verifyScreen,
+      pageBuilder: (context, state) =>
+          _customTransitionPage(VerifyScreen(), state),
+    ),
+
+
+    ///<<<=============>>> Reset Password Screen  <<<===============>>>
+    GoRoute(
+      path: resetPasswordScreen,
+      name: resetPasswordScreen,
+      pageBuilder: (context, state) =>
+          _customTransitionPage(ResetPasswordScreen(), state),
+    ),
+
+    ///<<<=============>>> Home Screen  <<<===============>>>
+    GoRoute(
+      path: homeScreen,
+      name: homeScreen,
+      pageBuilder: (context, state) =>
+          _customTransitionPage(HomeScreen(), state),
+    ),
+
+
+    ///<<<=============>>> Bottom Navbar  Screen  <<<===============>>>
+    GoRoute(
+      path: bottomNavbarScreen,
+      name: bottomNavbarScreen,
+      pageBuilder: (context, state) =>
+          _customTransitionPage(BottomNavBar(), state),
+    ),
+
+
+
     // ///<<<=============>>> Terms Services Screen  <<<===============>>>
     // GoRoute(
     //   path: termsServicesScreen,

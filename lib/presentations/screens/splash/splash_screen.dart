@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:rabbit_hole_app/core/config/app_routes/app_routes.dart';
 import 'package:rabbit_hole_app/core/constants/app_colors.dart';
 import 'package:rabbit_hole_app/presentations/widgets/custom_text.dart';
 import '../../../global/custom_assets/assets.gen.dart';
@@ -55,7 +57,9 @@ class SplashScreen extends StatelessWidget {
                   width: 210.w,
                   height: 52.h,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      context.pushNamed(AppRoutes.registerScreen);
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primaryColorC79235,
                       shape: RoundedRectangleBorder(

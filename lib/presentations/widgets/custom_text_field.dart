@@ -141,10 +141,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
             prefixIconConstraints: BoxConstraints(minHeight: 24.w, minWidth: 24.w),
             hintText: widget.hintText,
             hintStyle: TextStyle(color: widget.hintextColor ?? AppColors.textColor545454, fontSize: widget.hintextSize ?? 14.h,fontWeight: FontWeight.w400,fontFamily: FontFamily.sparklink ),
-            focusedBorder: focusedBorder(),
-            enabledBorder: enabledBorder(),
-            errorBorder: errorBorder(),
-            border: focusedBorder(),
+            // focusedBorder: focusedBorder(),
+            // enabledBorder: enabledBorder(),
+            // errorBorder: errorBorder(),
+            // border: focusedBorder(),
             errorStyle: TextStyle(fontSize: 12.h, fontWeight: FontWeight.w400)
                   ),
 
@@ -158,30 +158,30 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return Padding(padding: const EdgeInsets.all(12.0), child: Icon(icon,color:AppColors.textColor000000));
   }
 
-  OutlineInputBorder focusedBorder() {
-    return OutlineInputBorder(
-      borderRadius: BorderRadius.circular( widget.borderRadio?.r ?? 20.r),
-      borderSide:BorderSide(
-          color: widget.borderColor ??AppColors.textColor545454
-      ),
-    );
-  }
+  // OutlineInputBorder focusedBorder() {
+  //   return OutlineInputBorder(
+  //     borderRadius: BorderRadius.circular( widget.borderRadio?.r ?? 12.r),
+  //     borderSide:BorderSide(
+  //         color: widget.borderColor ??AppColors.textColor545454
+  //     ),
+  //   );
+  // }
+  //
+  // OutlineInputBorder enabledBorder() {
+  //   return OutlineInputBorder(
+  //     borderRadius: BorderRadius.circular(widget.borderRadio?.r ?? 12.r),
+  //     borderSide:BorderSide(
+  //         color: widget.borderColor ?? AppColors.textColor545454
+  //     ),
+  //   );
+  // }
 
-  OutlineInputBorder enabledBorder() {
-    return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(widget.borderRadio?.r ?? 20.r),
-      borderSide:BorderSide(
-          color: widget.borderColor ?? AppColors.textColor545454
-      ),
-    );
-  }
-
-  OutlineInputBorder errorBorder() {
-    return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(widget.borderRadio?.r ?? 20.r),
-      borderSide: const BorderSide(
-          color: Colors.red,width: 0.5
-      ),
-    );
-  }
+  // OutlineInputBorder errorBorder() {
+  //   return OutlineInputBorder(
+  //     borderRadius: BorderRadius.circular(widget.borderRadio?.r ?? 12.r),
+  //     borderSide: const BorderSide(
+  //         color: Colors.red,width: 0.5
+  //     ),
+  //   );
+  // }
 }

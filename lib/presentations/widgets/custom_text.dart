@@ -20,6 +20,7 @@ class CustomText extends StatelessWidget {
         this.fontsize,
         this.textHeight,
         this.fontWeight = FontWeight.w400,
+        this.textDecoration,
         this.color,
         this.text = ""});
 
@@ -36,6 +37,7 @@ class CustomText extends StatelessWidget {
   final int? maxline;
   final String? fontName;
   final double? textHeight;
+  final TextDecoration? textDecoration;
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +50,7 @@ class CustomText extends StatelessWidget {
         maxLines: maxline,
         overflow: textOverflow??TextOverflow.ellipsis,
         style: TextStyle(
+            decoration: textDecoration ?? TextDecoration.none,
             fontSize: fontsize ?? 14.sp,
             fontFamily: fontName?? "Sparklink",
             fontWeight:fontWeight == null ? FontWeight.w400 : fontWeight ,
