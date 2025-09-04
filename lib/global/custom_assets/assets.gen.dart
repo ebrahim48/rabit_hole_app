@@ -18,8 +18,15 @@ import 'package:vector_graphics/vector_graphics.dart' as _vg;
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/achievements.svg
+  SvgGenImage get achievements =>
+      const SvgGenImage('assets/icons/achievements.svg');
+
   /// File path: assets/icons/bigpacks.svg
   SvgGenImage get bigpacks => const SvgGenImage('assets/icons/bigpacks.svg');
+
+  /// File path: assets/icons/camera.svg
+  SvgGenImage get camera => const SvgGenImage('assets/icons/camera.svg');
 
   /// File path: assets/icons/carrotPacks.svg
   SvgGenImage get carrotPacks =>
@@ -28,14 +35,27 @@ class $AssetsIconsGen {
   /// File path: assets/icons/email.svg
   SvgGenImage get email => const SvgGenImage('assets/icons/email.svg');
 
+  /// File path: assets/icons/firstfall.svg
+  SvgGenImage get firstfall => const SvgGenImage('assets/icons/firstfall.svg');
+
+  /// File path: assets/icons/gameplay.svg
+  SvgGenImage get gameplay => const SvgGenImage('assets/icons/gameplay.svg');
+
   /// File path: assets/icons/gmail.svg
   SvgGenImage get gmail => const SvgGenImage('assets/icons/gmail.svg');
 
   /// File path: assets/icons/google.svg
   SvgGenImage get google => const SvgGenImage('assets/icons/google.svg');
 
+  /// File path: assets/icons/highscores.svg
+  SvgGenImage get highscores =>
+      const SvgGenImage('assets/icons/highscores.svg');
+
   /// File path: assets/icons/home.svg
   SvgGenImage get home => const SvgGenImage('assets/icons/home.svg');
+
+  /// File path: assets/icons/logout.svg
+  SvgGenImage get logout => const SvgGenImage('assets/icons/logout.svg');
 
   /// File path: assets/icons/nameProfile.svg
   SvgGenImage get nameProfile =>
@@ -46,6 +66,13 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/powerups.svg
   SvgGenImage get powerups => const SvgGenImage('assets/icons/powerups.svg');
+
+  /// File path: assets/icons/profileedit.svg
+  SvgGenImage get profileedit =>
+      const SvgGenImage('assets/icons/profileedit.svg');
+
+  /// File path: assets/icons/rabbit.svg
+  SvgGenImage get rabbit => const SvgGenImage('assets/icons/rabbit.svg');
 
   /// File path: assets/icons/rabbitSkin.svg
   SvgGenImage get rabbitSkin =>
@@ -60,32 +87,49 @@ class $AssetsIconsGen {
   /// File path: assets/icons/settings.svg
   SvgGenImage get settings => const SvgGenImage('assets/icons/settings.svg');
 
+  /// File path: assets/icons/shield.svg
+  SvgGenImage get shield => const SvgGenImage('assets/icons/shield.svg');
+
   /// File path: assets/icons/shop.svg
   SvgGenImage get shop => const SvgGenImage('assets/icons/shop.svg');
 
   /// File path: assets/icons/start.svg
   SvgGenImage get start => const SvgGenImage('assets/icons/start.svg');
 
+  /// File path: assets/icons/statistics.svg
+  SvgGenImage get statistics =>
+      const SvgGenImage('assets/icons/statistics.svg');
+
   /// File path: assets/icons/win.svg
   SvgGenImage get win => const SvgGenImage('assets/icons/win.svg');
 
   /// List of all assets
   List<SvgGenImage> get values => [
+    achievements,
     bigpacks,
+    camera,
     carrotPacks,
     email,
+    firstfall,
+    gameplay,
     gmail,
     google,
+    highscores,
     home,
+    logout,
     nameProfile,
     pass,
     powerups,
+    profileedit,
+    rabbit,
     rabbitSkin,
     scoreicon,
     scores,
     settings,
+    shield,
     shop,
     start,
+    statistics,
     win,
   ];
 }

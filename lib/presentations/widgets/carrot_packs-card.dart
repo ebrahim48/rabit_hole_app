@@ -37,52 +37,50 @@ class CarrotPacksCard extends StatelessWidget {
           ],
         ),
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 16.h),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              /// 🥕 Carrot icon
-              Assets.icons.bigpacks.svg(),
-              SizedBox(height: 7.h),
-          
-              /// 📦 Title & subtitle
-              Column(
-                children: [
-                  CustomText(
-                    text: title,
-                    color: AppColors.textColor000000,
-                    fontsize: 16.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  SizedBox(height: 7.h),
-                  CustomText(
-                    text: subtitle,
-                    color: AppColors.textColor545454,
-                    fontsize: 14.sp,
-                    fontWeight: FontWeight.w400,
-                  ),
-                  SizedBox(height: 2.h),
-                ],
-              ),
-          
-              /// 💰 Price button
-              Container(
-                width: 133.w,
-                height: 35.h,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: AppColors.textColorFFD93B,
-                  borderRadius: BorderRadius.circular(4.r),
-                ),
-                child: CustomText(
-                  text: price,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ///  Carrot icon
+            Assets.icons.bigpacks.svg(),
+            SizedBox(height: 7.h),
+
+            ///  Title & subtitle
+            Column(
+              children: [
+                CustomText(
+                  text: title,
                   color: AppColors.textColor000000,
-                  fontsize: 14.sp,
-                  fontWeight: FontWeight.w600,
+                  fontsize: 16.sp,
+                  fontWeight: FontWeight.w500,
                 ),
+                SizedBox(height: 7.h),
+                CustomText(
+                  text: subtitle,
+                  color: AppColors.textColor545454,
+                  fontsize: 14.sp,
+                  fontWeight: FontWeight.w400,
+                ),
+                SizedBox(height: 2.h),
+              ],
+            ),
+
+            ///  Price button
+            Container(
+              width: 133.w,
+              height: 35.h,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: AppColors.textColorFFD93B,
+                borderRadius: BorderRadius.circular(4.r),
               ),
-            ],
-          ),
+              child: CustomText(
+                text: price,
+                color: AppColors.textColor000000,
+                fontsize: 14.sp,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
         ),
       ),
     );

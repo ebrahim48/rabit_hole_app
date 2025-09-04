@@ -5,6 +5,8 @@ import '../../../core/constants/app_colors.dart';
 import '../../../global/custom_assets/assets.gen.dart';
 import '../../widgets/carrot_packs-card.dart';
 import '../../widgets/custom_text.dart';
+import '../../widgets/power_ups_card.dart';
+import '../../widgets/rabbit_skin_card.dart';
 
 
 class ShopScreen extends StatelessWidget {
@@ -53,13 +55,12 @@ class ShopScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(height: 20.h),
+            /// Carrot Packs Section
             Row(
               children: [
                 Padding(
@@ -75,17 +76,16 @@ class ShopScreen extends StatelessWidget {
               ],
             ),
             SizedBox(height: 16.h),
-
-            /// ========================> Carrot Packs Grid =============================>
-            Expanded(
+            SizedBox(
+              height: 180.h,
               child: AnimationLimiter(
                 child: GridView.builder(
-                  itemCount: 4,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 10,
                   padding: EdgeInsets.symmetric(vertical: 1.h),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 16.w,
-                    mainAxisSpacing: 10.h,
+                    crossAxisCount: 1,
+                    mainAxisSpacing: 16.w,
                     childAspectRatio: 162 / 162,
                   ),
                   itemBuilder: (context, index) {
@@ -98,7 +98,10 @@ class ShopScreen extends StatelessWidget {
                 ),
               ),
             ),
+
             SizedBox(height: 36.h),
+
+            /// Rabbit Skin Section
             Row(
               children: [
                 Padding(
@@ -114,29 +117,32 @@ class ShopScreen extends StatelessWidget {
               ],
             ),
             SizedBox(height: 16.h),
-            /// ========================> Rabbit Skin Grid =============================>
-            Expanded(
+            SizedBox(
+              height: 180.h,
               child: AnimationLimiter(
                 child: GridView.builder(
-                  itemCount: 6,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 10,
                   padding: EdgeInsets.symmetric(vertical: 1.h),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 16.w,
-                    mainAxisSpacing: 10.h,
+                    crossAxisCount: 1,
+                    mainAxisSpacing: 16.w,
                     childAspectRatio: 162 / 162,
                   ),
                   itemBuilder: (context, index) {
-                    return const CarrotPacksCard(
-                      title: "Carrot Packs",
-                      subtitle: "25 Carrots",
-                      price: "\$0.99",
+                    return const RabbitSkinCard(
+                      title: "Black Rabbit",
+                      subtitle: "Mysterious look",
+                      price: "250",
                     );
                   },
                 ),
               ),
             ),
+
             SizedBox(height: 36.h),
+
+            /// Power-Ups Section
             Row(
               children: [
                 Padding(
@@ -152,35 +158,31 @@ class ShopScreen extends StatelessWidget {
               ],
             ),
             SizedBox(height: 16.h),
-            Expanded(
-              child: AnimationLimiter(
-                child: GridView.builder(
-                  itemCount: 6,
-                  padding: EdgeInsets.symmetric(vertical: 1.h),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 16.w,
-                    mainAxisSpacing: 10.h,
-                    childAspectRatio: 162 / 162,
-                  ),
-                  itemBuilder: (context, index) {
-                    return const CarrotPacksCard(
-                      title: "Carrot Packs",
-                      subtitle: "25 Carrots",
-                      price: "\$0.99",
-                    );
-                  },
-                ),
-              ),
+            ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: 6,
+              separatorBuilder:
+                  (context, index) =>
+                  SizedBox(height: 12.h),
+              itemBuilder: (context, index) {
+                return PowerUpsListCard(
+                  icon: Assets.icons.shield.svg(width: 32.w, height: 32.h),
+                  title: "Shield",
+                  name: '5 second protection',
+                  subtitle:"25000ft\nDistance",
+                  price: '25',
+                  onTap: () {},
+                );
+              },
             ),
-
 
 
 
           ],
         ),
-
       ),
+
     );
   }
 

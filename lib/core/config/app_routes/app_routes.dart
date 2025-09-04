@@ -5,6 +5,9 @@ import 'package:rabbit_hole_app/presentations/screens/auth/sign_in_screen/sign_i
 import 'package:rabbit_hole_app/presentations/screens/bottom_navbar/bottom_navbar_screen.dart';
 import 'package:rabbit_hole_app/presentations/screens/home/home_screen.dart';
 import 'package:rabbit_hole_app/presentations/screens/leaderboard/leaderboard_screen.dart';
+import 'package:rabbit_hole_app/presentations/screens/profile_screen/edit_profile_screen.dart';
+import 'package:rabbit_hole_app/presentations/screens/profile_screen/profile_screen.dart';
+import 'package:rabbit_hole_app/presentations/screens/settings/settings_screen.dart';
 import 'package:rabbit_hole_app/presentations/screens/shop_screen/shop_screen.dart';
 
 import '../../../presentations/screens/auth/forget_screen/forget_screen.dart';
@@ -35,6 +38,9 @@ class AppRoutes {
   static const String bottomNavbarScreen = "/bottomNavbarScreen";
   static const String leaderBoardScreen = "/leaderBoardScreen";
   static const String shopScreen = "/shopScreen";
+  static const String profileScreen = "/profileScreen";
+  static const String editProfileScreen = "/editProfileScreen";
+  static const String settingsScreen = "/settingsScreen";
 
 
   static final GoRouter goRouter =
@@ -157,7 +163,7 @@ class AppRoutes {
       path: leaderBoardScreen,
       name: leaderBoardScreen,
       pageBuilder: (context, state) =>
-          _customTransitionPage(LeaderBoardScreen(
+          _customTransitionPage(const LeaderBoardScreen(
 
           ), state),
     ),
@@ -166,9 +172,39 @@ class AppRoutes {
       path: shopScreen,
       name: shopScreen,
       pageBuilder: (context, state) =>
-          _customTransitionPage(ShopScreen(
+          _customTransitionPage(const ShopScreen(
           ), state),
     ),
+
+
+    ///<<<=============>>> Profile  Screen  <<<===============>>>
+    GoRoute(
+      path: profileScreen,
+      name: profileScreen,
+      pageBuilder: (context, state) =>
+          _customTransitionPage( ProfileScreen(
+          ), state),
+    ),
+
+
+
+    ///<<<=============>>> Edit Profile  Screen  <<<===============>>>
+    GoRoute(
+      path: editProfileScreen,
+      name: editProfileScreen,
+      pageBuilder: (context, state) =>
+          _customTransitionPage( EditProfileScreen(), state),
+    ),
+
+    ///<<<=============>>> Edit Profile  Screen  <<<===============>>>
+    GoRoute(
+      path: settingsScreen,
+      name: settingsScreen,
+      pageBuilder: (context, state) =>
+          _customTransitionPage( SettingsScreen(), state),
+    ),
+
+
 
 
     // ///<<<=============>>> Terms Services Screen  <<<===============>>>

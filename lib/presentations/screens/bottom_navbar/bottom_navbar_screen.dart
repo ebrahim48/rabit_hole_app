@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rabbit_hole_app/presentations/screens/home/home_screen.dart';
 import 'package:rabbit_hole_app/presentations/screens/leaderboard/leaderboard_screen.dart';
+import 'package:rabbit_hole_app/presentations/screens/profile_screen/profile_screen.dart';
 import 'package:rabbit_hole_app/presentations/screens/shop_screen/shop_screen.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../global/custom_assets/assets.gen.dart';
@@ -19,7 +20,7 @@ class BottomNavBarState extends State<BottomNavBar> {
      HomeScreen(),
     LeaderBoardScreen(),
     ShopScreen(),
-    LeaderBoardScreen(),
+    ProfileScreen()
 
   ];
 
