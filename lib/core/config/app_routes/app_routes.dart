@@ -4,6 +4,8 @@ import 'package:rabbit_hole_app/presentations/screens/auth/register_screen/regis
 import 'package:rabbit_hole_app/presentations/screens/auth/sign_in_screen/sign_in_screen.dart';
 import 'package:rabbit_hole_app/presentations/screens/bottom_navbar/bottom_navbar_screen.dart';
 import 'package:rabbit_hole_app/presentations/screens/home/home_screen.dart';
+import 'package:rabbit_hole_app/presentations/screens/leaderboard/leaderboard_screen.dart';
+import 'package:rabbit_hole_app/presentations/screens/shop_screen/shop_screen.dart';
 
 import '../../../presentations/screens/auth/forget_screen/forget_screen.dart';
 import '../../../presentations/screens/auth/reset_screen/reset_screen.dart';
@@ -26,11 +28,13 @@ class AppRoutes {
   static const String resetPasswordScreen = "/resetPasswordScreen";
   static const String termsServicesScreen = "/termsServicesScreen";
   static const String privacyPolicyScreen = "/privacyPolicyScreen";
-  static const String homeScreen = "/homeScreen";
-  static const String bottomNavbarScreen = "/bottomNavbarScreen";
 
   /// ============================> Home ================================>
 
+  static const String homeScreen = "/homeScreen";
+  static const String bottomNavbarScreen = "/bottomNavbarScreen";
+  static const String leaderBoardScreen = "/leaderBoardScreen";
+  static const String shopScreen = "/shopScreen";
 
 
   static final GoRouter goRouter =
@@ -148,6 +152,23 @@ class AppRoutes {
           _customTransitionPage(BottomNavBar(), state),
     ),
 
+    ///<<<=============>>> Leader Board  Screen  <<<===============>>>
+    GoRoute(
+      path: leaderBoardScreen,
+      name: leaderBoardScreen,
+      pageBuilder: (context, state) =>
+          _customTransitionPage(LeaderBoardScreen(
+
+          ), state),
+    ),
+    ///<<<=============>>> Shop  Screen  <<<===============>>>
+    GoRoute(
+      path: shopScreen,
+      name: shopScreen,
+      pageBuilder: (context, state) =>
+          _customTransitionPage(ShopScreen(
+          ), state),
+    ),
 
 
     // ///<<<=============>>> Terms Services Screen  <<<===============>>>

@@ -18,6 +18,13 @@ import 'package:vector_graphics/vector_graphics.dart' as _vg;
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/bigpacks.svg
+  SvgGenImage get bigpacks => const SvgGenImage('assets/icons/bigpacks.svg');
+
+  /// File path: assets/icons/carrotPacks.svg
+  SvgGenImage get carrotPacks =>
+      const SvgGenImage('assets/icons/carrotPacks.svg');
+
   /// File path: assets/icons/email.svg
   SvgGenImage get email => const SvgGenImage('assets/icons/email.svg');
 
@@ -37,6 +44,13 @@ class $AssetsIconsGen {
   /// File path: assets/icons/pass.svg
   SvgGenImage get pass => const SvgGenImage('assets/icons/pass.svg');
 
+  /// File path: assets/icons/powerups.svg
+  SvgGenImage get powerups => const SvgGenImage('assets/icons/powerups.svg');
+
+  /// File path: assets/icons/rabbitSkin.svg
+  SvgGenImage get rabbitSkin =>
+      const SvgGenImage('assets/icons/rabbitSkin.svg');
+
   /// File path: assets/icons/scoreicon.svg
   SvgGenImage get scoreicon => const SvgGenImage('assets/icons/scoreicon.svg');
 
@@ -52,19 +66,27 @@ class $AssetsIconsGen {
   /// File path: assets/icons/start.svg
   SvgGenImage get start => const SvgGenImage('assets/icons/start.svg');
 
+  /// File path: assets/icons/win.svg
+  SvgGenImage get win => const SvgGenImage('assets/icons/win.svg');
+
   /// List of all assets
   List<SvgGenImage> get values => [
+    bigpacks,
+    carrotPacks,
     email,
     gmail,
     google,
     home,
     nameProfile,
     pass,
+    powerups,
+    rabbitSkin,
     scoreicon,
     scores,
     settings,
     shop,
     start,
+    win,
   ];
 }
 

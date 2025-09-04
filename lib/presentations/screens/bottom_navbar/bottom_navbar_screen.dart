@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rabbit_hole_app/presentations/screens/home/home_screen.dart';
+import 'package:rabbit_hole_app/presentations/screens/leaderboard/leaderboard_screen.dart';
+import 'package:rabbit_hole_app/presentations/screens/shop_screen/shop_screen.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../global/custom_assets/assets.gen.dart';
 
@@ -15,6 +17,9 @@ class BottomNavBar extends StatefulWidget {
 class BottomNavBarState extends State<BottomNavBar> {
   final List<Widget> screens = [
      HomeScreen(),
+    LeaderBoardScreen(),
+    ShopScreen(),
+    LeaderBoardScreen(),
 
   ];
 
@@ -78,14 +83,14 @@ class BottomNavBarState extends State<BottomNavBar> {
           child:  Padding(padding: EdgeInsets.all(6.r),
             child: index == 0
                 ? Assets.icons.home
-                .svg(color: isSelected ? AppColors.bottomBackColorB3E5FC : AppColors.bottomBackColorB3E5FC)
+                .svg(color: isSelected ? AppColors.bottomBackColorB3E5FC : AppColors.textColor000000)
                 : index == 1
                 ? Assets.icons.scoreicon
                 .svg(color: isSelected ? AppColors.bottomBackColorB3E5FC : AppColors.textColor000000)
                 : index == 2
                 ? Assets.icons.shop
-                .svg(color: isSelected ? AppColors.bottomBackColorB3E5FC : AppColors.bottomBackColorB3E5FC)
-                : Assets.icons.nameProfile.svg(color: isSelected ? AppColors.bottomBackColorB3E5FC : AppColors.bottomBackColorB3E5FC),
+                .svg(color: isSelected ? AppColors.bottomBackColorB3E5FC : AppColors.textColor000000)
+                : Assets.icons.nameProfile.svg(color: isSelected ? AppColors.bottomBackColorB3E5FC : AppColors.textColor000000),
           )
       ),
     );
