@@ -110,9 +110,7 @@ class ResetPasswordScreen extends StatelessWidget {
 
 
 
-  final TextEditingController emailCtrl = TextEditingController();
 
-  final TextEditingController otpTEController = TextEditingController();
 
   final RxInt countdown = 60.obs;
   final RxBool isCountingDown = false.obs;

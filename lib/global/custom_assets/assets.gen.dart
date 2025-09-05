@@ -18,9 +18,22 @@ import 'package:vector_graphics/vector_graphics.dart' as _vg;
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/about.svg
+  SvgGenImage get about => const SvgGenImage('assets/icons/about.svg');
+
   /// File path: assets/icons/achievements.svg
   SvgGenImage get achievements =>
       const SvgGenImage('assets/icons/achievements.svg');
+
+  /// File path: assets/icons/arrow.svg
+  SvgGenImage get arrow => const SvgGenImage('assets/icons/arrow.svg');
+
+  /// File path: assets/icons/audio.svg
+  SvgGenImage get audio => const SvgGenImage('assets/icons/audio.svg');
+
+  /// File path: assets/icons/backgroundmusic.svg
+  SvgGenImage get backgroundmusic =>
+      const SvgGenImage('assets/icons/backgroundmusic.svg');
 
   /// File path: assets/icons/bigpacks.svg
   SvgGenImage get bigpacks => const SvgGenImage('assets/icons/bigpacks.svg');
@@ -31,6 +44,16 @@ class $AssetsIconsGen {
   /// File path: assets/icons/carrotPacks.svg
   SvgGenImage get carrotPacks =>
       const SvgGenImage('assets/icons/carrotPacks.svg');
+
+  /// File path: assets/icons/changepass.svg
+  SvgGenImage get changepass =>
+      const SvgGenImage('assets/icons/changepass.svg');
+
+  /// File path: assets/icons/contact.svg
+  SvgGenImage get contact => const SvgGenImage('assets/icons/contact.svg');
+
+  /// File path: assets/icons/controls.svg
+  SvgGenImage get controls => const SvgGenImage('assets/icons/controls.svg');
 
   /// File path: assets/icons/email.svg
   SvgGenImage get email => const SvgGenImage('assets/icons/email.svg');
@@ -47,6 +70,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/google.svg
   SvgGenImage get google => const SvgGenImage('assets/icons/google.svg');
 
+  /// File path: assets/icons/hapticfeedback.svg
+  SvgGenImage get hapticfeedback =>
+      const SvgGenImage('assets/icons/hapticfeedback.svg');
+
   /// File path: assets/icons/highscores.svg
   SvgGenImage get highscores =>
       const SvgGenImage('assets/icons/highscores.svg');
@@ -61,11 +88,17 @@ class $AssetsIconsGen {
   SvgGenImage get nameProfile =>
       const SvgGenImage('assets/icons/nameProfile.svg');
 
+  /// File path: assets/icons/others.svg
+  SvgGenImage get others => const SvgGenImage('assets/icons/others.svg');
+
   /// File path: assets/icons/pass.svg
   SvgGenImage get pass => const SvgGenImage('assets/icons/pass.svg');
 
   /// File path: assets/icons/powerups.svg
   SvgGenImage get powerups => const SvgGenImage('assets/icons/powerups.svg');
+
+  /// File path: assets/icons/privacy.svg
+  SvgGenImage get privacy => const SvgGenImage('assets/icons/privacy.svg');
 
   /// File path: assets/icons/profileedit.svg
   SvgGenImage get profileedit =>
@@ -93,6 +126,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/shop.svg
   SvgGenImage get shop => const SvgGenImage('assets/icons/shop.svg');
 
+  /// File path: assets/icons/soundeffect.svg
+  SvgGenImage get soundeffect =>
+      const SvgGenImage('assets/icons/soundeffect.svg');
+
   /// File path: assets/icons/start.svg
   SvgGenImage get start => const SvgGenImage('assets/icons/start.svg');
 
@@ -100,26 +137,39 @@ class $AssetsIconsGen {
   SvgGenImage get statistics =>
       const SvgGenImage('assets/icons/statistics.svg');
 
+  /// File path: assets/icons/terms.svg
+  SvgGenImage get terms => const SvgGenImage('assets/icons/terms.svg');
+
   /// File path: assets/icons/win.svg
   SvgGenImage get win => const SvgGenImage('assets/icons/win.svg');
 
   /// List of all assets
   List<SvgGenImage> get values => [
+    about,
     achievements,
+    arrow,
+    audio,
+    backgroundmusic,
     bigpacks,
     camera,
     carrotPacks,
+    changepass,
+    contact,
+    controls,
     email,
     firstfall,
     gameplay,
     gmail,
     google,
+    hapticfeedback,
     highscores,
     home,
     logout,
     nameProfile,
+    others,
     pass,
     powerups,
+    privacy,
     profileedit,
     rabbit,
     rabbitSkin,
@@ -128,8 +178,10 @@ class $AssetsIconsGen {
     settings,
     shield,
     shop,
+    soundeffect,
     start,
     statistics,
+    terms,
     win,
   ];
 }
