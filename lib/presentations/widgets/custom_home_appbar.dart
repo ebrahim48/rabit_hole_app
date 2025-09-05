@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:rabbit_hole_app/core/config/app_routes/app_routes.dart';
 
 import '../../core/constants/app_colors.dart';
 import '../../global/custom_assets/assets.gen.dart';
@@ -59,6 +61,8 @@ class CustomHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
             /// Right Section (Settings Icon)
             GestureDetector(
               onTap: () {
+
+                context.pushNamed(AppRoutes.settingsScreen);
 
               },
               child: Assets.icons.settings.svg(

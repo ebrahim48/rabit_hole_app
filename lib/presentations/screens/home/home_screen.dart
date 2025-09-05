@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../core/config/app_routes/app_routes.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../global/custom_assets/assets.gen.dart';
 import '../../widgets/custom_home_appbar.dart';
@@ -103,7 +105,9 @@ class HomeScreen extends StatelessWidget {
                             height: 32.h,
                             width: 32.w,
                           ),
-                          onTap: () {},
+                          onTap: () {
+
+                          },
                         ),
                         _buildOptionCard(
                           label: "Shop",
@@ -111,7 +115,9 @@ class HomeScreen extends StatelessWidget {
                             height: 32.h,
                             width: 32.w,
                           ),
-                          onTap: () {},
+                          onTap: () {
+                            context.pushNamed(AppRoutes.shopScreen);
+                          },
                         ),
                         _buildOptionCard(
                           label: "Profile",
@@ -119,7 +125,9 @@ class HomeScreen extends StatelessWidget {
                             height: 32.h,
                             width: 32.w,
                           ),
-                          onTap: () {},
+                          onTap: () {
+                            context.pushNamed(AppRoutes.profileScreen);
+                          },
                         ),
                         _buildOptionCard(
                           label: "Settings",
@@ -127,7 +135,9 @@ class HomeScreen extends StatelessWidget {
                             height: 32.h,
                             width: 32.w,
                           ),
-                          onTap: () {},
+                          onTap: () {
+                            context.pushNamed(AppRoutes.settingsScreen);
+                          },
                         ),
                       ],
                     ),

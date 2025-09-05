@@ -7,12 +7,15 @@ import 'package:rabbit_hole_app/presentations/screens/home/home_screen.dart';
 import 'package:rabbit_hole_app/presentations/screens/leaderboard/leaderboard_screen.dart';
 import 'package:rabbit_hole_app/presentations/screens/profile_screen/edit_profile_screen.dart';
 import 'package:rabbit_hole_app/presentations/screens/profile_screen/profile_screen.dart';
+import 'package:rabbit_hole_app/presentations/screens/settings/privacy_screen.dart';
 import 'package:rabbit_hole_app/presentations/screens/settings/settings_screen.dart';
+import 'package:rabbit_hole_app/presentations/screens/settings/terms_service.dart';
 import 'package:rabbit_hole_app/presentations/screens/shop_screen/shop_screen.dart';
 
 import '../../../presentations/screens/auth/forget_screen/forget_screen.dart';
 import '../../../presentations/screens/auth/reset_screen/reset_screen.dart';
 import '../../../presentations/screens/auth/verify_screen/verify_screen.dart';
+import '../../../presentations/screens/settings/about_us_screen.dart';
 import '../../../presentations/screens/splash/splash_screen.dart';
 
 
@@ -29,8 +32,6 @@ class AppRoutes {
   static const String forgetPasswordScreen = "/forgetPasswordScreen";
   static const String verifyScreen = "/verifyScreen";
   static const String resetPasswordScreen = "/resetPasswordScreen";
-  static const String termsServicesScreen = "/termsServicesScreen";
-  static const String privacyPolicyScreen = "/privacyPolicyScreen";
 
   /// ============================> Home ================================>
 
@@ -41,6 +42,9 @@ class AppRoutes {
   static const String profileScreen = "/profileScreen";
   static const String editProfileScreen = "/editProfileScreen";
   static const String settingsScreen = "/settingsScreen";
+  static const String privacyScreen = "/privacyScreen";
+  static const String termsServiceScreen = "/termsServiceScreen";
+  static const String aboutUsScreen = "/aboutUsScreen";
 
 
   static final GoRouter goRouter =
@@ -206,50 +210,28 @@ class AppRoutes {
 
 
 
+    ///<<<=============>>> Privacy Policy Screen  <<<===============>>>
+    GoRoute(
+      path: privacyScreen,
+      name: privacyScreen,
+      pageBuilder: (context, state) =>
+          _customTransitionPage(PrivacyScreen(), state),
+    ),
+    ///<<<=============>>> Terms Services Screen  <<<===============>>>
+    GoRoute(
+      path: termsServiceScreen,
+      name: termsServiceScreen,
+      pageBuilder: (context, state) =>
+          _customTransitionPage(TermsServiceScreen(), state),
+    ),
 
-    // ///<<<=============>>> Terms Services Screen  <<<===============>>>
-    // GoRoute(
-    //   path: termsServicesScreen,
-    //   name: termsServicesScreen,
-    //   pageBuilder: (context, state) =>
-    //       _customTransitionPage( TermsServicesScreen(), state),
-    // ),
-    // ///<<<=============>>> Privacy Policy Screen  <<<===============>>>
-    // GoRoute(
-    //   path: privacyPolicyScreen,
-    //   name: privacyPolicyScreen,
-    //   pageBuilder: (context, state) =>
-    //       _customTransitionPage( PrivacyPolicyScreen(), state),
-    // ),
-    //
-    //
-    // /// =============================================================> Home =================================================>
-    //
-    //
-    // ///<<<=============>>>  Home Screen  <<<===============>>>
-    // GoRoute(
-    //   path: homeScreen,
-    //   name: homeScreen,
-    //   pageBuilder: (context, state) =>
-    //       _customTransitionPage( HomeScreen(), state),
-    // ),
-    //
-    //
-    // //<<<=============>>>  About  Screen  <<<===============>>>
-    // GoRoute(
-    //   path: aboutScreen,
-    //   name: aboutScreen,
-    //   pageBuilder: (context, state) =>
-    //       _customTransitionPage(AboutScreen(), state),
-    // ),
-    // //<<<=============>>>  Question Help Screen  <<<===============>>>
-    // GoRoute(
-    //   path: questionHelpScreen,
-    //   name: questionHelpScreen,
-    //   pageBuilder: (context, state) =>
-    //       _customTransitionPage(QuestionHelpScreen(), state),
-    // ),
-
+    //<<<=============>>>  About  Screen  <<<===============>>>
+    GoRoute(
+      path: aboutUsScreen,
+      name: aboutUsScreen,
+      pageBuilder: (context, state) =>
+          _customTransitionPage(AboutUsScreen(), state),
+    ),
 
   ]);
 

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:go_router/go_router.dart';
+import 'package:rabbit_hole_app/core/config/app_routes/app_routes.dart';
 import 'package:rabbit_hole_app/presentations/widgets/custom_button.dart';
 import 'package:rabbit_hole_app/presentations/widgets/custom_music_slider.dart';
 import '../../../core/constants/app_colors.dart';
@@ -25,6 +27,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool soundEffects = true;
   bool backgroundMusic = true;
   bool hapticFeedback = true;
+  bool notification = true;
 
 
 
@@ -339,10 +342,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ],
                       ),
                       ToggleButtonWidget(
-                        status: hapticFeedback,
+                        status: notification,
                         onToggle: (value) {
                           setState(() {
-                            hapticFeedback = value;
+                            notification = value;
                           });
                         },
                         activeColor: AppColors.buttonColorF9B039,
@@ -393,20 +396,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   SizedBox(height: 16.h),
 
-                  /// ========================================== Haptic Feedback ===============================>
+                  /// ========================================== MEnu ===============================>
 
-                  MenuItemWidget(
-                    icon: GestureDetector(
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          backgroundColor: AppColors.bgColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
-                          ),
-                          builder: (context) {
-                            return Container(
+                  GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: AppColors.bgColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
+                        ),
+                        builder: (context) {
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).viewInsets.bottom,
+                            ),
+                            child: Container(
                               width: 393.w,
                               height: 440.h,
                               padding: EdgeInsets.all(20.w),
@@ -419,10 +425,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               child: SingleChildScrollView(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Center(
                                       child: Container(
-                                        width: 60.w,
+                                        width: 40.w,
                                         height: 4.h,
                                         decoration: BoxDecoration(
                                           color: Colors.grey[400],
@@ -437,7 +444,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       fontsize: 20.sp,
                                       fontWeight: FontWeight.w600,
                                     ),
-                                    SizedBox(height: 32.h),
+                                    SizedBox(height: 28.h),
 
                                     /// Example fields
                                     CustomTextField(
@@ -446,6 +453,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                         prefixIcon: Assets.icons.pass.svg(),
                                         hintText: "Current Password",
                                         isPassword: true),
+
+                                    Align(
+                                        alignment: Alignment.topRight,
+                                        child:
+                                        CustomText(
+                                            text: 'Forget Password?')),
+
+                                    SizedBox(height: 22.h),
+
                                     CustomTextField(
                                         hintextColor: AppColors.textColor545454,
                                         controller: newPassWordCtrl,
@@ -484,42 +500,64 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
 
                                     SizedBox(height: 24.h),
-                                   CustomButton(
-                                       title: 'Save Change',
-                                       onpress: () {
+                                    CustomButton(
+                                      title: 'Save Change',
+                                      onpress: () {
 
-                                       },)
+                                      },)
                                   ],
                                 ),
                               ),
-                            );
-                          },
-                        );
-                      },
-                      child: Assets.icons.changepass.svg(),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: MenuItemWidget(
+                      icon: Assets.icons.changepass.svg(),
+                      text: "Change Password",
                     ),
-                    text: "Change Password",
                   ),
 
                   SizedBox(height: 34.h),
-                   MenuItemWidget(
-                     icon: Assets.icons.privacy.svg(),
-                    text: "Privacy Policy",
-                  ),
+                   GestureDetector(
+                     onTap: () {
+                       context.pushNamed(AppRoutes.privacyScreen);
+                     },
+                     child: MenuItemWidget(
+                       icon: Assets.icons.privacy.svg(),
+                      text: "Privacy Policy",
+                                       ),
+                   ),
                   SizedBox(height: 34.h),
-                   MenuItemWidget(
-                     icon: Assets.icons.terms.svg(),
-                    text: "Terms of Service",
-                  ),
+                   GestureDetector(
+                     onTap: () {
+                       context.pushNamed(AppRoutes.termsServiceScreen);
+                     },
+                     child: MenuItemWidget(
+                       icon: Assets.icons.terms.svg(),
+                      text: "Terms of Service",
+                                       ),
+                   ),
                   SizedBox(height: 34.h),
-                   MenuItemWidget(
-                     icon: Assets.icons.contact.svg(),
-                    text: "Contact Us",
-                  ),
+                   GestureDetector(
+                     onTap: () {
+
+                     },
+                     child: MenuItemWidget(
+                       icon: Assets.icons.contact.svg(),
+                      text: "Contact Us",
+                                       ),
+                   ),
                   SizedBox(height: 34.h),
-                  MenuItemWidget(
-                    icon: Assets.icons.about.svg(),
-                    text: "About Us",
+                  GestureDetector(
+                    onTap: () {
+                      context.pushNamed(AppRoutes.aboutUsScreen);
+                    },
+                    child: MenuItemWidget(
+                      icon: Assets.icons.about.svg(),
+                      text: "About Us",
+                    ),
                   ),
 
                 ],
