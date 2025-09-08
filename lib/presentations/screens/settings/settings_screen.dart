@@ -542,7 +542,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   SizedBox(height: 34.h),
                    GestureDetector(
                      onTap: () {
-
+                       context.pushNamed(AppRoutes.contactUsScreen);
                      },
                      child: MenuItemWidget(
                        icon: Assets.icons.contact.svg(),

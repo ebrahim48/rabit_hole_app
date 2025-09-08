@@ -8,6 +8,7 @@ import 'package:rabbit_hole_app/presentations/screens/home/home_screen.dart';
 import 'package:rabbit_hole_app/presentations/screens/leaderboard/leaderboard_screen.dart';
 import 'package:rabbit_hole_app/presentations/screens/profile_screen/edit_profile_screen.dart';
 import 'package:rabbit_hole_app/presentations/screens/profile_screen/profile_screen.dart';
+import 'package:rabbit_hole_app/presentations/screens/settings/contact_us_screen.dart';
 import 'package:rabbit_hole_app/presentations/screens/settings/privacy_screen.dart';
 import 'package:rabbit_hole_app/presentations/screens/settings/settings_screen.dart';
 import 'package:rabbit_hole_app/presentations/screens/settings/terms_service.dart';
@@ -47,6 +48,7 @@ class AppRoutes {
   static const String termsServiceScreen = "/termsServiceScreen";
   static const String aboutUsScreen = "/aboutUsScreen";
   static const String gameScreen = "/gameScreen";
+  static const String contactUsScreen = "/contactUsScreen";
 
 
   static final GoRouter goRouter =
@@ -242,6 +244,15 @@ class AppRoutes {
       pageBuilder: (context, state) =>
           _customTransitionPage(AboutUsScreen(), state),
     ),
+    //<<<=============>>>  Contact Us  Screen  <<<===============>>>
+    GoRoute(
+      path: contactUsScreen,
+      name: contactUsScreen,
+      pageBuilder: (context, state) =>
+          _customTransitionPage(ContactUsScreen(), state),
+    ),
+
+
 
   ]);
 
