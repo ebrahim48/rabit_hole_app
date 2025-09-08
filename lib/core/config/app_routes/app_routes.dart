@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:rabbit_hole_app/presentations/screens/auth/register_screen/register_screen.dart';
 import 'package:rabbit_hole_app/presentations/screens/auth/sign_in_screen/sign_in_screen.dart';
 import 'package:rabbit_hole_app/presentations/screens/bottom_navbar/bottom_navbar_screen.dart';
+import 'package:rabbit_hole_app/presentations/screens/home/game_screen.dart';
 import 'package:rabbit_hole_app/presentations/screens/home/home_screen.dart';
 import 'package:rabbit_hole_app/presentations/screens/leaderboard/leaderboard_screen.dart';
 import 'package:rabbit_hole_app/presentations/screens/profile_screen/edit_profile_screen.dart';
@@ -45,6 +46,7 @@ class AppRoutes {
   static const String privacyScreen = "/privacyScreen";
   static const String termsServiceScreen = "/termsServiceScreen";
   static const String aboutUsScreen = "/aboutUsScreen";
+  static const String gameScreen = "/gameScreen";
 
 
   static final GoRouter goRouter =
@@ -153,6 +155,15 @@ class AppRoutes {
           _customTransitionPage(HomeScreen(), state),
     ),
 
+    ///<<<=============>>> Game Screen  <<<===============>>>
+    GoRoute(
+      path: gameScreen,
+      name: gameScreen,
+      pageBuilder: (context, state) =>
+          _customTransitionPage(GameScreen(), state),
+    ),
+
+
 
     ///<<<=============>>> Bottom Navbar  Screen  <<<===============>>>
     GoRoute(
@@ -186,8 +197,7 @@ class AppRoutes {
       path: profileScreen,
       name: profileScreen,
       pageBuilder: (context, state) =>
-          _customTransitionPage( ProfileScreen(
-          ), state),
+          _customTransitionPage(ProfileScreen(), state),
     ),
 
 

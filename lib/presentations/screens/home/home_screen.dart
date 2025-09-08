@@ -60,7 +60,7 @@ class HomeScreen extends StatelessWidget {
                       height: 60.h,
                       child: ElevatedButton(
                         onPressed: () {
-
+                          context.pushNamed(AppRoutes.gameScreen);
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.textColorFFD93B,
