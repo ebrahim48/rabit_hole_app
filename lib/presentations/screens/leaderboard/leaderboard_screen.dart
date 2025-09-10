@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:rabbit_hole_app/core/config/app_routes/app_routes.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../global/custom_assets/assets.gen.dart';
 import '../../widgets/custom_text.dart';
@@ -39,6 +41,7 @@ class LeaderBoardScreen extends StatelessWidget {
               children: [
                 IconButton(
                   onPressed: () {
+                    context.pushNamed(AppRoutes.settingsScreen);
 
                   },
                   icon: Assets.icons.settings.svg(),
