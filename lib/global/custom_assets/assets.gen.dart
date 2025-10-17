@@ -119,6 +119,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/pass.svg
   SvgGenImage get pass => const SvgGenImage('assets/icons/pass.svg');
 
+  /// File path: assets/icons/phone.svg
+  SvgGenImage get phone => const SvgGenImage('assets/icons/phone.svg');
+
   /// File path: assets/icons/powerups.svg
   SvgGenImage get powerups => const SvgGenImage('assets/icons/powerups.svg');
 
@@ -205,6 +208,7 @@ class $AssetsIconsGen {
     nameProfile,
     others,
     pass,
+    phone,
     powerups,
     privacy,
     profileedit,
