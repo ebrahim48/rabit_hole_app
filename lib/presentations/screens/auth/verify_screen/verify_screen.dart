@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../../global/custom_assets/assets.gen.dart';
-import '../../../../core/config/app_routes/app_routes.dart';
+import '../../../../controllers/auth-controller.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../helpers/toast_message_helper.dart';
 import '../../../widgets/custom_app_bar.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_text.dart';
@@ -14,8 +14,15 @@ import 'custom_pin_text_field.dart';
 
 
 class VerifyScreen extends StatelessWidget {
-  VerifyScreen({super.key});
 
+  final String screenType;
+  final String email;
+  final String token;
+
+  VerifyScreen({super.key,required this.screenType, required this.email,required this.token});
+
+
+  AuthController authController = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -97,12 +104,26 @@ class VerifyScreen extends StatelessWidget {
 
               /// ============================================ Button ====================================>
 
-              CustomButton(
-                  title: "Verify",
-                  onpress: () {
-                context.pushNamed(AppRoutes.resetPasswordScreen);
-                // Get.toNamed(AppRoutes.optScreen, arguments: {"screenType" : "Sign up"});
-              }),
+              Obx(() =>
+                  CustomButton(
+                    loading: authController.verifyLoading.value,
+                    title: "Verify",
+                    onpress: () {
+                      if (otpTEController.text.isEmpty) {
+                        ToastMessageHelper.showToastMessage("Please enter OTP");
+                        return;
+                      }
+
+                      authController.verfyEmail(
+                        otpTEController.text,
+                        email,
+                        token,
+                        screenType: screenType,
+                        type: screenType == "signup" ? "Sign Up" : "Forgot",
+                        context: context,
+                      );
+                    },
+                  ),),
               SizedBox(height: 27.h),
 
             ],

@@ -1,15 +1,19 @@
+import 'dart:io';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../../../../global/custom_assets/assets.gen.dart';
 import '../../../../controllers/auth-controller.dart';
 import '../../../../core/config/app_routes/app_routes.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../widgets/custom_app_bar.dart';
 import '../../../widgets/custom_button.dart';
+import '../../../widgets/custom_network_image.dart';
 import '../../../widgets/custom_text.dart';
 import '../../../widgets/custom_text_field.dart';
 
@@ -43,6 +47,88 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Center(child: Assets.images.logo.image(height: 100.h, width: 100.w)),
                 SizedBox(height: 58.h),
 
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: 16.w),
+                      child: Assets.icons.nameProfile.svg(
+                        width: 20.w,
+                        height: 20.h,
+                      ),
+                    ),
+                    CustomText(
+                      textAlign: TextAlign.start,
+                      text: "Profile Image",
+                      fontsize: 14.sp,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.textColor000000,
+                    ),
+                    SizedBox(width: 12.w),
+                    // Profile image + camera icon
+                    GestureDetector(
+                      onTap: () => showImagePickerOption(context),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        clipBehavior: Clip.none,
+                        children: [
+                          Container(
+                            width: 40.w,
+                            height: 40.w,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: AppColors.primaryColorC79235,
+                                width: 3,
+                              ),
+                            ),
+                            child: ClipOval(
+                              child: selectedImage != null
+                                  ? Image.file(
+                                selectedImage!,
+                                fit: BoxFit.cover,
+                              )
+                                  : CustomNetworkImage(
+                                boxShape: BoxShape.circle,
+                                imageUrl: profileImagePath ?? "",
+                                height: 60.w,
+                                width: 60.w,
+                              ),
+                            ),
+                          ),
+
+                          Positioned(
+                            bottom: -4.h,
+                            right: -4.w,
+                            child: Container(
+                              width: 26.w,
+                              height: 26.w,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.2),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                              child: Icon(
+                                Icons.camera_alt,
+                                color: AppColors.primaryColorC79235,
+                                size: 16.sp,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const Divider(
+                  color: AppColors.textColor000000,
+                ),
 
                 /// <<< ============><>>> sign up text flied  << < ==============>>>
                 CustomTextField(
@@ -50,9 +136,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     controller: nameCtrl,
                     hintText: "User name",
                     prefixIcon: Assets.icons.nameProfile.svg()),
-
-
-
 
                 CustomTextField(
                     hintextColor: AppColors.textColor545454,
@@ -63,10 +146,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 CustomTextField(
                   keyboardType: TextInputType.phone,
-                  hintextColor: AppColors.textColor8A8A8A,
+                  hintextColor: AppColors.textColor545454,
                   controller: phoneCtrl,
                   hintText: "Phone Number",
-                  prefixIcon: Assets.icons.phone.svg(),
+                  prefixIcon: Assets.icons.phone.svg(
+                    color: AppColors.textColor000000
+                  ),
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                     LengthLimitingTextInputFormatter(11),
@@ -82,6 +167,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return null;
                   },
                 ),
+
+                CustomTextField(
+                    hintextColor: AppColors.textColor545454,
+                    controller: addressCtrl,
+                    hintText: "Address",
+                    prefixIcon: Assets.icons.address.svg(
+                      color: AppColors.textColor000000,
+                      height: 20.h,
+                      width: 20.w
+                    ),),
+
 
 
                 CustomTextField(
@@ -162,7 +258,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  // Open Terms of Service
+                                  context.pushNamed(AppRoutes.termsServiceScreen);
                                 },
                             ),
 
@@ -179,7 +275,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 Obx(()=>
                    CustomButton(
-                        // loading: authController.signUpLoading.value,
+                        loading: authController.signUpLoading.value,
                       title: "Register",
                       onpress: () {
                         if(formKey.currentState?.validate()?? true){
@@ -188,12 +284,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             fullName: nameCtrl.text.trim(),
                             password: passWordCtrl.text.trim(),
                             confirmpassword: confirmPassWordCtrl.text.trim(),
-
+                            address: addressCtrl.text.trim(),
+                            phone: phoneCtrl.text.trim(),
+                            profileImage: selectedImage,
                             context: context,
                             screenType: "signup",
-
-
-
                           );
                         }
 
@@ -307,6 +402,98 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController passWordCtrl = TextEditingController();
 
   final TextEditingController confirmPassWordCtrl = TextEditingController();
+  final TextEditingController profileCtrl = TextEditingController();
 
   RxBool isChecked = false.obs;
+
+
+
+  void showImagePickerOption(BuildContext context) {
+    showModalBottomSheet(
+        backgroundColor: Colors.white.withOpacity(.5),
+        elevation: 3,
+        context: context,
+        builder: (builder) {
+          return Container(
+            decoration: BoxDecoration(
+              border: const Border(
+                  top: BorderSide(color: AppColors.primaryColorC79235, width: 0.25)),
+              borderRadius: BorderRadius.circular(20.r),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height / 9.2,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          _pickImageFromGallery();
+                        },
+                        child: SizedBox(
+                          child: Column(
+                            children: [
+                              Icon(
+                                Icons.image,
+                                size: 50.w,
+                              ),
+                              CustomText(text: 'Gallery')
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          _pickImageFromCamera();
+                        },
+                        child: SizedBox(
+                          child: Column(
+                            children: [
+                              Icon(
+                                Icons.camera_alt,
+                                size: 50.w,
+                              ),
+                              CustomText(text: 'Camera')
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  Future<void> _pickImageFromGallery() async {
+    final pickedFile =
+    await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      Navigator.pop(context);
+      selectedImage = File(pickedFile.path);
+      setState(() {});
+    }
+  }
+
+  Future<void> _pickImageFromCamera() async {
+    final pickedFile =
+    await ImagePicker().pickImage(source: ImageSource.camera);
+    if (pickedFile != null) {
+      Navigator.pop(context);
+      selectedImage = File(pickedFile.path);
+      setState(() {});
+    }
+  }
+
+
+  String? selectedGender;
+  File? selectedImage;
+  String? profileImagePath;
 }

@@ -136,8 +136,17 @@ class AppRoutes {
     GoRoute(
       path: verifyScreen,
       name: verifyScreen,
-      pageBuilder: (context, state) =>
-          _customTransitionPage(VerifyScreen(), state),
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>;
+        final screenType = extra['screenType']?.toString() ?? '';
+        final email = extra['email']?.toString() ?? '';
+        final token = extra['token']?.toString() ?? '';
+        return VerifyScreen(
+          screenType: screenType,
+          email: email,
+          token: token,
+        );
+      },
     ),
 
 

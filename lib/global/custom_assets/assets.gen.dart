@@ -25,6 +25,9 @@ class $AssetsIconsGen {
   SvgGenImage get achievements =>
       const SvgGenImage('assets/icons/achievements.svg');
 
+  /// File path: assets/icons/address.svg
+  SvgGenImage get address => const SvgGenImage('assets/icons/address.svg');
+
   /// File path: assets/icons/arrow.svg
   SvgGenImage get arrow => const SvgGenImage('assets/icons/arrow.svg');
 
@@ -179,6 +182,7 @@ class $AssetsIconsGen {
   List<SvgGenImage> get values => [
     about,
     achievements,
+    address,
     arrow,
     audio,
     backgroundmusic,
