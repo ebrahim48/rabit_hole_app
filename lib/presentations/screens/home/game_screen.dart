@@ -427,8 +427,7 @@ class RabbitGame extends FlameGame with HasCollisionDetection {
   }
 }
 
-class Rabbit extends RectangleComponent
-    with HasGameRef<RabbitGame>, CollisionCallbacks {
+class Rabbit extends RectangleComponent with HasGameRef<RabbitGame>, CollisionCallbacks {
 
   Rabbit() : super(
     size: Vector2(60, 60),
@@ -474,10 +473,7 @@ class Rabbit extends RectangleComponent
   }
 }
 
-
-
-class GameObject extends RectangleComponent
-    with CollisionCallbacks, HasGameRef<RabbitGame> {
+class GameObject extends RectangleComponent with CollisionCallbacks, HasGameRef<RabbitGame> {
   final String type;
 
   GameObject(this.type) : super(
@@ -533,10 +529,6 @@ class GameObject extends RectangleComponent
     }
   }
 }
-
-
-
-
 
 class SpawnManager extends Component with HasGameRef<RabbitGame> {
   double timer = 0;

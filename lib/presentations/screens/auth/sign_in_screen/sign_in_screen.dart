@@ -7,6 +7,7 @@ import '../../../../../global/custom_assets/assets.gen.dart';
 import '../../../../controllers/auth-controller.dart';
 import '../../../../core/config/app_routes/app_routes.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../helpers/toast_message_helper.dart';
 import '../../../widgets/custom_app_bar.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_text.dart';
@@ -107,7 +108,11 @@ class SignInScreen extends StatelessWidget {
                           ),
                           GestureDetector(
                             onTap: (){
-                              context.pushNamed(AppRoutes.forgetPasswordScreen);
+                              if(emailCtrl.text.isEmpty){
+                                ToastMessageHelper.showToastMessage("Please enter your email",title: 'Attention');
+                              }else{
+                                context.pushNamed(AppRoutes.forgetPasswordScreen, extra: emailCtrl.text);
+                              }
                             },
                             child: CustomText(
                               text: 'Forget Password?',

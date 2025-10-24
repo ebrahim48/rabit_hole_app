@@ -1,10 +1,8 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../../global/custom_assets/assets.gen.dart';
-import '../../../../core/config/app_routes/app_routes.dart';
+import '../../../../controllers/auth-controller.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../widgets/custom_app_bar.dart';
 import '../../../widgets/custom_button.dart';
@@ -12,9 +10,29 @@ import '../../../widgets/custom_text.dart';
 import '../../../widgets/custom_text_field.dart';
 
 
-class ForgetPasswordScreen extends StatelessWidget {
-  ForgetPasswordScreen({super.key});
+class ForgetPasswordScreen extends StatefulWidget {
+  ForgetPasswordScreen({super.key,required this.email});
 
+  final String email;
+
+  @override
+  State<ForgetPasswordScreen> createState() => _ForgetPasswordScreenState();
+}
+
+class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
+
+  @override
+  void initState() {
+    print("====================${widget.email}");
+    setState(() {
+      emailCtrl.text = widget.email;
+    });
+    super.initState();
+  }
+
+  AuthController authController = Get.find<AuthController>();
+
+  final GlobalKey<FormState> _logKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -64,10 +82,22 @@ class ForgetPasswordScreen extends StatelessWidget {
 
               /// ============================================ Button ====================================>
 
-              CustomButton(title: "Get Verification Code", onpress: () {
-                context.pushNamed(AppRoutes.verifyScreen);
-                // Get.toNamed(AppRoutes.optScreen, arguments: {"screenType" : "Sign up"});
-              }),
+
+              Obx(()=>
+                  CustomButton(
+                      loading: authController.forgotLoading.value,
+                      title: "Get Verification Code",
+                      onpress: () {
+                        if(_logKey.currentState?.validate()??true){
+                          authController.handleForgot(
+                              emailCtrl.text,
+                              "forgot",
+                              context: context);
+                        }
+
+                      }),),
+
+
               SizedBox(height: 27.h),
 
             ],
@@ -77,10 +107,5 @@ class ForgetPasswordScreen extends StatelessWidget {
     );
   }
 
-
-
-
   final TextEditingController emailCtrl = TextEditingController();
-
-
 }

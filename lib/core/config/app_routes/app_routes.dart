@@ -14,11 +14,13 @@ import 'package:rabbit_hole_app/presentations/screens/settings/settings_screen.d
 import 'package:rabbit_hole_app/presentations/screens/settings/terms_service.dart';
 import 'package:rabbit_hole_app/presentations/screens/shop_screen/shop_screen.dart';
 
+import '../../../helpers/prefs_helper.dart';
 import '../../../presentations/screens/auth/forget_screen/forget_screen.dart';
 import '../../../presentations/screens/auth/reset_screen/reset_screen.dart';
 import '../../../presentations/screens/auth/verify_screen/verify_screen.dart';
 import '../../../presentations/screens/settings/about_us_screen.dart';
 import '../../../presentations/screens/splash/splash_screen.dart';
+import '../../app_constants/app_constants.dart';
 
 
 
@@ -61,53 +63,24 @@ class AppRoutes {
       builder: (context, state) => const SplashScreen(),
       redirect: (context, state) {
         Future.delayed(const Duration(seconds: 3), () async {
-          // var role = await PrefsHelper.getString(AppConstants.role);
-          // var token = await PrefsHelper.getString(AppConstants.bearerToken);
-          // var userId = await PrefsHelper.getString(AppConstants.userId);
-          // var fcmToken = await PrefsHelper.getString(AppConstants.fcmToken);
-          // bool isLogged = await PrefsHelper.getBool(AppConstants.isLogged);
-          //
-          //
-          //
-          // print("======================================$isLogged  \n token: $token \n userId : $userId \n fcm token : $fcmToken");
-          //
-          // SocketServices sockService = SocketServices();
-          //
-          // sockService.init(userId: userId, fcmToken: fcmToken.toString());
-          // FirebaseNotificationService.listenMessage();
-          //
-          // if(token != "" && isLogged){
-          //
-          //   /// ===============Role Check =============>>>
-          //   if(role.toLowerCase() == "customer"){
-          //     AppRoutes.goRouter.replaceNamed(AppRoutes.customerBottomNavBar);
-          //   }else if(role.toLowerCase() == "mechanic"){
-          //     AppRoutes.goRouter.replaceNamed(AppRoutes.mechanicBottomNavBar);
-          //   }else{
-          //     AppRoutes.goRouter.replaceNamed(AppRoutes.towTruckBottomNavBar);
-          //   }
-          // }else{
-          //   AppRoutes.goRouter.replaceNamed(AppRoutes.onboardingScreen);
-          // }
-          // AppRoutes.goRouter.replaceNamed(AppRoutes.onBoardingScreen);
+          var role = await PrefsHelper.getString(AppConstants.role);
+          var token = await PrefsHelper.getString(AppConstants.bearerToken);
+          if (token != "") {
+            /// ===============Role Check =============>>>
+            if (role == "user") {
+              AppRoutes.goRouter.replaceNamed(AppRoutes.bottomNavbarScreen);
+            }
+          }
+          else {
+            AppRoutes.goRouter.replaceNamed(AppRoutes.onBoardingScreen);
+          }
+        });
 
-        }
-
-        );
 
         return;
       },
     ),
 
-    // ///<<<=============>>> ONBOARDING SCREEN <<<===============>>>
-    // GoRoute(
-    //   path: onBoardingScreen,
-    //   name: onBoardingScreen,
-    //   pageBuilder: (context, state) =>
-    //       _customTransitionPage(OnboardingScreen(), state),
-    // ),
-    // /// =============================================================> Auth  =================================================>
-    //
     ///<<<=============>>> Sign Up SCREEN <<<===============>>>
     GoRoute(
       path: registerScreen,
@@ -127,8 +100,10 @@ class AppRoutes {
     GoRoute(
       path: forgetPasswordScreen,
       name: forgetPasswordScreen,
-      pageBuilder: (context, state) =>
-          _customTransitionPage(ForgetPasswordScreen(), state),
+      builder: (context, state) {
+        String email = state.extra as String;
+        return ForgetPasswordScreen(email: email);
+      },
     ),
 
 

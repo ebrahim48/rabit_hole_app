@@ -116,7 +116,7 @@ class AuthController extends GetxController {
       if (type == 'Sign Up' && screenType == 'signup') {
         context.go(AppRoutes.signInScreen);
       } else if (type == 'Forgot' && screenType == 'forgot') {
-        // context.go(AppRoutes.resetPasswordScreen);
+        context.go(AppRoutes.resetPasswordScreen);
       }
 
       if (type == 'Sign Up') {
@@ -130,11 +130,10 @@ class AuthController extends GetxController {
 
 
       verifyLoading(false);
-      ToastMessageHelper.showToastMessage("${response.body["message"]}");
+      ToastMessageHelper.showToastMessage("${response.body["message"]}",title: 'Success');
     } else {
       verifyLoading(false);
-      ToastMessageHelper.showToastMessage(
-          "${response.body["message"]}", title: 'attention');
+      ToastMessageHelper.showToastMessage("${response.body["message"]}", title: 'attention');
       print(
           '================================ screenType received yjuikhujikgyhujvghg: $screenType');
     }
@@ -213,43 +212,43 @@ class AuthController extends GetxController {
   }
 
 
-  // ///===========================================> Forgot Password ====================================================<>
-  // RxBool forgotLoading = false.obs;
-  //
-  // handleForgot(String email, screenType,
-  //     {required BuildContext context}) async {
-  //   forgotLoading(true);
-  //   var body = {"email": email};
-  //   var response = await ApiClient.postData(
-  //     ApiConstants.forgotPasswordEndPoint,
-  //     jsonEncode(body),
-  //   );
-  //
-  //   if (response.statusCode == 200 || response.statusCode == 201) {
-  //     final token = response.body["data"]["attributes"]["resetPasswordToken"] ??
-  //         response.body["data"]["attributes"]["verificationToken"];
-  //     if (token != null) {
-  //       await PrefsHelper.setString(AppConstants.bearerToken, token);
-  //     } else {
-  //       debugPrint("❌ Token missing in forgot response.");
-  //     }
-  //
-  //     if (screenType == "forgot") {
-  //       context.pushNamed(AppRoutes.verifyScreen, extra: {
-  //         "screenType": "forgot",
-  //         "email": email,
-  //         "token": token,
-  //       });
-  //     }
-  //
-  //     forgotLoading(false);
-  //   } else {
-  //     forgotLoading(false);
-  //     ToastMessageHelper.showToastMessage(response.body["message"]);
-  //   }
-  // }
-  //
-  //
+  ///===========================================> Forgot Password ====================================================<>
+  RxBool forgotLoading = false.obs;
+
+  handleForgot(String email, screenType,
+      {required BuildContext context}) async {
+    forgotLoading(true);
+    var body = {"email": email};
+    var response = await ApiClient.postData(
+      ApiConstants.forgotPasswordEndPoint,
+      jsonEncode(body),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final token = response.body["data"]["attributes"]["resetPasswordToken"] ??
+          response.body["data"]["attributes"]["verificationToken"];
+      if (token != null) {
+        await PrefsHelper.setString(AppConstants.bearerToken, token);
+      } else {
+        debugPrint("❌ Token missing in forgot response.");
+      }
+
+      if (screenType == "forgot") {
+        context.pushNamed(AppRoutes.verifyScreen, extra: {
+          "screenType": "forgot",
+          "email": email,
+          "token": token,
+        });
+      }
+
+      forgotLoading(false);
+    } else {
+      forgotLoading(false);
+      ToastMessageHelper.showToastMessage(response.body["message"]);
+    }
+  }
+
+
   // ///===============Set Password================<>
   //
   // RxBool setPasswordLoading = false.obs;

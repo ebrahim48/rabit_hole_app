@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -51,21 +50,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(left: 16.w),
+                      padding: EdgeInsets.only(left: 18.w),
                       child: Assets.icons.nameProfile.svg(
-                        width: 20.w,
-                        height: 20.h,
+                        width: 24.w,
+                        height: 24.h,
                       ),
                     ),
-                    CustomText(
-                      textAlign: TextAlign.start,
-                      text: "Profile Image",
-                      fontsize: 14.sp,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.textColor000000,
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 14.w),
+                        child: CustomText(
+                          textAlign: TextAlign.start,
+                          text: "Profile Image",
+                          fontsize: 14.sp,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.textColor545454,
+                        ),
+                      ),
                     ),
                     SizedBox(width: 12.w),
-                    // Profile image + camera icon
+                    /// ======================================> Profile image  camera icon ====================================>
                     GestureDetector(
                       onTap: () => showImagePickerOption(context),
                       child: Stack(
