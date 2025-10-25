@@ -9,11 +9,8 @@ import '../../widgets/achievements_card.dart';
 import '../../widgets/custom_logout_button.dart';
 import '../../widgets/custom_text.dart';
 
-
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +29,7 @@ class ProfileScreen extends StatelessWidget {
               text: 'Profile',
               color: AppColors.textColor000000,
               fontsize: 18.sp,
-            )
+            ),
           ],
         ),
         actions: [
@@ -47,7 +44,6 @@ class ProfileScreen extends StatelessWidget {
                   },
                   icon: Assets.icons.settings.svg(),
                 ),
-
               ],
             ),
           ),
@@ -58,7 +54,6 @@ class ProfileScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             Container(
               width: 346.w,
               height: 85.h,
@@ -68,7 +63,7 @@ class ProfileScreen extends StatelessWidget {
                 left: 24.w,
                 right: 10.w,
               ),
-              decoration:  BoxDecoration(
+              decoration: BoxDecoration(
                 color: AppColors.textColorFFFFFF,
                 borderRadius: BorderRadius.circular(12.r),
                 boxShadow: [
@@ -87,7 +82,8 @@ class ProfileScreen extends StatelessWidget {
                   Row(
                     children: [
                       const CustomMainProfileImage(
-                        imageUrl: 'https://media.licdn.com/dms/image/v2/C4E03AQGAvYAY6kdVXQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1603315936568?e=1758758400&v=beta&t=QeIvlqHz22MKUgXX6U56FSocAyZYGAA5NUi3CMb_alQ',
+                        imageUrl:
+                            'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Pori_Moni_%28cropped%29.jpg/960px-Pori_Moni_%28cropped%29.jpg',
                       ),
 
                       SizedBox(width: 10.w),
@@ -116,9 +112,6 @@ class ProfileScreen extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       context.pushNamed(AppRoutes.editProfileScreen);
-
-
-
                     },
                     child: Assets.icons.profileedit.svg(
                       width: 42.w,
@@ -131,88 +124,89 @@ class ProfileScreen extends StatelessWidget {
 
             SizedBox(height: 16.h),
             Container(
-          width: 346.w,
-          height: 380.h,
-          padding: EdgeInsets.all(16.w),
-          decoration: BoxDecoration(
-            color: AppColors.textColorFFFFFF,
-            borderRadius: BorderRadius.circular(12.r),
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0x1F000000),
-                offset: Offset(1.w, 3.h),
-                blurRadius: 4.r,
-                spreadRadius: 4,
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Assets.icons.statistics.svg(),
-                  SizedBox(width: 8.w),
-                  CustomText(
-                    text: 'Statistics',
-                    fontsize: 17.sp,
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.textColor000000,
+              width: 346.w,
+              height: 380.h,
+              padding: EdgeInsets.all(16.w),
+              decoration: BoxDecoration(
+                color: AppColors.textColorFFFFFF,
+                borderRadius: BorderRadius.circular(12.r),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0x1F000000),
+                    offset: Offset(1.w, 3.h),
+                    blurRadius: 4.r,
+                    spreadRadius: 4,
                   ),
                 ],
               ),
-              SizedBox(height: 16.h),
-              ///  Grid of statistics cards
-              Expanded(
-                child: GridView.count(
-                  shrinkWrap: true,
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 16.w,
-                  mainAxisSpacing: 16.h,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: [
-                    _buildOptionCard(
-                      subtitle: '1250ft',
-                      label: "High Scores",
-                      icon: Assets.icons.scores.svg(
-                        height: 24.h,
-                        width: 24.w,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Assets.icons.statistics.svg(),
+                      SizedBox(width: 8.w),
+                      CustomText(
+                        text: 'Statistics',
+                        fontsize: 17.sp,
+                        fontWeight: FontWeight.w400,
+                        color: AppColors.textColor000000,
                       ),
-                      onTap: () {},
+                    ],
+                  ),
+                  SizedBox(height: 16.h),
+
+                  ///  Grid of statistics cards
+                  Expanded(
+                    child: GridView.count(
+                      shrinkWrap: true,
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 16.w,
+                      mainAxisSpacing: 16.h,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: [
+                        _buildOptionCard(
+                          subtitle: '1250ft',
+                          label: "High Scores",
+                          icon: Assets.icons.scores.svg(
+                            height: 24.h,
+                            width: 24.w,
+                          ),
+                          onTap: () {},
+                        ),
+                        _buildOptionCard(
+                          subtitle: '45',
+                          label: "Total carrots",
+                          icon: Assets.icons.bigpacks.svg(
+                            height: 24.h,
+                            width: 24.w,
+                          ),
+                          onTap: () {},
+                        ),
+                        _buildOptionCard(
+                          subtitle: '23',
+                          label: "Games Played",
+                          icon: Assets.icons.gameplay.svg(
+                            height: 24.h,
+                            width: 24.w,
+                          ),
+                          onTap: () {},
+                        ),
+                        _buildOptionCard(
+                          subtitle: '4/6',
+                          label: "Achievements",
+                          icon: Assets.icons.achievements.svg(
+                            height: 24.h,
+                            width: 24.w,
+                          ),
+                          onTap: () {},
+                        ),
+                      ],
                     ),
-                    _buildOptionCard(
-                      subtitle: '45',
-                      label: "Total carrots",
-                      icon: Assets.icons.bigpacks.svg(
-                        height: 24.h,
-                        width: 24.w,
-                      ),
-                      onTap: () {},
-                    ),
-                    _buildOptionCard(
-                      subtitle: '23',
-                      label: "Games Played",
-                      icon: Assets.icons.gameplay.svg(
-                        height: 24.h,
-                        width: 24.w,
-                      ),
-                      onTap: () {},
-                    ),
-                    _buildOptionCard(
-                      subtitle: '4/6',
-                      label: "Achievements",
-                      icon: Assets.icons.achievements.svg(
-                        height: 24.h,
-                        width: 24.w,
-                      ),
-                      onTap: () {},
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
             SizedBox(height: 16.h),
             Container(
               width: 346.w,
@@ -247,15 +241,18 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 16.h),
 
-
                   Expanded(
                     child: ListView.separated(
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: 3,
-                      separatorBuilder: (context, index) => SizedBox(height: 12.h),
+                      separatorBuilder:
+                          (context, index) => SizedBox(height: 12.h),
                       itemBuilder: (context, index) {
                         return AchievementsListCard(
-                          icon: Assets.icons.firstfall.svg(width: 42.w, height: 42.h),
+                          icon: Assets.icons.firstfall.svg(
+                            width: 42.w,
+                            height: 42.h,
+                          ),
                           title: "First Fall",
                           name: 'Complete your first game',
                           subtitle: "Unlocked",
@@ -271,7 +268,7 @@ class ProfileScreen extends StatelessWidget {
             SizedBox(height: 16.h),
             Container(
               width: 346.w,
-              padding: EdgeInsets.only(top: 16.sp,left: 14.w),
+              padding: EdgeInsets.only(top: 16.sp, left: 14.w),
               decoration: BoxDecoration(
                 color: AppColors.textColorFFFFFF,
                 borderRadius: BorderRadius.circular(12.r),
@@ -324,15 +321,10 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
 
-
-            SizedBox(height: 90.h)
-
-
-
-        ],
+            SizedBox(height: 90.h),
+          ],
         ),
       ),
-
     );
   }
 
@@ -368,13 +360,11 @@ class ProfileScreen extends StatelessWidget {
               fontWeight: FontWeight.w400,
               color: AppColors.textColor000000,
             ),
-
           ],
         ),
       ),
     );
   }
-
 
   void _showLogoutConfirmationDialog(BuildContext context) {
     showDialog(
@@ -382,7 +372,9 @@ class ProfileScreen extends StatelessWidget {
       barrierDismissible: false,
       builder: (_) {
         return Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
           backgroundColor: AppColors.textColorFFFFFF,
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),

@@ -37,11 +37,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ),
               child: IconButton(
                 padding: EdgeInsets.zero,
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: Colors.black,
-                  size: 20.r,
-                ),
+                icon: Icon(Icons.arrow_back, color: Colors.black, size: 20.r),
                 onPressed: () => Navigator.pop(context),
               ),
             ),
@@ -74,7 +70,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               alignment: Alignment.bottomRight,
               children: [
                 CustomMainProfileImage(
-                  imageUrl: 'https://media.licdn.com/dms/image/v2/C4E03AQGAvYAY6kdVXQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1603315936568?e=1758758400&v=beta&t=QeIvlqHz22MKUgXX6U56FSocAyZYGAA5NUi3CMb_alQ',
+                  imageUrl:
+                      'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Pori_Moni_%28cropped%29.jpg/960px-Pori_Moni_%28cropped%29.jpg',
                 ),
               ],
             ),
@@ -105,18 +102,25 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.r),
-                        borderSide: const BorderSide(color: AppColors.textColorC7A8AD),
+                        borderSide: const BorderSide(
+                          color: AppColors.textColorC7A8AD,
+                        ),
                       ),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 12.w,
+                        vertical: 12.h,
+                      ),
                     ),
                   ),
                   SizedBox(height: 20.h),
 
                   // Address
-                  CustomText(text: "Address",
+                  CustomText(
+                    text: "Address",
                     color: AppColors.textColor545454,
                     fontsize: 13.sp,
-                    fontWeight: FontWeight.w400,),
+                    fontWeight: FontWeight.w400,
+                  ),
                   SizedBox(height: 8.h),
                   TextFormField(
                     initialValue: "2431 AF AMSTERDAM",
@@ -124,17 +128,25 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8.r),
-                        borderSide: const BorderSide(color: AppColors.textColorC7A8AD),
+                        borderSide: const BorderSide(
+                          color: AppColors.textColorC7A8AD,
+                        ),
                       ),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 12.w,
+                        vertical: 12.h,
+                      ),
                     ),
                   ),
                   SizedBox(height: 20.h),
 
                   // Phone
-                  CustomText(text: "Phone", color: AppColors.textColor545454,
-                      fontsize: 13.sp,
-                      fontWeight: FontWeight.w400),
+                  CustomText(
+                    text: "Phone",
+                    color: AppColors.textColor545454,
+                    fontsize: 13.sp,
+                    fontWeight: FontWeight.w400,
+                  ),
                   SizedBox(height: 8.h),
                   TextFormField(
                     initialValue: "************",
@@ -143,25 +155,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8.r),
-                        borderSide: const BorderSide(color: AppColors.textColorC7A8AD),
+                        borderSide: const BorderSide(
+                          color: AppColors.textColorC7A8AD,
+                        ),
                       ),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 12.w,
+                        vertical: 12.h,
+                      ),
                     ),
                   ),
                   SizedBox(height: 310.h),
-                 CustomButton(
-                   title: 'Save Change',
-                     onpress: () {
-
-                     },),
-
+                  CustomButton(title: 'Save Change', onpress: () {}),
                 ],
               ),
             ),
-
-
-
-
           ],
         ),
       ),

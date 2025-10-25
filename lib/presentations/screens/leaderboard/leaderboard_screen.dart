@@ -7,11 +7,8 @@ import '../../../global/custom_assets/assets.gen.dart';
 import '../../widgets/custom_text.dart';
 import '../../widgets/rank_card.dart';
 
-
 class LeaderBoardScreen extends StatelessWidget {
   const LeaderBoardScreen({super.key});
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +27,7 @@ class LeaderBoardScreen extends StatelessWidget {
               text: 'Leaderboard',
               color: AppColors.textColor000000,
               fontsize: 18.sp,
-            )
+            ),
           ],
         ),
         actions: [
@@ -42,7 +39,6 @@ class LeaderBoardScreen extends StatelessWidget {
                 IconButton(
                   onPressed: () {
                     context.pushNamed(AppRoutes.settingsScreen);
-
                   },
                   icon: Assets.icons.settings.svg(),
                 ),
@@ -80,47 +76,40 @@ class LeaderBoardScreen extends StatelessWidget {
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: 6,
                     separatorBuilder:
-                        (context, index) =>
-                        SizedBox(height: 12.h),
+                        (context, index) => SizedBox(height: 12.h),
                     itemBuilder: (context, index) {
                       return GlobalListCard(
                         icon: Assets.icons.win.svg(width: 32.w, height: 32.h),
                         imageUrl:
-                        'https://media.licdn.com/dms/image/v2/C4E03AQGAvYAY6kdVXQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1603315936568?e=1758758400&v=beta&t=QeIvlqHz22MKUgXX6U56FSocAyZYGAA5NUi3CMb_alQ',
+                            'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Pori_Moni_%28cropped%29.jpg/960px-Pori_Moni_%28cropped%29.jpg',
                         title: "Alex",
-                        subtitle:"25000ft\nDistance",
+                        subtitle: "25000ft\nDistance",
                         onTap: () {},
                       );
                     },
                   ),
-
                 ],
               ),
-
-
             ],
           ),
         ),
       ),
     );
   }
+
   Widget buildBestScoreCard() {
     return Container(
       width: 346.w,
       height: 90.h,
       decoration: BoxDecoration(
-        color:  const Color(0xFFDFE380).withOpacity(0.2),
+        color: const Color(0xFFDFE380).withOpacity(0.2),
         borderRadius: BorderRadius.circular(12.r),
 
-        border: Border.all(
-          color: const Color(0xFFF7FCFF),
-          width: 0.4,
-        ),
+        border: Border.all(color: const Color(0xFFF7FCFF), width: 0.4),
       ),
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
       child: Row(
         children: [
-
           /// Best Score Texts
           Row(
             children: [
@@ -147,18 +136,11 @@ class LeaderBoardScreen extends StatelessWidget {
             ],
           ),
           const Spacer(),
-          /// Carrot Image
-          Assets.images.carrot.image(
-            width: 48.w,
-            height: 48.h,
-          ),
 
+          /// Carrot Image
+          Assets.images.carrot.image(width: 48.w, height: 48.h),
         ],
       ),
     );
-
-
   }
-
-
 }

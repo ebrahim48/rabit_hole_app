@@ -34,7 +34,7 @@ class CustomHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
               children: [
                 const CustomProfileImage(
                   imageUrl:
-                  'https://media.licdn.com/dms/image/v2/C4E03AQGAvYAY6kdVXQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1603315936568?e=1758758400&v=beta&t=QeIvlqHz22MKUgXX6U56FSocAyZYGAA5NUi3CMb_alQ',
+                      'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Pori_Moni_%28cropped%29.jpg/960px-Pori_Moni_%28cropped%29.jpg',
                 ),
                 SizedBox(width: 10.w),
                 Column(
@@ -61,14 +61,9 @@ class CustomHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
             /// Right Section (Settings Icon)
             GestureDetector(
               onTap: () {
-
                 context.pushNamed(AppRoutes.settingsScreen);
-
               },
-              child: Assets.icons.settings.svg(
-                width: 32.w,
-                height: 32.h,
-              ),
+              child: Assets.icons.settings.svg(width: 32.w, height: 32.h),
             ),
           ],
         ),

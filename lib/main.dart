@@ -19,13 +19,7 @@ void main() async {
   di.lockDevicePortrait();
 
   Get.put(ThemeController());
-  runApp(
-    DevicePreview(
-
-      enabled:false, // Disable in release mode
-      builder: (context) => MyApp(), // Wrap your app
-    ),
-  );
+  runApp(DevicePreview(enabled: false, builder: (context) => const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -34,26 +28,26 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-        designSize: const Size(393, 852),
-        builder: (context, child) {
-          return MaterialApp.router(
-            debugShowCheckedModeBanner: false,
-            title: 'Rabbit Hole App',
-            theme: Themes().lightTheme,
-            darkTheme: Themes().lightTheme,
-            builder: DevicePreview.appBuilder, // <== Required for layout simulation
-            useInheritedMediaQuery: true,      // <== Required for responsive behavior
-            locale: DevicePreview.locale(context), // <== Optional: test different locales
-            // darkTheme: ThemeData.dark(),
-            themeMode: Get.find<ThemeController>().themeMode.value,
-            routeInformationParser: AppRoutes.goRouter.routeInformationParser,
-            routeInformationProvider:
-            AppRoutes.goRouter.routeInformationProvider,
-            routerDelegate: AppRoutes.goRouter.routerDelegate,
-            // builder: (context, child) {
-            //   return Scaffold(body: NoInterNetScreen(child: child!));
-            // },
-          );
-        });
+      designSize: const Size(393, 852),
+      builder: (context, child) {
+        return MaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          title: 'Rabbit Hole App',
+          theme: Themes().lightTheme,
+          darkTheme: Themes().lightTheme,
+          builder: DevicePreview.appBuilder,
+          useInheritedMediaQuery: true,
+          locale: DevicePreview.locale(context),
+          // darkTheme: ThemeData.dark(),
+          themeMode: Get.find<ThemeController>().themeMode.value,
+          routeInformationParser: AppRoutes.goRouter.routeInformationParser,
+          routeInformationProvider: AppRoutes.goRouter.routeInformationProvider,
+          routerDelegate: AppRoutes.goRouter.routerDelegate,
+          // builder: (context, child) {
+          //   return Scaffold(body: NoInterNetScreen(child: child!));
+          // },
+        );
+      },
+    );
   }
 }
