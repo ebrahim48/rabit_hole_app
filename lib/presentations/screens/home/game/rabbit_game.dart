@@ -1,15 +1,16 @@
+
 import 'dart:math';
-import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/collisions.dart';
-
-import '../../../../core/constants/app_colors.dart';
-import '../game_screen.dart';
-
+import 'package:flutter/material.dart';
+import 'package:rabbit_hole_app/core/constants/app_colors.dart';
+import 'package:rabbit_hole_app/presentations/screens/home/game/rabbit.dart';
+import 'package:rabbit_hole_app/presentations/screens/home/game/spawn_manager.dart';
 
 class RabbitGame extends FlameGame with HasCollisionDetection {
+  Color backgroundColor() => AppColors.textColorBC844A;
   final VoidCallback onGameOver;
+
   RabbitGame({required this.onGameOver});
 
   late Rabbit rabbit;
@@ -23,16 +24,14 @@ class RabbitGame extends FlameGame with HasCollisionDetection {
   bool isPaused = false;
   int countdownValue = 3;
   double countdownTimer = 0;
-  final Random random = Random();
-
-  @override
-  Color backgroundColor() => AppColors.textColorBC844A;
+  Random random = Random();
 
   @override
   Future<void> onLoad() async {
-    rabbit = Rabbit()
-      ..position = Vector2(size.x / 2, size.y / 2)
-      ..anchor = Anchor.center;
+    rabbit =
+        Rabbit()
+          ..position = Vector2(size.x / 2, size.y / 2)
+          ..anchor = Anchor.center;
     add(rabbit);
     startCountdown();
   }
@@ -40,7 +39,6 @@ class RabbitGame extends FlameGame with HasCollisionDetection {
   void startCountdown() {
     countdownTimer = 0;
     countdownValue = 3;
-    overlays.add('Countdown');
   }
 
   void startGame() {
@@ -51,8 +49,13 @@ class RabbitGame extends FlameGame with HasCollisionDetection {
   }
 
   void togglePause() {
-    isPaused ? resumeEngine() : pauseEngine();
-    isPaused = !isPaused;
+    if (isPaused) {
+      resumeEngine();
+      isPaused = false;
+    } else {
+      pauseEngine();
+      isPaused = true;
+    }
   }
 
   @override
@@ -63,6 +66,7 @@ class RabbitGame extends FlameGame with HasCollisionDetection {
       return;
     }
     if (isPaused) return;
+
     speed += 10 * dt;
     distance += speed * dt * 0.1;
   }

@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import '../presentations/screens/home/game/rabbit_game.dart';
 import '../presentations/screens/home/game_screen.dart';
 
 class GameController extends GetxController {
