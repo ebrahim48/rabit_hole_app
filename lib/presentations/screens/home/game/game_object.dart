@@ -1,30 +1,39 @@
-
+import 'dart:math';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-
-import 'package:flutter/material.dart';
+import 'package:flame_svg/flame_svg.dart';
 import 'package:rabbit_hole_app/presentations/screens/home/game/rabbit.dart';
 import 'package:rabbit_hole_app/presentations/screens/home/game/rabbit_game.dart';
 
-class GameObject extends RectangleComponent
+class GameObject extends PositionComponent
     with CollisionCallbacks, HasGameRef<RabbitGame> {
   final String type;
 
-  GameObject(this.type) : super(size: Vector2(40, 40), paint: Paint());
+  GameObject(this.type) : super(size: Vector2(40, 40));
 
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    switch (type) {
-      case 'carrot':
-        paint.color = Colors.orange;
-        break;
-      case 'obstacle':
-        paint.color = Colors.black;
-        break;
-      default:
-        paint.color = Colors.grey;
+
+    Svg? svg;
+    if (type == 'carrot') {
+      svg = await Svg.load('icons/carrot.svg');
+    } else if (type == 'obstacle') {
+      final obstacleIcons = [
+        'icons/ball.svg',
+        'icons/chair.svg',
+        'icons/power.svg',
+      ];
+      final randomIconPath =
+          obstacleIcons[Random().nextInt(obstacleIcons.length)];
+      svg = await Svg.load(randomIconPath);
     }
+
+    if (svg != null) {
+      final svgComponent = SvgComponent(svg: svg, size: size);
+      add(svgComponent);
+    }
+
     add(RectangleHitbox());
   }
 
