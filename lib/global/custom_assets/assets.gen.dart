@@ -60,6 +60,10 @@ class $AssetsIconsGen {
   SvgGenImage get carrotPacks =>
       const SvgGenImage('assets/icons/carrotPacks.svg');
 
+  /// File path: assets/icons/carrotearn.svg
+  SvgGenImage get carrotearn =>
+      const SvgGenImage('assets/icons/carrotearn.svg');
+
   /// File path: assets/icons/chair.svg
   SvgGenImage get chair => const SvgGenImage('assets/icons/chair.svg');
 
@@ -86,6 +90,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/gameplay.svg
   SvgGenImage get gameplay => const SvgGenImage('assets/icons/gameplay.svg');
 
+  /// File path: assets/icons/ganeheart.svg
+  SvgGenImage get ganeheart => const SvgGenImage('assets/icons/ganeheart.svg');
+
   /// File path: assets/icons/gmail.svg
   SvgGenImage get gmail => const SvgGenImage('assets/icons/gmail.svg');
 
@@ -109,6 +116,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/key.svg
   SvgGenImage get key => const SvgGenImage('assets/icons/key.svg');
 
+  /// File path: assets/icons/leaderboard.svg
+  SvgGenImage get leaderboard =>
+      const SvgGenImage('assets/icons/leaderboard.svg');
+
   /// File path: assets/icons/logout.svg
   SvgGenImage get logout => const SvgGenImage('assets/icons/logout.svg');
 
@@ -124,6 +135,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/phone.svg
   SvgGenImage get phone => const SvgGenImage('assets/icons/phone.svg');
+
+  /// File path: assets/icons/play.svg
+  SvgGenImage get play => const SvgGenImage('assets/icons/play.svg');
 
   /// File path: assets/icons/powerups.svg
   SvgGenImage get powerups => const SvgGenImage('assets/icons/powerups.svg');
@@ -155,6 +169,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/settings.svg
   SvgGenImage get settings => const SvgGenImage('assets/icons/settings.svg');
 
+  /// File path: assets/icons/share.svg
+  SvgGenImage get share => const SvgGenImage('assets/icons/share.svg');
+
   /// File path: assets/icons/shield.svg
   SvgGenImage get shield => const SvgGenImage('assets/icons/shield.svg');
 
@@ -175,6 +192,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/terms.svg
   SvgGenImage get terms => const SvgGenImage('assets/icons/terms.svg');
 
+  /// File path: assets/icons/watch.svg
+  SvgGenImage get watch => const SvgGenImage('assets/icons/watch.svg');
+
   /// File path: assets/icons/win.svg
   SvgGenImage get win => const SvgGenImage('assets/icons/win.svg');
 
@@ -193,6 +213,7 @@ class $AssetsIconsGen {
     card,
     carrot,
     carrotPacks,
+    carrotearn,
     chair,
     changepass,
     contact,
@@ -201,6 +222,7 @@ class $AssetsIconsGen {
     emailcontact,
     firstfall,
     gameplay,
+    ganeheart,
     gmail,
     google,
     hapticfeedback,
@@ -208,11 +230,13 @@ class $AssetsIconsGen {
     highscores,
     home,
     key,
+    leaderboard,
     logout,
     nameProfile,
     others,
     pass,
     phone,
+    play,
     powerups,
     privacy,
     profileedit,
@@ -222,12 +246,14 @@ class $AssetsIconsGen {
     scoreicon,
     scores,
     settings,
+    share,
     shield,
     shop,
     soundeffect,
     start,
     statistics,
     terms,
+    watch,
     win,
   ];
 }

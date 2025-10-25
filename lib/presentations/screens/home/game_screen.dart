@@ -4,23 +4,44 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:rabbit_hole_app/core/constants/app_colors.dart';
 import 'package:rabbit_hole_app/global/custom_assets/assets.gen.dart';
 import 'package:rabbit_hole_app/presentations/widgets/custom_text.dart';
 
+import '../../../core/constants/app_colors.dart';
+
 // ================== GAME SCREEN ==================
-class GameScreen extends StatelessWidget {
+class GameScreen extends StatefulWidget {
   const GameScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final game = RabbitGame();
+  State<GameScreen> createState() => _GameScreenState();
+}
 
+class _GameScreenState extends State<GameScreen> {
+  late RabbitGame game;
+
+  @override
+  void initState() {
+    super.initState();
+    game = RabbitGame(onGameOver: () {
+      setState(() {});
+    });
+  }
+
+  void restartGame() {
+    setState(() {
+      game = RabbitGame(onGameOver: () {
+        setState(() {});
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Stack(
           children: [
-            // Game Area
             GameWidget(
               game: game,
               overlayBuilderMap: {
@@ -36,11 +57,13 @@ class GameScreen extends StatelessWidget {
                         border: Border.all(color: Colors.blue, width: 3),
                       ),
                       child: Center(
-                        child: CustomText(
-                          text: rabbitGame.countdownValue.toString(),
-                          fontsize: 60.sp,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue,
+                        child: Text(
+                          rabbitGame.countdownValue.toString(),
+                          style: TextStyle(
+                            fontSize: 60.sp,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue,
+                          ),
                         ),
                       ),
                     ),
@@ -51,11 +74,9 @@ class GameScreen extends StatelessWidget {
                   return Column(
                     children: [
                       const SizedBox(height: 12),
-                      // Top HUD
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          // Pause Button
                           GestureDetector(
                             onTap: () => rabbitGame.togglePause(),
                             child: Container(
@@ -64,27 +85,24 @@ class GameScreen extends StatelessWidget {
                               decoration: BoxDecoration(
                                 gradient: const LinearGradient(
                                   colors: [Color(0xFFB3E5FC), Color(0xFF99DEFE)],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
                                 ),
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Icon(
-                                rabbitGame.isPaused ? Icons.play_arrow : Icons.pause,
-                                size: 12.sp,
+                                rabbitGame.isPaused
+                                    ? Icons.play_arrow
+                                    : Icons.pause,
+                                size: 16.sp,
                                 color: Colors.black,
                               ),
                             ),
                           ),
-
-                          // Hearts
                           Container(
-                            padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 6.w, vertical: 2.h),
                             decoration: BoxDecoration(
                               gradient: const LinearGradient(
                                 colors: [Color(0xFFB3E5FC), Color(0xFF99DEFE)],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
                               ),
                               borderRadius: BorderRadius.circular(4),
                             ),
@@ -92,42 +110,41 @@ class GameScreen extends StatelessWidget {
                               spacing: 4,
                               children: List.generate(
                                 rabbitGame.lives.clamp(0, 5),
-                                    (i) => Icon(Icons.favorite, color: Colors.red, size: 18.sp),
+                                    (i) => Icon(Icons.favorite,
+                                    color: Colors.red, size: 18.sp),
                               ),
                             ),
                           ),
-
-                          // Distance Counter
                           Container(
                             width: 130.w,
                             padding: EdgeInsets.symmetric(vertical: 4.h),
                             decoration: BoxDecoration(
                               gradient: const LinearGradient(
                                 colors: [Color(0xFFB3E5FC), Color(0xFF99DEFE)],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
                               ),
                               borderRadius: BorderRadius.circular(6.r),
                             ),
                             child: Column(
-                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                CustomText(
-                                  text: "${rabbitGame.distance.toInt()} ft",
-                                  color: AppColors.bottomColorB17D28,
-                                  fontsize: 18.sp,
+                                Text(
+                                  "${rabbitGame.distance.toInt()} ft",
+                                  style: TextStyle(
+                                    color: Colors.brown[700],
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
-                                CustomText(
-                                  text: "Distance",
-                                  fontsize: 12.sp,
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColors.textColor000000,
+                                Text(
+                                  "Distance",
+                                  style: TextStyle(
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ],
                             ),
                           ),
-
-                          // Carrots Box
                           Container(
                             width: 65.w,
                             height: 40.h,
@@ -135,114 +152,336 @@ class GameScreen extends StatelessWidget {
                             decoration: BoxDecoration(
                               gradient: const LinearGradient(
                                 colors: [Color(0xFFB3E5FC), Color(0xFF99DEFE)],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
                               ),
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Assets.icons.bigpacks.svg(),
+                                Assets.icons.carrotearn.svg(),
                                 SizedBox(width: 4.r),
                                 CustomText(
                                   text: "${rabbitGame.carrots}",
+                                  fontsize: 8.sp,
+                                  fontWeight: FontWeight.w400,
                                   color: AppColors.textColor000000,
-                                ),
+
+
+                                   ),
+
                               ],
                             ),
                           ),
-
-                          // Settings Button
                           Container(
                             width: 36.w,
                             height: 36.h,
                             decoration: BoxDecoration(
                               gradient: const LinearGradient(
                                 colors: [Color(0xFFB3E5FC), Color(0xFF99DEFE)],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
                               ),
                               borderRadius: BorderRadius.circular(4),
                             ),
-                            child: Assets.icons.settings.svg(),
+                            child: const Icon(
+                                Icons.settings,
+                                color: Colors.black),
                           ),
                         ],
                       ),
-
-                      // Invincible Status
-                      if (rabbitGame.isInvincible && rabbitGame.lives > 0)
-                        Container(
-                          margin: EdgeInsets.only(top: 8.h),
-                          width: 130.w,
-                          height: 28.h,
-                          decoration: BoxDecoration(
-                            color: Color(0xFF12DA65).withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Center(
-                            child: CustomText(
-                              text: "INVINCIBLE",
-                              color: AppColors.textColor000000,
-                              fontsize: 11.sp,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ),
                     ],
                   );
                 },
                 'GameOver': (context, game) {
                   final rabbitGame = game as RabbitGame;
-                  return Container(
-                    color: Colors.black.withOpacity(0.8),
-                    child: Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text(
-                            "Game Over",
-                            style: TextStyle(
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                  return Center(
+                    child: Container(
+                      width: 375.w,
+                      height: 690.h,
+                      padding: EdgeInsets.all(10.r),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16.r),
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFFB3E5FC), Color(0xFF99DEFE)],
+                        ),
+                      ),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Assets.icons.ganeheart.svg(
+                              height: 64.h,
+                              width: 64.w
                             ),
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            "Distance: ${rabbitGame.distance.toInt()} ft",
-                            style: const TextStyle(
-                              fontSize: 20,
-                              color: Colors.white70,
+                            SizedBox(height: 16.h),
+                            CustomText(text:
+                              "Game Over!",
+                              color: AppColors.textColor000000,
+                              fontsize: 23.sp,
+                              fontWeight: FontWeight.w600,
                             ),
-                          ),
-                          Text(
-                            "Carrots: ${rabbitGame.carrots}",
-                            style: const TextStyle(
-                              fontSize: 20,
-                              color: Colors.white70,
+                            SizedBox(height: 8.h),
+                            CustomText(
+                                text: "The rabbit hit an obstacle",
+                              color: AppColors.textColor333333,
+                              fontsize: 14.sp,
+                              fontWeight: FontWeight.w400,
+                                ),
+                            SizedBox(height: 24.h),
+                            Container(
+                              width: 346.w,
+                              height: 120.h,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12.r),
+                                color: Colors.white.withOpacity(0.85),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  CustomText(
+                                    text: 'Distance',
+                                    color: AppColors.textColor333333,
+                                    fontsize: 16.sp,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                  CustomText(text:
+                                    "${rabbitGame.distance.toInt()} ft",
+                                    color: AppColors.textColor000000,
+                                    fontsize: 26.sp,
+                                    fontWeight: FontWeight.w600,
+
+                                  ),
+                                  CustomText(
+                                    text: "Best: ${rabbitGame.bestDistance} ft",
+                                    color: AppColors.textColor333333,
+                                    fontsize: 16.sp,
+                                    fontWeight: FontWeight.w400,
+
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 24),
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(builder: (_) => const GameScreen()),
-                              );
-                            },
-                            child: const Text("Play Again"),
-                          ),
-                        ],
+                            SizedBox(height: 12.h),
+                            Container(
+                              width: 346.w,
+                              height: 75.h,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8.r),
+                                color: Colors.white,
+                              ),
+                              child: Center(
+                                child: Column(
+                                  children: [
+                                    SizedBox(height: 20.h),
+                                    Row(
+                                      children: [
+                                        SizedBox(width: 18.w),
+                                        Assets.icons.carrotearn.svg(
+                                          height: 24.h,
+                                          width: 24.w
+                                        ),
+                                        SizedBox(width: 18.w),
+                                        CustomText(text:
+                                          "Carrots Earned:",
+                                          color: AppColors.textColor000000,
+                                          fontsize: 14.sp,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        const Spacer(),
+                                        CustomText(text:
+                                        "+${rabbitGame.carrots * 5}",
+                                          color: AppColors.textColor000000,
+                                          fontsize: 14.sp,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        SizedBox(width: 18.w),
+
+                                      ],
+                                    ),
+                                    SizedBox(height: 5.h),
+                                    CustomText(text:
+                                    "Special Note: Exchange 20 Super-carrots for 1 Original Carrot.",
+                                      color: AppColors.textColor000000,
+                                      fontsize: 11.sp,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ],
+                                ),
+
+                              ),
+                            ),
+                            SizedBox(height: 20.h),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFFFFD93B),
+                                minimumSize: Size(346.w, 52.h),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.r)),
+                              ),
+                              onPressed: () {
+                                rabbitGame.overlays.remove('GameOver');
+                                restartGame();
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Assets.icons.play.svg(
+                                      height: 16.h,
+                                      width: 16.w
+                                  ),
+                                  SizedBox(width: 12.w),
+                                  CustomText(
+                                    text: "Play Again",
+                                    color: AppColors.textColor000000,
+                                    fontsize: 14.sp,
+                                    fontWeight: FontWeight.w400,
+
+                                  ),
+                                ],
+                              ),
+                            ),
+
+
+                            SizedBox(height: 12.h),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFFF87914),
+                                minimumSize: Size(346.w, 42.h),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.r)),
+                              ),
+                              onPressed: () {
+
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Assets.icons.watch.svg(
+                                      height: 16.h,
+                                      width: 16.w
+                                  ),
+                                  SizedBox(width: 12.w),
+                                  CustomText(
+                                    text: "Watch Ad for +20 Carrots",
+                                    color: AppColors.textColorFFFFFF,
+                                    fontsize: 14.sp,
+                                    fontWeight: FontWeight.w400,
+
+                                  ),
+                                ],
+                              ),
+                            ),
+
+
+                            SizedBox(height: 16.h),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColors.bgColor,
+                                    minimumSize: Size(170.w, 42.h),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.r),
+                                    ),
+                                  ),
+                                  onPressed: () {
+
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                     Assets.icons.leaderboard.svg(),
+                                      SizedBox(width: 8.w),
+                                      CustomText(text:
+                                        "Leaderboard",
+                                          fontsize: 14.sp,
+                                          fontWeight: FontWeight.w400,
+                                          color: AppColors.textColor000000,
+
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColors.bgColor,
+                                    minimumSize: Size(170.w, 42.h),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.r),
+                                    ),
+                                  ),
+                                  onPressed: () {
+
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Assets.icons.home.svg(),
+                                      SizedBox(width: 8.w),
+                                      CustomText(text:
+                                        "Home",
+                                          fontsize: 14.sp,
+                                          fontWeight: FontWeight.w400,
+                                        color: AppColors.textColor000000,
+
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            SizedBox(height: 16.h),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFFFFD93B),
+                                minimumSize: Size(345.w, 42.h),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.r)),
+                              ),
+                              onPressed: () {
+
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Assets.icons.share.svg(
+                                      height: 16.h,
+                                      width: 16.w
+                                  ),
+                                  SizedBox(width: 12.w),
+                                  CustomText(
+                                    text: "Share & Get Free Skin!",
+                                    color: AppColors.textColor000000,
+                                    fontsize: 14.sp,
+                                    fontWeight: FontWeight.w400,
+
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 20.h),
+
+                            CustomText(
+                              text: '“Being at the beginning, and go on till you come the end: then stop.”',
+                              fontsize: 11.sp,
+                              fontWeight: FontWeight.w400,
+                              color: AppColors.textColor8A8A8A,
+
+                            ),
+                            SizedBox(height: 10.h),
+                          ],
+                        ),
                       ),
                     ),
                   );
-                }
+                },
               },
               initialActiveOverlays: const ['Countdown'],
             ),
 
-            // Bottom Controls (Left & Right)
             if (!game.isGameOver)
               Align(
                 alignment: Alignment.bottomCenter,
@@ -251,46 +490,36 @@ class GameScreen extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      GestureDetector(
-                        onTap: () => game.rabbit.moveLeft(),
-                        child: Container(
-                          width: 50,
-                          height: 50,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: LinearGradient(
-                              colors: [Colors.blue, Colors.lightBlue],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                          ),
-                          child: const Icon(
-                            Icons.arrow_left,
-                            size: 40,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () => game.rabbit.moveRight(),
-                        child: Container(
-                          width: 50,
-                          height: 50,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: LinearGradient(
-                              colors: [Colors.blue, Colors.lightBlue],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                          ),
-                          child: const Icon(
-                            Icons.arrow_right,
-                            size: 30,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
+                      // GestureDetector(
+                      //   onTap: () => game.rabbit.moveLeft(),
+                      //   child: Container(
+                      //     width: 60,
+                      //     height: 60,
+                      //     decoration: const BoxDecoration(
+                      //       shape: BoxShape.circle,
+                      //       gradient: LinearGradient(
+                      //         colors: [Colors.blue, Colors.lightBlue],
+                      //       ),
+                      //     ),
+                      //     child: const Icon(Icons.arrow_left,
+                      //         size: 40, color: Colors.white),
+                      //   ),
+                      // ),
+                      // GestureDetector(
+                      //   onTap: () => game.rabbit.moveRight(),
+                      //   child: Container(
+                      //     width: 60,
+                      //     height: 60,
+                      //     decoration: const BoxDecoration(
+                      //       shape: BoxShape.circle,
+                      //       gradient: LinearGradient(
+                      //         colors: [Colors.blue, Colors.lightBlue],
+                      //       ),
+                      //     ),
+                      //     child: const Icon(Icons.arrow_right,
+                      //         size: 40, color: Colors.white),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
@@ -302,36 +531,34 @@ class GameScreen extends StatelessWidget {
   }
 }
 
+
+
+
 // ================== GAME LOGIC ==================
 class RabbitGame extends FlameGame with HasCollisionDetection {
-  Color backgroundColor() =>AppColors.textColorFFFFFF;
+  Color backgroundColor() =>AppColors.textColorBC844A;
+  final VoidCallback onGameOver;
+  RabbitGame({required this.onGameOver});
+
   late Rabbit rabbit;
   int lives = 3;
   int carrots = 0;
   double distance = 0;
+  double bestDistance = 0;
   double speed = 100;
-  bool isInvincible = false;
   bool isGameStarted = false;
   bool isGameOver = false;
   bool isPaused = false;
-
-  // Countdown related
   int countdownValue = 3;
   double countdownTimer = 0;
-
   Random random = Random();
-  double invincibilityTimer = 0;
-  static const double invincibilityDuration = 2.0;
 
   @override
   Future<void> onLoad() async {
-    // Initialize rabbit
     rabbit = Rabbit()
       ..position = Vector2(size.x / 2, size.y / 2)
       ..anchor = Anchor.center;
     add(rabbit);
-
-    // Start countdown
     startCountdown();
   }
 
@@ -360,26 +587,13 @@ class RabbitGame extends FlameGame with HasCollisionDetection {
   @override
   void update(double dt) {
     super.update(dt);
-
     if (!isGameStarted) {
       updateCountdown(dt);
       return;
     }
-
     if (isPaused) return;
 
-    // Update invincibility
-    if (isInvincible) {
-      invincibilityTimer -= dt;
-      if (invincibilityTimer <= 0) {
-        isInvincible = false;
-      }
-    }
-
-    // Increase speed over time
     speed += 10 * dt;
-
-    // Update distance based on speed
     distance += speed * dt * 0.1;
   }
 
@@ -388,103 +602,69 @@ class RabbitGame extends FlameGame with HasCollisionDetection {
     if (countdownTimer >= 1.0) {
       countdownValue--;
       countdownTimer = 0;
-
       if (countdownValue <= 0) {
         startGame();
       } else {
-        // Update countdown display
         overlays.remove('Countdown');
         overlays.add('Countdown');
       }
     }
   }
 
-  void loseLife() {
-    if (isInvincible) return;
-
-    lives--;
-    if (lives > 0) {
-      // Make invincible temporarily
-      isInvincible = true;
-      invincibilityTimer = invincibilityDuration;
-    } else {
-      // Game over
-      isGameOver = true;
-      overlays.remove('HUD');
-      overlays.add('GameOver');
-      pauseEngine();
-    }
-  }
-
-  void gainLife() {
-    lives++;
-    // Add some visual feedback here if needed
+  void gameOver() {
+    if (isGameOver) return;
+    isGameOver = true;
+    bestDistance = distance > bestDistance ? distance : bestDistance;
+    overlays.remove('HUD');
+    overlays.add('GameOver');
+    pauseEngine();
+    onGameOver();
   }
 
   void collectCarrot() {
     carrots++;
-    // Add some visual feedback here if needed
   }
 }
 
-class Rabbit extends RectangleComponent with HasGameRef<RabbitGame>, CollisionCallbacks {
-
-  Rabbit() : super(
-    size: Vector2(60, 60),
-    paint: Paint()..color = Colors.brown,
-  );
+class Rabbit extends RectangleComponent
+    with HasGameRef<RabbitGame>, CollisionCallbacks {
+  Rabbit()
+      : super(size: Vector2(60, 60), paint: Paint()..color = Colors.brown);
 
   @override
-  void update(double dt) {
-    super.update(dt);
-
-    if (!gameRef.isGameStarted || gameRef.isPaused) return;
-
-    // Rabbit visual feedback for invincibility
-    if (gameRef.isInvincible) {
-      paint.color = paint.color == Colors.brown
-          ? Colors.brown.withOpacity(0.5)
-          : Colors.brown;
-    } else {
-      paint.color = Colors.brown;
-    }
+  Future<void> onLoad() async {
+    super.onLoad();
+    add(RectangleHitbox());
   }
 
   void moveLeft() {
     if (!gameRef.isGameStarted || gameRef.isPaused) return;
-
-    double newX = x - 100;
-    if (newX >= 30) {
-      x = newX;
-    } else {
-      x = 30;
-    }
+    x = (x - 100).clamp(30, gameRef.size.x - 30);
   }
 
   void moveRight() {
     if (!gameRef.isGameStarted || gameRef.isPaused) return;
+    x = (x + 100).clamp(30, gameRef.size.x - 30);
+  }
 
-    double newX = x + 100;
-    if (newX <= gameRef.size.x - 30) {
-      x = newX;
-    } else {
-      x = gameRef.size.x - 30;
+  @override
+  void onCollision(Set<Vector2> points, PositionComponent other) {
+    if (other is GameObject && other.type == 'obstacle') {
+      gameRef.gameOver();
     }
   }
 }
 
-class GameObject extends RectangleComponent with CollisionCallbacks, HasGameRef<RabbitGame> {
+class GameObject extends RectangleComponent
+    with CollisionCallbacks, HasGameRef<RabbitGame> {
   final String type;
+  GameObject(this.type)
+      : super(size: Vector2(40, 40), paint: Paint());
 
-  GameObject(this.type) : super(
-    size: Vector2(40, 40),
-    paint: Paint(),
-  ) {
-    // Set colors based on type
+  @override
+  Future<void> onLoad() async {
+    super.onLoad();
     switch (type) {
-      case 'heart':
-        paint.color = Colors.red;
-        break;
       case 'carrot':
         paint.color = Colors.orange;
         break;
@@ -494,36 +674,24 @@ class GameObject extends RectangleComponent with CollisionCallbacks, HasGameRef<
       default:
         paint.color = Colors.grey;
     }
+    add(RectangleHitbox());
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-
     if (!gameRef.isGameStarted || gameRef.isPaused) return;
-
-    // Move upward (since rabbit is falling, objects appear to move up)
     y -= gameRef.speed * dt;
-
-    // Remove when off screen
-    if (y < -size.y) {
-      removeFromParent();
-    }
+    if (y < -size.y) removeFromParent();
   }
 
   @override
   void onCollision(Set<Vector2> points, PositionComponent other) {
     if (other is Rabbit) {
-      switch (type) {
-        case 'heart':
-          gameRef.gainLife();
-          break;
-        case 'carrot':
-          gameRef.collectCarrot();
-          break;
-        case 'obstacle':
-          gameRef.loseLife();
-          break;
+      if (type == 'carrot') {
+        gameRef.collectCarrot();
+      } else if (type == 'obstacle') {
+        gameRef.gameOver();
       }
       removeFromParent();
     }
@@ -537,12 +705,9 @@ class SpawnManager extends Component with HasGameRef<RabbitGame> {
   @override
   void update(double dt) {
     super.update(dt);
-
     if (!gameRef.isGameStarted || gameRef.isPaused) return;
 
     timer += dt;
-
-    // Decrease spawn interval as game progresses (increase difficulty)
     spawnInterval = (2.0 - (gameRef.distance / 1000)).clamp(0.5, 2.0);
 
     if (timer >= spawnInterval) {
@@ -553,27 +718,15 @@ class SpawnManager extends Component with HasGameRef<RabbitGame> {
 
   void spawnRandomObject() {
     final rand = gameRef.random.nextDouble();
-    String type;
-
-    // 60% obstacles, 25% carrots, 15% hearts
-    if (rand < 0.6) {
-      type = 'obstacle';
-    } else if (rand < 0.85) {
-      type = 'carrot';
-    } else {
-      type = 'heart';
-    }
-
+    String type = rand < 0.6 ? 'obstacle' : 'carrot';
     final positions = [
       gameRef.size.x * 0.2,
       gameRef.size.x * 0.5,
       gameRef.size.x * 0.8,
     ];
-
     final obj = GameObject(type)
       ..x = positions[gameRef.random.nextInt(positions.length)]
       ..y = gameRef.size.y + 50;
-
     gameRef.add(obj);
   }
 }

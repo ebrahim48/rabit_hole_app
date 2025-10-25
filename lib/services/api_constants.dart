@@ -17,4 +17,8 @@ class ApiConstants{
   static const String resetPasswordEndPoint = "/auth/reset-password";
 
 
+
+  static const String gamingDashboardEndPoint = "/auth/reset-password";
+
+
 }
