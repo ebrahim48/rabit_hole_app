@@ -51,7 +51,7 @@ class _GameScreenState extends State<GameScreen> {
             },
             initialActiveOverlays: const ['Countdown'],
           ),
-          if (!game.isGameOver) ControlsWidget(game: game),
+
         ],
       ),
     );

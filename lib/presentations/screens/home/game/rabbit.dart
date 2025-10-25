@@ -24,14 +24,12 @@ class Rabbit extends PositionComponent
     add(RectangleHitbox());
   }
 
-  void moveLeft() {
-    if (!gameRef.isGameStarted || gameRef.isPaused) return;
-    x = (x - 100).clamp(30, gameRef.size.x - 30);
-  }
 
-  void moveRight() {
+
+  @override
+  void move(double dx) {
     if (!gameRef.isGameStarted || gameRef.isPaused) return;
-    x = (x + 100).clamp(30, gameRef.size.x - 30);
+    x = (x + dx).clamp(30, gameRef.size.x - 30);
   }
 
   @override

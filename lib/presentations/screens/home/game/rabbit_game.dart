@@ -1,13 +1,13 @@
-
 import 'dart:math';
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:rabbit_hole_app/core/constants/app_colors.dart';
 import 'package:rabbit_hole_app/presentations/screens/home/game/rabbit.dart';
 import 'package:rabbit_hole_app/presentations/screens/home/game/spawn_manager.dart';
 
-class RabbitGame extends FlameGame with HasCollisionDetection {
+class RabbitGame extends FlameGame with HasCollisionDetection, DragCallbacks {
   Color backgroundColor() => AppColors.textColorBC844A;
   final VoidCallback onGameOver;
 
@@ -97,5 +97,11 @@ class RabbitGame extends FlameGame with HasCollisionDetection {
 
   void collectCarrot() {
     carrots++;
+  }
+
+  @override
+  void onDragUpdate(DragUpdateEvent event) {
+    if (!isGameStarted || isGameOver || isPaused) return;
+    rabbit.move(event.localDelta.x);
   }
 }

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:rabbit_hole_app/presentations/screens/home/game/rabbit_game.dart';
 
@@ -17,7 +16,7 @@ class ControlsWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             GestureDetector(
-              onTap: () => game.rabbit.moveLeft(),
+              //onTap: () => game.rabbit.moveLeft(),
               child: Container(
                 width: 60,
                 height: 60,
@@ -35,7 +34,7 @@ class ControlsWidget extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () => game.rabbit.moveRight(),
+              // onTap: () => game.rabbit.moveRight(),
               child: Container(
                 width: 60,
                 height: 60,
