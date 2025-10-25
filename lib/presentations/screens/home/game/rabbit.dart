@@ -1,18 +1,26 @@
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame_svg/flame_svg.dart';
 
 import 'package:flutter/material.dart';
 import 'package:rabbit_hole_app/presentations/screens/home/game/game_object.dart';
 import 'package:rabbit_hole_app/presentations/screens/home/game/rabbit_game.dart';
 
-class Rabbit extends RectangleComponent
+class Rabbit extends PositionComponent
     with HasGameRef<RabbitGame>, CollisionCallbacks {
-  Rabbit() : super(size: Vector2(60, 60), paint: Paint()..color = Colors.brown);
+  Rabbit() : super(size: Vector2(60, 60));
 
   @override
   Future<void> onLoad() async {
     super.onLoad();
+    final sprite = await Svg.load('icons/rabit.svg');
+    add(
+      SvgComponent(
+        svg: sprite,
+        size: Vector2(60, 60),
+      ),
+    );
     add(RectangleHitbox());
   }
 
