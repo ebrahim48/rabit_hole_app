@@ -2,6 +2,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:rabbit_hole_app/presentations/screens/home/game/rabbit_game.dart';
 import 'package:rabbit_hole_app/presentations/screens/home/game/widgets/all_widgets.dart';
+import 'package:rabbit_hole_app/presentations/screens/home/game/widgets/road_separator_painter.dart';
 
 class GameScreen extends StatefulWidget {
   const GameScreen({super.key});
@@ -63,6 +64,19 @@ class _GameScreenState extends State<GameScreen> {
                     ),
               },
               initialActiveOverlays: const ['Countdown'],
+            ),
+            // Road separators
+            Positioned.fill(
+              child: IgnorePointer(
+                child: CustomPaint(
+                  painter: RoadSeparatorPainter(
+                    dashHeight: 4.0,
+                    dashGap: 4.0,
+                    strokeWidth: 0.5,
+                    color: Colors.white.withOpacity(0.5),
+                  ),
+                ),
+              ),
             ),
           ],
         ),

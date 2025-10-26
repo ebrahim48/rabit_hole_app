@@ -8,17 +8,35 @@ class Rabbit extends PositionComponent
     with HasGameRef<RabbitGame>, CollisionCallbacks {
   Rabbit() : super(size: Vector2(60, 60));
 
+  late SvgComponent rabbitSprite;
+
   @override
   Future<void> onLoad() async {
     super.onLoad();
     final sprite = await Svg.load('icons/blue_rabbit.svg');
-    add(SvgComponent(svg: sprite, size: Vector2(60, 60)));
+    rabbitSprite = SvgComponent(svg: sprite, size: Vector2(60, 60));
+    // Initially facing left (default), so flip horizontally
+    rabbitSprite.flipHorizontally();
+    add(rabbitSprite);
     add(RectangleHitbox());
   }
 
   void move(double dx) {
     if (!gameRef.isGameStarted || gameRef.isPaused) return;
     x = (x + dx).clamp(30, gameRef.size.x - 30);
+
+    // Flip rabbit based on drag direction
+    if (dx > 0) {
+      // Moving right - face right
+      if (!rabbitSprite.isFlippedHorizontally) {
+        rabbitSprite.flipHorizontally();
+      }
+    } else if (dx < 0) {
+      // Moving left - face left
+      if (rabbitSprite.isFlippedHorizontally) {
+        rabbitSprite.flipHorizontally();
+      }
+    }
   }
 
   @override
