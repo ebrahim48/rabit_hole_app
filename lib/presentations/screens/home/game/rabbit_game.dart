@@ -17,11 +17,13 @@ class RabbitGame extends FlameGame with HasCollisionDetection, DragCallbacks {
   RabbitGame({required this.onGameOver});
 
   late Rabbit rabbit;
-  int lives = 3;
+  int lives = 1;
+  int maxLives = 3;
   int carrots = 0;
   double distance = 0;
   double bestDistance = 0;
   double speed = 100;
+  double baseSpeed = 100;
   bool isGameStarted = false;
   bool isGameOver = false;
   bool isPaused = false;
@@ -71,7 +73,8 @@ class RabbitGame extends FlameGame with HasCollisionDetection, DragCallbacks {
     }
     if (isPaused) return;
 
-    speed += 10 * dt;
+    baseSpeed += 10 * dt;
+    speed = baseSpeed;
     distance += speed * dt * 0.1;
   }
 
@@ -103,6 +106,25 @@ class RabbitGame extends FlameGame with HasCollisionDetection, DragCallbacks {
 
   void collectCarrot() {
     carrots++;
+  }
+
+  void collectLife() {
+    if (lives < maxLives) {
+      lives++;
+    }
+  }
+
+  void collectPower() {
+    // Increase speed by 50%
+    baseSpeed *= 1.5;
+    speed = baseSpeed;
+  }
+
+  void hitObstacle() {
+    lives--;
+    if (lives <= 0) {
+      gameOver();
+    }
   }
 
   @override

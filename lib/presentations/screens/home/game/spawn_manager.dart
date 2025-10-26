@@ -24,7 +24,21 @@ class SpawnManager extends Component with HasGameRef<RabbitGame> {
 
   void spawnRandomObject() {
     final rand = gameRef.random.nextDouble();
-    String type = rand < 0.6 ? 'obstacle' : 'carrot';
+    String type;
+
+    // Distribution: 40% carrot, 35% obstacles, 15% life, 10% power
+    if (rand < 0.40) {
+      type = 'carrot';
+    } else if (rand < 0.75) {
+      // Obstacles: ball, chair, hat, trump_card, key
+      final obstacles = ['ball', 'chair', 'hat', 'trump_card', 'key'];
+      type = obstacles[gameRef.random.nextInt(obstacles.length)];
+    } else if (rand < 0.90) {
+      type = 'life';
+    } else {
+      type = 'power';
+    }
+
     final positions = [
       gameRef.size.x * 0.2,
       gameRef.size.x * 0.5,

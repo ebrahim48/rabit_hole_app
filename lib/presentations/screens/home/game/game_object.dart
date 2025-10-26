@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_svg/flame_svg.dart';
@@ -17,21 +16,13 @@ class GameObject extends PositionComponent
     super.onLoad();
 
     Svg? svg;
-    if (type == 'carrot') {
-      svg = await Svg.load('icons/carrot.svg');
-    } else if (type == 'obstacle') {
-      final obstacleIcons = [
-        'icons/ball.svg',
-        'icons/chair.svg',
-        'icons/power.svg',
-        'icons/life.svg',
-        'icons/hat.svg',
-        'icons/trump_card.svg',
-        'icons/key.svg',
-      ];
-      final randomIconPath =
-          obstacleIcons[Random().nextInt(obstacleIcons.length)];
-      svg = await Svg.load(randomIconPath);
+    String iconPath = 'icons/$type.svg';
+
+    try {
+      svg = await Svg.load(iconPath);
+    } catch (e) {
+      // Fallback if icon not found
+      print('Could not load icon: $iconPath');
     }
 
     if (svg != null) {
@@ -57,11 +48,21 @@ class GameObject extends PositionComponent
       if (type == 'carrot') {
         gameRef.collectCarrot();
         HapticHelper.triggerLightFeedback();
-      } else if (type == 'obstacle') {
+      } else if (type == 'life') {
+        gameRef.collectLife();
+        HapticHelper.triggerLightFeedback();
+      } else if (type == 'power') {
+        gameRef.collectPower();
+        HapticHelper.triggerSelectionFeedback();
+      } else if (_isObstacle(type)) {
+        gameRef.hitObstacle();
         HapticHelper.triggerHeavyFeedback();
-        gameRef.gameOver();
       }
       removeFromParent();
     }
+  }
+
+  bool _isObstacle(String type) {
+    return ['ball', 'chair', 'hat', 'trump_card', 'key'].contains(type);
   }
 }
