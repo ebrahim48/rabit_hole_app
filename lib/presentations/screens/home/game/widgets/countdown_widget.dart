@@ -9,6 +9,11 @@ class CountdownWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Don't show countdown if game is over or game has started
+    if (game.isGameOver || game.isGameStarted) {
+      return const SizedBox.shrink();
+    }
+
     return Center(
       child: Container(
         width: 150.w,

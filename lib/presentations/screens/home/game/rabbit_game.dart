@@ -64,6 +64,7 @@ class RabbitGame extends FlameGame with HasCollisionDetection, DragCallbacks {
   @override
   void update(double dt) {
     super.update(dt);
+    if (isGameOver) return;
     if (!isGameStarted) {
       updateCountdown(dt);
       return;
@@ -75,6 +76,7 @@ class RabbitGame extends FlameGame with HasCollisionDetection, DragCallbacks {
   }
 
   void updateCountdown(double dt) {
+    if (isGameOver) return;
     countdownTimer += dt;
     if (countdownTimer >= 1.0) {
       countdownValue--;
@@ -92,7 +94,7 @@ class RabbitGame extends FlameGame with HasCollisionDetection, DragCallbacks {
     if (isGameOver) return;
     isGameOver = true;
     bestDistance = distance > bestDistance ? distance : bestDistance;
-    overlays.remove('HUD');
+    overlays.clear();
     overlays.add('GameOver');
     pauseEngine();
     HapticHelper.triggerErrorFeedback();

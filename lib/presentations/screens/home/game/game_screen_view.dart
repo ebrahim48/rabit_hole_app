@@ -36,23 +36,36 @@ class _GameScreenState extends State<GameScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          GameWidget(
-            game: game,
-            overlayBuilderMap: {
-              'Countdown': (context, game) =>
-                  CountdownWidget(game: game as RabbitGame),
-              'HUD': (context, game) => HudWidget(game: game as RabbitGame),
-              'GameOver': (context, game) => GameOverWidget(
-                    game: game as RabbitGame,
-                    onRestart: restartGame,
-                  ),
-            },
-            initialActiveOverlays: const ['Countdown'],
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFFBC844A), // Top color: #BC844A
+              Color(0xFF502A0E), // Bottom color: #502A0E
+            ],
           ),
-
-        ],
+        ),
+        child: Stack(
+          children: [
+            GameWidget(
+              game: game,
+              overlayBuilderMap: {
+                'Countdown':
+                    (context, game) =>
+                        CountdownWidget(game: game as RabbitGame),
+                'HUD': (context, game) => HudWidget(game: game as RabbitGame),
+                'GameOver':
+                    (context, game) => GameOverWidget(
+                      game: game as RabbitGame,
+                      onRestart: restartGame,
+                    ),
+              },
+              initialActiveOverlays: const ['Countdown'],
+            ),
+          ],
+        ),
       ),
     );
   }

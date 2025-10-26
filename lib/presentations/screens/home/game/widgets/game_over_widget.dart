@@ -70,7 +70,7 @@ class GameOverWidget extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
                   CustomText(
-                    text: "Best: ${game.bestDistance} ft",
+                    text: "Best: ${game.distance.toInt()} ft",
                     color: AppColors.textColor333333,
                     fontsize: 16.sp,
                     fontWeight: FontWeight.w400,
