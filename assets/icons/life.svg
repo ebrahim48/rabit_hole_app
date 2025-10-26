@@ -1,0 +1,21 @@
+<svg width="59" height="59" viewBox="0 0 59 59" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g clip-path="url(#clip0_726_3895)">
+        <rect y="12.4233" width="48" height="48" rx="24" transform="rotate(-15 0 12.4233)"
+            fill="#C9B4B4" fill-opacity="0.6" />
+        <path
+            d="M16.0581 24.1437C14.1941 27.3722 15.3003 31.5004 18.5287 33.3644L32.6415 41.5124L40.7894 27.3996C42.6534 24.1712 41.5472 20.0429 38.3187 18.179C35.0903 16.315 30.962 17.4212 29.0981 20.6496L27.7002 23.0711L25.2787 21.673C22.0503 19.8091 17.922 20.9152 16.0581 24.1437Z"
+            fill="url(#paint0_linear_726_3895)" stroke="#FD2020" stroke-linecap="round"
+            stroke-linejoin="round" />
+
+    </g>
+    <defs>
+        <clipPath id="bgblur_1_726_3895_clip_path" transform="translate(12 12)">
+            <rect y="12.4233" width="48" height="48" rx="24" transform="rotate(-15 0 12.4233)" />
+        </clipPath>
+        <linearGradient id="paint0_linear_726_3895" x1="13.2705" y1="21.3788" x2="44.5683"
+            y2="18.7992" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#D61355" />
+            <stop offset="1" stop-color="#FF0000" />
+        </linearGradient>
+    </defs>
+</svg>

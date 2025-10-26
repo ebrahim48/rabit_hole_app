@@ -2,7 +2,6 @@ import 'dart:math';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_svg/flame_svg.dart';
-import 'package:flutter/services.dart';
 import 'package:rabbit_hole_app/core/helpers/haptic_helper.dart';
 import 'package:rabbit_hole_app/presentations/screens/home/game/rabbit.dart';
 import 'package:rabbit_hole_app/presentations/screens/home/game/rabbit_game.dart';
@@ -25,6 +24,10 @@ class GameObject extends PositionComponent
         'icons/ball.svg',
         'icons/chair.svg',
         'icons/power.svg',
+        'icons/life.svg',
+        'icons/hat.svg',
+        'icons/trump_card.svg',
+        'icons/key.svg',
       ];
       final randomIconPath =
           obstacleIcons[Random().nextInt(obstacleIcons.length)];
