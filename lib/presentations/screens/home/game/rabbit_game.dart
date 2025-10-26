@@ -11,7 +11,7 @@ import 'package:rabbit_hole_app/presentations/screens/home/game/spawn_manager.da
 
 class RabbitGame extends FlameGame with HasCollisionDetection, DragCallbacks {
   @override
-  Color backgroundColor() => AppColors.textColorBC844A;
+  Color backgroundColor() => const Color(0x00000000); // Transparent background
   final VoidCallback onGameOver;
 
   RabbitGame({required this.onGameOver});
