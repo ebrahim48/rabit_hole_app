@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../core/constants/app_colors.dart';
 
 class CustomProfileImage extends StatelessWidget {
   final String imageUrl;
@@ -13,12 +12,8 @@ class CustomProfileImage extends StatelessWidget {
     return Container(
       width: 60.w,
       height: 60.h,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         shape: BoxShape.circle,
-        // border: Border.all(
-        //   color: AppColors.buttonColorE8A533,
-        //   width: 3, // border width
-        // ),
       ),
       child: ClipOval(
         child: Image.network(

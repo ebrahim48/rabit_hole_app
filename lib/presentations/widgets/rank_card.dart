@@ -10,12 +10,14 @@ class GlobalListCard extends StatelessWidget {
   final String imageUrl;
   final String title;
   final String subtitle;
+  final String distance;
   final VoidCallback? onTap;
 
   const GlobalListCard({
     super.key,
     required this.icon,
     required this.imageUrl,
+    required this.distance,
     required this.title,
     required this.subtitle,
     this.onTap,
@@ -68,13 +70,13 @@ class GlobalListCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 CustomText(
-                  text: subtitle.split("\n")[0],
+                  text: subtitle,
                   color: AppColors.textColor000000,
-                  fontsize: 14.sp,
-                  fontWeight: FontWeight.w500,
+                  fontsize: 13.sp,
+                  fontWeight: FontWeight.w400,
                 ),
                 CustomText(
-                  text: subtitle.split("\n")[1],
+                  text: distance,
                   color: AppColors.textColor8A8A8A,
                   fontsize: 13.sp,
                   fontWeight: FontWeight.w400,
