@@ -47,6 +47,7 @@ class GameObject extends PositionComponent
 
   @override
   void onCollision(Set<Vector2> points, PositionComponent other) {
+    super.onCollision(points, other);
     if (other is Rabbit) {
       if (type == 'carrot') {
         gameRef.collectCarrot();
