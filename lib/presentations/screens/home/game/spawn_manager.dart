@@ -33,7 +33,7 @@ class SpawnManager extends Component with HasGameRef<RabbitGame> {
     final obj =
         GameObject(type)
           ..x = positions[gameRef.random.nextInt(positions.length)]
-          ..y = gameRef.size.y + 50;
+          ..y = -50;
     gameRef.add(obj);
   }
 }

@@ -41,13 +41,13 @@ class GameObject extends PositionComponent
   void update(double dt) {
     super.update(dt);
     if (!gameRef.isGameStarted || gameRef.isPaused) return;
-    y -= gameRef.speed * dt;
-    if (y < -size.y) removeFromParent();
+    y += gameRef.speed * dt;
+    if (y > gameRef.size.y) removeFromParent();
   }
 
   @override
-  void onCollision(Set<Vector2> points, PositionComponent other) {
-    super.onCollision(points, other);
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollision(intersectionPoints, other);
     if (other is Rabbit) {
       if (type == 'carrot') {
         gameRef.collectCarrot();

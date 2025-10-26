@@ -8,6 +8,7 @@ import 'package:rabbit_hole_app/presentations/screens/home/game/rabbit.dart';
 import 'package:rabbit_hole_app/presentations/screens/home/game/spawn_manager.dart';
 
 class RabbitGame extends FlameGame with HasCollisionDetection, DragCallbacks {
+  @override
   Color backgroundColor() => AppColors.textColorBC844A;
   final VoidCallback onGameOver;
 
@@ -30,7 +31,7 @@ class RabbitGame extends FlameGame with HasCollisionDetection, DragCallbacks {
   Future<void> onLoad() async {
     rabbit =
         Rabbit()
-          ..position = Vector2(size.x / 2, size.y / 2)
+          ..position = Vector2(size.x / 2, size.y - 64)
           ..anchor = Anchor.center;
     add(rabbit);
     startCountdown();
