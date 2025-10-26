@@ -6,10 +6,46 @@ import 'package:rabbit_hole_app/global/custom_assets/assets.gen.dart';
 import 'package:rabbit_hole_app/presentations/screens/home/game/rabbit_game.dart';
 import 'package:rabbit_hole_app/presentations/widgets/custom_text.dart';
 
-class HudWidget extends StatelessWidget {
+class HudWidget extends StatefulWidget {
   final RabbitGame game;
 
   const HudWidget({super.key, required this.game});
+
+  @override
+  State<HudWidget> createState() => _HudWidgetState();
+}
+
+class _HudWidgetState extends State<HudWidget> {
+  late int carrots;
+  late double distance;
+
+  @override
+  void initState() {
+    super.initState();
+    carrots = widget.game.carrots;
+    distance = widget.game.distance;
+    
+    // Update values periodically
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _startUpdatingValues();
+    });
+  }
+
+  void _startUpdatingValues() {
+    // Create a timer to periodically update the display values
+    // This ensures the HUD updates in real-time
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      while (mounted && !widget.game.isGameOver) {
+        await Future.delayed(const Duration(milliseconds: 50)); // Update every 50ms
+        if (mounted) {
+          setState(() {
+            carrots = widget.game.carrots;
+            distance = widget.game.distance;
+          });
+        }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +56,7 @@ class HudWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             GestureDetector(
-              onTap: () => game.togglePause(),
+              onTap: () => widget.game.togglePause(),
               child: Container(
                 width: 36.w,
                 height: 36.h,
@@ -31,7 +67,7 @@ class HudWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Icon(
-                  game.isPaused ? Icons.play_arrow : Icons.pause,
+                  widget.game.isPaused ? Icons.play_arrow : Icons.pause,
                   size: 16.sp,
                   color: Colors.black,
                 ),
@@ -51,7 +87,7 @@ class HudWidget extends StatelessWidget {
               child: Wrap(
                 spacing: 4,
                 children: List.generate(
-                  game.lives.clamp(0, 5),
+                  widget.game.lives.clamp(0, 5),
                   (i) => Icon(
                     Icons.favorite,
                     color: Colors.red,
@@ -72,7 +108,7 @@ class HudWidget extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    "${game.distance.toInt()} ft",
+                    "${distance.toInt()} ft",
                     style: TextStyle(
                       color: Colors.brown[700],
                       fontSize: 18.sp,
@@ -106,7 +142,7 @@ class HudWidget extends StatelessWidget {
                   Assets.icons.carrotearn.svg(),
                   SizedBox(width: 4.r),
                   CustomText(
-                    text: "${game.carrots}",
+                    text: "$carrots",
                     fontsize: 8.sp,
                     fontWeight: FontWeight.w400,
                     color: AppColors.textColor000000,
