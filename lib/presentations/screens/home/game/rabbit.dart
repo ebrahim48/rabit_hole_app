@@ -1,6 +1,7 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_svg/flame_svg.dart';
+import 'package:rabbit_hole_app/core/helpers/haptic_helper.dart';
 import 'package:rabbit_hole_app/presentations/screens/home/game/game_object.dart';
 import 'package:rabbit_hole_app/presentations/screens/home/game/rabbit_game.dart';
 

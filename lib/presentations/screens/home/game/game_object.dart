@@ -2,6 +2,8 @@ import 'dart:math';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_svg/flame_svg.dart';
+import 'package:flutter/services.dart';
+import 'package:rabbit_hole_app/core/helpers/haptic_helper.dart';
 import 'package:rabbit_hole_app/presentations/screens/home/game/rabbit.dart';
 import 'package:rabbit_hole_app/presentations/screens/home/game/rabbit_game.dart';
 
@@ -51,7 +53,9 @@ class GameObject extends PositionComponent
     if (other is Rabbit) {
       if (type == 'carrot') {
         gameRef.collectCarrot();
+        HapticHelper.triggerLightFeedback();
       } else if (type == 'obstacle') {
+        HapticHelper.triggerHeavyFeedback();
         gameRef.gameOver();
       }
       removeFromParent();

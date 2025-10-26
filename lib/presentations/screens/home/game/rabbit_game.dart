@@ -3,7 +3,9 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:rabbit_hole_app/core/constants/app_colors.dart';
+import 'package:rabbit_hole_app/core/helpers/haptic_helper.dart';
 import 'package:rabbit_hole_app/presentations/screens/home/game/rabbit.dart';
 import 'package:rabbit_hole_app/presentations/screens/home/game/spawn_manager.dart';
 
@@ -93,6 +95,7 @@ class RabbitGame extends FlameGame with HasCollisionDetection, DragCallbacks {
     overlays.remove('HUD');
     overlays.add('GameOver');
     pauseEngine();
+    HapticHelper.triggerErrorFeedback();
     onGameOver();
   }
 
