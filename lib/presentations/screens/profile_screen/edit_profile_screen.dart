@@ -54,7 +54,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ),
               child: IconButton(
                 padding: EdgeInsets.zero,
-                icon: Icon(Icons.arrow_back, color: Colors.black, size: 20.r),
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Colors.black,
+                  size: 20.r,
+                ),
                 onPressed: () => Navigator.pop(context),
               ),
             ),
@@ -83,14 +87,60 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const Stack(
-              alignment: Alignment.bottomRight,
-              children: [
-                CustomMainProfileImage(
-                  imageUrl:
-                      'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Pori_Moni_%28cropped%29.jpg/960px-Pori_Moni_%28cropped%29.jpg',
-                ),
-              ],
+            GestureDetector(
+              onTap: () {
+                showImagePickerOption(context);
+              },
+              child: Stack(
+                alignment: Alignment.bottomRight,
+                children: [
+                  Container(
+                    width: 100.w,
+                    height: 100.h,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: AppColors.primaryColorC79235,
+                        width: 3,
+                      ),
+                    ),
+                    child: selectedImage != null
+                        ? ClipOval(
+                        child: Image.file(selectedImage!,
+                            fit: BoxFit.cover))
+                        : CustomNetworkImage(
+                      boxShape: BoxShape.circle,
+                      imageUrl: profileImagePath ?? "",
+                      height: 100.h,
+                      width: 100.w,
+                    ),
+                  ),
+                  Positioned(
+                    top: 67.h,
+                    left: 70.w,
+                    child: Container(
+                      width: 26.58.w,
+                      height: 26.58.h,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white.withOpacity(0.2),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 10,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Icon(
+                        Icons.camera_alt,
+                        color: AppColors.textColorFFFFFF,
+                        size: 16.sp,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             SizedBox(height: 12.h),
             // Input fields box
@@ -120,25 +170,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.r),
-                        borderSide: const BorderSide(
-                          color: AppColors.textColorC7A8AD,
-                        ),
+                        borderSide: const BorderSide(color: AppColors.textColorC7A8AD),
                       ),
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 12.w,
-                        vertical: 12.h,
-                      ),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
                     ),
                   ),
                   SizedBox(height: 20.h),
 
                   // Address
-                  CustomText(
-                    text: "Address",
+                  CustomText(text: "Address",
                     color: AppColors.textColor545454,
                     fontsize: 13.sp,
-                    fontWeight: FontWeight.w400,
-                  ),
+                    fontWeight: FontWeight.w400,),
+
                   SizedBox(height: 8.h),
                   TextFormField(
                     controller: addressCtrl,
@@ -147,25 +191,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8.r),
-                        borderSide: const BorderSide(
-                          color: AppColors.textColorC7A8AD,
-                        ),
+                        borderSide: const BorderSide(color: AppColors.textColorC7A8AD),
                       ),
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 12.w,
-                        vertical: 12.h,
-                      ),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
                     ),
                   ),
                   SizedBox(height: 20.h),
 
                   // Phone
-                  CustomText(
-                    text: "Phone",
-                    color: AppColors.textColor545454,
-                    fontsize: 13.sp,
-                    fontWeight: FontWeight.w400,
-                  ),
+                  CustomText(text: "Phone", color: AppColors.textColor545454,
+                      fontsize: 13.sp,
+                      fontWeight: FontWeight.w400),
                   SizedBox(height: 8.h),
                   TextFormField(
                     controller: phoneCtrl,
@@ -175,21 +211,36 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8.r),
-                        borderSide: const BorderSide(
-                          color: AppColors.textColorC7A8AD,
-                        ),
+                        borderSide: const BorderSide(color: AppColors.textColorC7A8AD),
                       ),
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 12.w,
-                        vertical: 12.h,
-                      ),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
                     ),
                   ),
                   SizedBox(height: 310.h),
-                  CustomButton(title: 'Save Change', onpress: () {}),
+                  Obx(
+                        () => CustomButton(
+                      loading: controller.updateProfileLoading.value,
+                      title: 'Save Change',
+                      onpress: () {
+                        controller.updateProfile(
+                          file: selectedImage,
+                          fullName: namCtrl.text.trim(),
+                          phone: phoneCtrl.text.trim(),
+                          address: addressCtrl.text.trim(),
+                          context: context,
+                        );
+                      },
+                      width: 245.w,
+                    ),
+                  ),
+
                 ],
               ),
             ),
+
+
+
+
           ],
         ),
       ),
