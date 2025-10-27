@@ -7,6 +7,7 @@ import 'package:rabbit_hole_app/core/config/app_routes/app_routes.dart';
 import 'package:rabbit_hole_app/presentations/widgets/custom_button.dart';
 import 'package:rabbit_hole_app/presentations/widgets/custom_music_slider.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/helpers/haptic_helper.dart';
 import '../../../global/custom_assets/assets.gen.dart';
 import '../../widgets/custom_haptic_feedback_slider.dart';
 import '../../widgets/custom_slider.dart';
@@ -28,6 +29,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool backgroundMusic = true;
   bool hapticFeedback = true;
   bool notification = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSettings();
+  }
+
+  Future<void> _loadSettings() async {
+    hapticFeedback = await HapticHelper.getHapticFeedbackStatus();
+    setState(() {});
+  }
 
 
 
@@ -254,10 +266,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                       ToggleButtonWidget(
                         status: hapticFeedback,
-                        onToggle: (value) {
+                        onToggle: (value) async {
                           setState(() {
                             hapticFeedback = value;
                           });
+                          await HapticHelper.setHapticFeedbackStatus(value);
                         },
                         activeColor: AppColors.buttonColorF9B039,
                       ),

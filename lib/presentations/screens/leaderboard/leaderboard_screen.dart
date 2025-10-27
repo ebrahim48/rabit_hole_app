@@ -12,14 +12,9 @@ import '../../widgets/custom_text.dart';
 import '../../widgets/rank_card.dart';
 
 
-class LeaderBoardScreen extends StatefulWidget {
+class LeaderBoardScreen extends StatelessWidget {
   const LeaderBoardScreen({super.key});
 
-  @override
-  State<LeaderBoardScreen> createState() => _LeaderBoardScreenState();
-}
-
-class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +32,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
               text: 'Leaderboard',
               color: AppColors.textColor000000,
               fontsize: 18.sp,
-            )
+            ),
           ],
         ),
         actions: [
@@ -49,7 +44,6 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                 IconButton(
                   onPressed: () {
                     context.pushNamed(AppRoutes.settingsScreen);
-
                   },
                   icon: Assets.icons.settings.svg(),
                 ),
@@ -107,9 +101,41 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                     distance: 'Distance',
                     onTap: () {
 
+
+              /// ========================> Best Card =============================>
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  buildBestScoreCard(),
+                  SizedBox(height: 20.h),
+                  CustomText(
+                    text: 'Global Rankings',
+                    color: AppColors.textColor000000,
+                    fontsize: 16.sp,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  SizedBox(height: 16.h),
+
+                  /// ============================> Global Rankings ===================>
+                  ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: 6,
+                    separatorBuilder:
+                        (context, index) => SizedBox(height: 12.h),
+                    itemBuilder: (context, index) {
+                      return GlobalListCard(
+                        icon: Assets.icons.win.svg(width: 32.w, height: 32.h),
+                        imageUrl:
+                            'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Pori_Moni_%28cropped%29.jpg/960px-Pori_Moni_%28cropped%29.jpg',
+                        title: "Alex",
+                        subtitle: "25000ft\nDistance",
+                        onTap: () {},
+                      );
                     },
-                  );
-                },
+                  ),
+                ],
+
               ),
             ],
           ),
@@ -119,25 +145,23 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
     );
   }
 
-  Widget buildBestScoreCard(LeaderBoardModel board) {
-    final bestScore = board.yourBestScore?.highScoreInFt ?? 0;
+
+  Widget buildBestScoreCard() {
+
     return Container(
       width: 346.w,
       height: 90.h,
       decoration: BoxDecoration(
         color: const Color(0xFFDFE380).withOpacity(0.2),
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(
-          color: const Color(0xFFF7FCFF),
-          width: 0.4,
-        ),
+
+        border: Border.all(color: const Color(0xFFF7FCFF), width: 0.4),
       ),
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
       child: Row(
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
+          /// Best Score Texts
+          Row(
             children: [
               CustomText(
                 text: 'Your Best',
@@ -154,23 +178,11 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
             ],
           ),
           const Spacer(),
-          Assets.images.carrot.image(
-            width: 48.w,
-            height: 48.h,
-          ),
+
+          /// Carrot Image
+          Assets.images.carrot.image(width: 48.w, height: 48.h),
         ],
       ),
     );
   }
-
-  LeaderBoardController leaderBoardController = Get.put(LeaderBoardController());
-
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      leaderBoardController.getLeaderBoard();
-    });
-  }
-
-
 }

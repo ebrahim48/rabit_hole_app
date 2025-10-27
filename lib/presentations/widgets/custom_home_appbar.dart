@@ -48,8 +48,9 @@ class _CustomHomeAppBarState extends State<CustomHomeAppBar> {
             /// Left Section (Profile + Text)
             Row(
               children: [
-                CustomProfileImage(
-                  imageUrl: controller.profile.value.profileImage ?? 'N/A',
+                const CustomProfileImage(
+                  imageUrl:
+                      'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Pori_Moni_%28cropped%29.jpg/960px-Pori_Moni_%28cropped%29.jpg',
                 ),
                 SizedBox(width: 10.w),
                 Column(
@@ -78,14 +79,14 @@ class _CustomHomeAppBarState extends State<CustomHomeAppBar> {
               onTap: () {
                 context.pushNamed(AppRoutes.settingsScreen);
               },
-              child: Assets.icons.settings.svg(
-                width: 32.w,
-                height: 32.h,
-              ),
+              child: Assets.icons.settings.svg(width: 32.w, height: 32.h),
             ),
           ],
         ),
       ),
     );
   }
+
+  @override
+  Size get preferredSize => Size.fromHeight(75.h);
 }

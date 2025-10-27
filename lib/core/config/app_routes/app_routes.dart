@@ -22,10 +22,7 @@ import '../../../presentations/screens/settings/about_us_screen.dart';
 import '../../../presentations/screens/splash/splash_screen.dart';
 import '../../app_constants/app_constants.dart';
 
-
-
 class AppRoutes {
-
   static const String splashScreen = "/splashScreen";
   static const String onBoardingScreen = "/onBoardingScreen";
 
@@ -52,201 +49,170 @@ class AppRoutes {
   static const String gameScreen = "/gameScreen";
   static const String contactUsScreen = "/contactUsScreen";
 
-
-  static final GoRouter goRouter =
-  GoRouter(initialLocation: splashScreen, routes: [
-
-
-    GoRoute(
-      path: splashScreen,
-      name: splashScreen,
-      builder: (context, state) => const SplashScreen(),
-      redirect: (context, state) {
-        Future.delayed(const Duration(seconds: 3), () async {
-          var role = await PrefsHelper.getString(AppConstants.role);
-          var token = await PrefsHelper.getString(AppConstants.bearerToken);
-          if (token != "") {
-            /// ===============Role Check =============>>>
-            if (role == "user") {
+  static final GoRouter goRouter = GoRouter(
+    initialLocation: splashScreen,
+    routes: [
+      GoRoute(
+        path: splashScreen,
+        name: splashScreen,
+        builder: (context, state) => const SplashScreen(),
+        redirect: (context, state) {
+          Future.delayed(const Duration(seconds: 3), () async {
+            var token = await PrefsHelper.getString(AppConstants.bearerToken);
+            if (token != "") {
               AppRoutes.goRouter.replaceNamed(AppRoutes.bottomNavbarScreen);
             }
-          }
-          else {
-            AppRoutes.goRouter.replaceNamed(AppRoutes.onBoardingScreen);
-          }
-        });
+          });
 
+          return;
+        },
+      ),
 
-        return;
-      },
-    ),
+      GoRoute(
+        path: registerScreen,
+        name: registerScreen,
+        pageBuilder:
+            (context, state) => _customTransitionPage(RegisterScreen(), state),
+      ),
+      // GoRoute(
+      //   path: onBoardingScreen,
+      //   name: onBoardingScreen,
+      //   pageBuilder: (context, state) =>
+      //       _customTransitionPage((), state),
+      // ),
+      GoRoute(
+        path: signInScreen,
+        name: signInScreen,
+        pageBuilder:
+            (context, state) => _customTransitionPage(SignInScreen(), state),
+      ),
 
-    ///<<<=============>>> Sign Up SCREEN <<<===============>>>
-    GoRoute(
-      path: registerScreen,
-      name: registerScreen,
-      pageBuilder: (context, state) =>
-          _customTransitionPage(RegisterScreen(), state),
-    ),
-    ///<<<=============>>> Log In <<<===============>>>
-    GoRoute(
-      path: signInScreen,
-      name: signInScreen,
-      pageBuilder: (context, state) =>
-          _customTransitionPage(SignInScreen(), state),
-    ),
+      GoRoute(
+        path: forgetPasswordScreen,
+        name: forgetPasswordScreen,
+        builder: (context, state) {
+          String email = state.extra as String;
+          return ForgetPasswordScreen(email: email);
+        },
+      ),
 
-    ///<<<=============>>> Forget Password Screen  <<<===============>>>
-    GoRoute(
-      path: forgetPasswordScreen,
-      name: forgetPasswordScreen,
-      builder: (context, state) {
-        String email = state.extra as String;
-        return ForgetPasswordScreen(email: email);
-      },
-    ),
+      GoRoute(
+        path: verifyScreen,
+        name: verifyScreen,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          final screenType = extra['screenType']?.toString() ?? '';
+          final email = extra['email']?.toString() ?? '';
+          final token = extra['token']?.toString() ?? '';
+          return VerifyScreen(
+            screenType: screenType,
+            email: email,
+            token: token,
+          );
+        },
+      ),
 
+      GoRoute(
+        path: resetPasswordScreen,
+        name: resetPasswordScreen,
+        pageBuilder:
+            (context, state) =>
+                _customTransitionPage(ResetPasswordScreen(), state),
+      ),
 
-    ///<<<=============>>> Verify Screen  <<<===============>>>
-    GoRoute(
-      path: verifyScreen,
-      name: verifyScreen,
-      builder: (context, state) {
-        final extra = state.extra as Map<String, dynamic>;
-        final screenType = extra['screenType']?.toString() ?? '';
-        final email = extra['email']?.toString() ?? '';
-        final token = extra['token']?.toString() ?? '';
-        return VerifyScreen(
-          screenType: screenType,
-          email: email,
-          token: token,
-        );
-      },
-    ),
+      GoRoute(
+        path: homeScreen,
+        name: homeScreen,
+        pageBuilder:
+            (context, state) => _customTransitionPage(HomeScreen(), state),
+      ),
 
+      GoRoute(
+        path: gameScreen,
+        name: gameScreen,
+        pageBuilder:
+            (context, state) => _customTransitionPage(GameScreen(), state),
+      ),
 
-    ///<<<=============>>> Reset Password Screen  <<<===============>>>
-    GoRoute(
-      path: resetPasswordScreen,
-      name: resetPasswordScreen,
-      pageBuilder: (context, state) =>
-          _customTransitionPage(ResetPasswordScreen(), state),
-    ),
+      GoRoute(
+        path: bottomNavbarScreen,
+        name: bottomNavbarScreen,
+        pageBuilder:
+            (context, state) => _customTransitionPage(BottomNavBar(), state),
+      ),
 
-    ///<<<=============>>> Home Screen  <<<===============>>>
-    GoRoute(
-      path: homeScreen,
-      name: homeScreen,
-      pageBuilder: (context, state) =>
-          _customTransitionPage(HomeScreen(), state),
-    ),
+      GoRoute(
+        path: leaderBoardScreen,
+        name: leaderBoardScreen,
+        pageBuilder:
+            (context, state) =>
+                _customTransitionPage(const LeaderBoardScreen(), state),
+      ),
 
-    ///<<<=============>>> Game Screen  <<<===============>>>
-    GoRoute(
-      path: gameScreen,
-      name: gameScreen,
-      pageBuilder: (context, state) =>
-          _customTransitionPage(GameScreen(), state),
-    ),
+      GoRoute(
+        path: shopScreen,
+        name: shopScreen,
+        pageBuilder:
+            (context, state) =>
+                _customTransitionPage(const ShopScreen(), state),
+      ),
 
+      GoRoute(
+        path: profileScreen,
+        name: profileScreen,
+        pageBuilder:
+            (context, state) => _customTransitionPage(ProfileScreen(), state),
+      ),
 
+      GoRoute(
+        path: editProfileScreen,
+        name: editProfileScreen,
+        pageBuilder:
+            (context, state) =>
+                _customTransitionPage(EditProfileScreen(), state),
+      ),
 
-    ///<<<=============>>> Bottom Navbar  Screen  <<<===============>>>
-    GoRoute(
-      path: bottomNavbarScreen,
-      name: bottomNavbarScreen,
-      pageBuilder: (context, state) =>
-          _customTransitionPage(BottomNavBar(), state),
-    ),
+      GoRoute(
+        path: settingsScreen,
+        name: settingsScreen,
+        pageBuilder:
+            (context, state) => _customTransitionPage(SettingsScreen(), state),
+      ),
 
-    ///<<<=============>>> Leader Board  Screen  <<<===============>>>
-    GoRoute(
-      path: leaderBoardScreen,
-      name: leaderBoardScreen,
-      pageBuilder: (context, state) =>
-          _customTransitionPage(const LeaderBoardScreen(
+      GoRoute(
+        path: privacyScreen,
+        name: privacyScreen,
+        pageBuilder:
+            (context, state) => _customTransitionPage(PrivacyScreen(), state),
+      ),
+      GoRoute(
+        path: termsServiceScreen,
+        name: termsServiceScreen,
+        pageBuilder:
+            (context, state) =>
+                _customTransitionPage(TermsServiceScreen(), state),
+      ),
 
-          ), state),
-    ),
-    ///<<<=============>>> Shop  Screen  <<<===============>>>
-    GoRoute(
-      path: shopScreen,
-      name: shopScreen,
-      pageBuilder: (context, state) =>
-          _customTransitionPage(const ShopScreen(
-          ), state),
-    ),
+      GoRoute(
+        path: aboutUsScreen,
+        name: aboutUsScreen,
+        pageBuilder:
+            (context, state) => _customTransitionPage(AboutUsScreen(), state),
+      ),
 
-
-    ///<<<=============>>> Profile  Screen  <<<===============>>>
-    GoRoute(
-      path: profileScreen,
-      name: profileScreen,
-      pageBuilder: (context, state) =>
-          _customTransitionPage(ProfileScreen(), state),
-    ),
-
-
-
-    ///<<<=============>>> Edit Profile  Screen  <<<===============>>>
-    GoRoute(
-      path: editProfileScreen,
-      name: editProfileScreen,
-      pageBuilder: (context, state) =>
-          _customTransitionPage( EditProfileScreen(), state),
-    ),
-
-    ///<<<=============>>> Edit Profile  Screen  <<<===============>>>
-    GoRoute(
-      path: settingsScreen,
-      name: settingsScreen,
-      pageBuilder: (context, state) =>
-          _customTransitionPage( SettingsScreen(), state),
-    ),
-
-
-
-    ///<<<=============>>> Privacy Policy Screen  <<<===============>>>
-    GoRoute(
-      path: privacyScreen,
-      name: privacyScreen,
-      pageBuilder: (context, state) =>
-          _customTransitionPage(PrivacyScreen(), state),
-    ),
-    ///<<<=============>>> Terms Services Screen  <<<===============>>>
-    GoRoute(
-      path: termsServiceScreen,
-      name: termsServiceScreen,
-      pageBuilder: (context, state) =>
-          _customTransitionPage(TermsServiceScreen(), state),
-    ),
-
-    //<<<=============>>>  About  Screen  <<<===============>>>
-    GoRoute(
-      path: aboutUsScreen,
-      name: aboutUsScreen,
-      pageBuilder: (context, state) =>
-          _customTransitionPage(AboutUsScreen(), state),
-    ),
-    //<<<=============>>>  Contact Us  Screen  <<<===============>>>
-    GoRoute(
-      path: contactUsScreen,
-      name: contactUsScreen,
-      pageBuilder: (context, state) =>
-          _customTransitionPage(ContactUsScreen(), state),
-    ),
-
-
-
-  ]);
-
-
-
-
+      GoRoute(
+        path: contactUsScreen,
+        name: contactUsScreen,
+        pageBuilder:
+            (context, state) => _customTransitionPage(ContactUsScreen(), state),
+      ),
+    ],
+  );
 
   static Page<dynamic> _customTransitionPage(
-      Widget child, GoRouterState state) {
-
+    Widget child,
+    GoRouterState state,
+  ) {
     return CustomTransitionPage(
       key: state.pageKey,
       child: child,
@@ -255,8 +221,10 @@ class AppRoutes {
         const end = Offset.zero;
         const curve = Curves.easeInOut;
 
-        var tween =
-        Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var tween = Tween(
+          begin: begin,
+          end: end,
+        ).chain(CurveTween(curve: curve));
         var offsetAnimation = animation.drive(tween);
 
         return SlideTransition(position: offsetAnimation, child: child);

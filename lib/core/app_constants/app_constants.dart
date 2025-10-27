@@ -11,6 +11,7 @@ class AppConstants{
   static const String fcmToken = "fcmToken";
   static const String mechanicType = "mechanicType";
   static const String emailValidator = "emailValidator";
+  static const String hapticFeedback = "hapticFeedback";
 
 
 
