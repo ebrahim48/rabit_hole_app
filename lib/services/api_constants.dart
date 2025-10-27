@@ -26,6 +26,7 @@ class ApiConstants{
   static  String gamingDashboardEndPoint = "/gaming-dashboard";
   static  String userAccountEndPoint = "/user/account";
   static  String updateProfileEndPoint = "/user/update-profile";
+  static  String contactUsEndPoint = "/settings/support-and-contact";
 
 
 }

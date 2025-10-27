@@ -108,20 +108,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Row(
                       children: [
                         CustomProfileImage(
-                            imageUrl: controller.profile.value.profileImage ?? 'N/A'),
+                            imageUrl: controller.profile.value?.profileImage ?? 'N/A'),
                         SizedBox(width: 10.w),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             CustomText(
-                              text: controller.profile.value.fullName ?? 'N/A',
+                              text: controller.profile.value?.fullName ?? 'N/A',
                               color: AppColors.textColor000000,
                               fontsize: 23.sp,
                               fontWeight: FontWeight.w600,
                             ),
                             CustomText(
-                              text: controller.profile.value.currentGametag ?? 'N/A',
+                              text: controller.profile.value?.currentGametag ?? 'N/A',
                               color: AppColors.textColor000000,
                               fontsize: 13.sp,
                               fontWeight: FontWeight.w400,
@@ -282,7 +282,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       return Expanded(
                         child: ListView.separated(
                           physics: const NeverScrollableScrollPhysics(),
-                          itemCount: controller.gamingDashBoard.value.gameDashboard!.achievedBadges!.length,
+                          itemCount: controller.gamingDashBoard.value.gameDashboard?.achievedBadges?.length ?? 0,
                           separatorBuilder: (context, index) => SizedBox(height: 12.h),
                           itemBuilder: (context, index) {
                             final achievements = controller.gamingDashBoard.value.gameDashboard?.achievedBadges?[index];
