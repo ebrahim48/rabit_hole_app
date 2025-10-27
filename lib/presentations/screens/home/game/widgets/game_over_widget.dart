@@ -21,7 +21,7 @@ class GameOverWidget extends StatelessWidget {
       child: Container(
         width: 375.w,
         height: 700,
-        padding: EdgeInsets.all(10.r),
+        padding: EdgeInsets.all(8.r),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16.r),
           gradient: const LinearGradient(
@@ -31,22 +31,21 @@ class GameOverWidget extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Assets.icons.ganeheart.svg(height: 64.h, width: 64.w),
-            SizedBox(height: 16.h),
+            Assets.icons.ganeheart.svg(height: 48.h, width: 48.w),
+            SizedBox(height: 8.h),
             CustomText(
               text: "Game Over!",
               color: AppColors.textColor000000,
-              fontsize: 23.sp,
+              fontsize: 20.sp,
               fontWeight: FontWeight.w600,
             ),
-            SizedBox(height: 8.h),
+
             CustomText(
               text: "The rabbit hit an obstacle",
               color: AppColors.textColor333333,
               fontsize: 14.sp,
               fontWeight: FontWeight.w400,
             ),
-            SizedBox(height: 24.h),
             Container(
               width: 346.w,
               height: 120.h,
@@ -123,7 +122,7 @@ class GameOverWidget extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 20.h),
+            SizedBox(height: 16.h),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFFFD93B),
@@ -261,7 +260,6 @@ class GameOverWidget extends StatelessWidget {
               fontWeight: FontWeight.w400,
               color: AppColors.textColor8A8A8A,
             ),
-            SizedBox(height: 10.h),
           ],
         ),
       ),
