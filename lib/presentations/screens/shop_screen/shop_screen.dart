@@ -27,6 +27,7 @@ class _ShopScreenState extends State<ShopScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       shopPackageController.getShopPackage();
       shopPackageController.getContent();
+      shopPackageController.getContentPowerUp();
     });
   }
 
@@ -182,17 +183,17 @@ class _ShopScreenState extends State<ShopScreen> {
               ListView.separated(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: 6,
+                itemCount: shopPackageController.contentPowerUp.value.contents!.length,
                 separatorBuilder:
                     (context, index) =>
                     SizedBox(height: 12.h),
                 itemBuilder: (context, index) {
+                  final contentPowerUp = shopPackageController.contentPowerUp.value.contents?[index];
                   return PowerUpsListCard(
                     icon: Assets.icons.shield.svg(width: 32.w, height: 32.h),
-                    title: "Shield",
-                    name: '5 second protection',
-                    subtitle:"25000ft\nDistance",
-                    price: '25',
+                    title: contentPowerUp?.name ??'N/A',
+                    name: contentPowerUp?.category.toString() ??'N/A',
+                    price: contentPowerUp?.timeInSec.toString() ??'N/A',
                     onTap: () {},
                   );
                 },

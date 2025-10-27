@@ -18,10 +18,14 @@ class ApiConstants{
 
 
 
-  static const String gamingDashboardEndPoint = "/auth/reset-password";
+  static const String authEndPoint = "/auth/reset-password";
   static const String gamingLeaderDashboardEndPoint = "/gaming-dashboard/leaderboard";
   static const String shopPackageEndPoint = "/package";
-  static  String shopSkinPowerUpEndPoint = "/content?category=skin&category=power-up";
+  static  String shopSkinEndPoint = "/content?category=skin";
+  static  String powerUpEndPoint = "/content?category=power-up";
+  static  String gamingDashboardEndPoint = "/gaming-dashboard";
+  static  String userAccountEndPoint = "/user/account";
+  static  String updateProfileEndPoint = "/user/update-profile";
 
 
 }

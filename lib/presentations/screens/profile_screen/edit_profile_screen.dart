@@ -1,11 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:rabbit_hole_app/presentations/widgets/custom_button.dart';
-import 'package:rabbit_hole_app/presentations/widgets/custom_main_profile.dart';
+import '../../../controllers/profile_controller.dart';
 import '../../../core/config/app_routes/app_routes.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../global/custom_assets/assets.gen.dart';
+import '../../widgets/custom_network_image.dart';
 import '../../widgets/custom_text.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -16,8 +21,20 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
+
+
+  ProfileController controller = Get.put(ProfileController());
+
+
+
+  File? selectedImage;
+  String? profileImagePath;
+
+
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
       appBar: AppBar(
         forceMaterialTransparency: true,
@@ -70,14 +87,61 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const Stack(
-              alignment: Alignment.bottomRight,
-              children: [
-                CustomMainProfileImage(
-                  imageUrl: 'https://media.licdn.com/dms/image/v2/C4E03AQGAvYAY6kdVXQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1603315936568?e=1758758400&v=beta&t=QeIvlqHz22MKUgXX6U56FSocAyZYGAA5NUi3CMb_alQ',
-                ),
-              ],
-            ),
+             GestureDetector(
+               onTap: () {
+                 showImagePickerOption(context);
+               },
+               child: Stack(
+                alignment: Alignment.bottomRight,
+                children: [
+                  Container(
+                    width: 100.w,
+                    height: 100.h,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: AppColors.primaryColorC79235,
+                        width: 3,
+                      ),
+                    ),
+                    child: selectedImage != null
+                        ? ClipOval(
+                        child: Image.file(selectedImage!,
+                            fit: BoxFit.cover))
+                        : CustomNetworkImage(
+                      boxShape: BoxShape.circle,
+                      imageUrl: profileImagePath ?? "",
+                      height: 100.h,
+                      width: 100.w,
+                    ),
+                  ),
+                  Positioned(
+                    top: 67.h,
+                    left: 70.w,
+                    child: Container(
+                      width: 26.58.w,
+                      height: 26.58.h,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white.withOpacity(0.2),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 10,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Icon(
+                        Icons.camera_alt,
+                        color: AppColors.textColorFFFFFF,
+                        size: 16.sp,
+                      ),
+                    ),
+                  ),
+                ],
+                           ),
+             ),
             SizedBox(height: 12.h),
             // Input fields box
             Container(
@@ -100,6 +164,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
                   SizedBox(height: 5.h),
                   TextFormField(
+                    controller: namCtrl,
                     initialValue: "Jessika",
                     style: const TextStyle(color: AppColors.textColor545454),
                     decoration: InputDecoration(
@@ -117,8 +182,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     color: AppColors.textColor545454,
                     fontsize: 13.sp,
                     fontWeight: FontWeight.w400,),
+
                   SizedBox(height: 8.h),
                   TextFormField(
+                    controller: addressCtrl,
                     initialValue: "2431 AF AMSTERDAM",
                     style: const TextStyle(color: AppColors.textColor545454),
                     decoration: InputDecoration(
@@ -137,6 +204,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       fontWeight: FontWeight.w400),
                   SizedBox(height: 8.h),
                   TextFormField(
+                    controller: phoneCtrl,
                     initialValue: "************",
                     style: const TextStyle(color: AppColors.textColor545454),
                     obscureText: true,
@@ -149,11 +217,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                   ),
                   SizedBox(height: 310.h),
-                 CustomButton(
-                   title: 'Save Change',
-                     onpress: () {
-
-                     },),
+                  Obx(
+                        () => CustomButton(
+                          loading: controller.updateProfileLoading.value,
+                          title: 'Save Change',
+                          onpress: () {
+                            controller.updateProfile(
+                              file: selectedImage,
+                              fullName: namCtrl.text.trim(),
+                              phone: phoneCtrl.text.trim(),
+                              address: addressCtrl.text.trim(),
+                              context: context,
+                            );
+                          },
+                          width: 245.w,
+                        ),
+                  ),
 
                 ],
               ),
@@ -166,6 +245,89 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ),
       ),
     );
+  }
+  void showImagePickerOption(BuildContext context) {
+    showModalBottomSheet(
+        backgroundColor: Colors.white.withOpacity(.5),
+        elevation: 3,
+        context: context,
+        builder: (builder) {
+          return Container(
+            decoration: BoxDecoration(
+              border: const Border(
+                  top: BorderSide(color: AppColors.primaryColorC79235, width: 0.25)),
+              borderRadius: BorderRadius.circular(20.r),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height / 9.2,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          _pickImageFromGallery();
+                        },
+                        child: SizedBox(
+                          child: Column(
+                            children: [
+                              Icon(
+                                Icons.image,
+                                size: 50.w,
+                              ),
+                              CustomText(text: 'Gallery')
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          _pickImageFromCamera();
+                        },
+                        child: SizedBox(
+                          child: Column(
+                            children: [
+                              Icon(
+                                Icons.camera_alt,
+                                size: 50.w,
+                              ),
+                              CustomText(text: 'Camera')
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  Future<void> _pickImageFromGallery() async {
+    final pickedFile =
+    await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      Navigator.pop(context);
+      selectedImage = File(pickedFile.path);
+      setState(() {});
+    }
+  }
+
+  Future<void> _pickImageFromCamera() async {
+    final pickedFile =
+    await ImagePicker().pickImage(source: ImageSource.camera);
+    if (pickedFile != null) {
+      Navigator.pop(context);
+      selectedImage = File(pickedFile.path);
+      setState(() {});
+    }
   }
 
   TextEditingController namCtrl = TextEditingController();

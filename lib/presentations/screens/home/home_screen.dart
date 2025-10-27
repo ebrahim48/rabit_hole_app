@@ -8,15 +8,24 @@ import '../../../global/custom_assets/assets.gen.dart';
 import '../../widgets/custom_home_appbar.dart';
 import '../../widgets/custom_text.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+
+
+
 
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomHomeAppBar(),
+      appBar:  CustomHomeAppBar(),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -160,6 +169,7 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+
   Widget _buildOptionCard({
     required String label,
     required Widget icon,

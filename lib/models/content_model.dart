@@ -25,12 +25,11 @@ class ContentModel {
 class Content {
   final String? id;
   final String? name;
-  final Category? category;
+  final String? category;
   final String? description;
   final String? imgUrl;
-  final int? timeInSec;
   final int? numberOfCarrot;
-  final Status? status;
+  final String? status;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -40,7 +39,6 @@ class Content {
     this.category,
     this.description,
     this.imgUrl,
-    this.timeInSec,
     this.numberOfCarrot,
     this.status,
     this.createdAt,
@@ -50,12 +48,11 @@ class Content {
   factory Content.fromJson(Map<String, dynamic> json) => Content(
     id: json["_id"],
     name: json["name"],
-    category: categoryValues.map[json["category"]]!,
+    category: json["category"],
     description: json["description"],
     imgUrl: json["imgUrl"],
-    timeInSec: json["timeInSec"],
     numberOfCarrot: json["numberOfCarrot"],
-    status: statusValues.map[json["status"]]!,
+    status: json["status"],
     createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
     updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
   );
@@ -63,34 +60,15 @@ class Content {
   Map<String, dynamic> toJson() => {
     "_id": id,
     "name": name,
-    "category": categoryValues.reverse[category],
+    "category": category,
     "description": description,
     "imgUrl": imgUrl,
-    "timeInSec": timeInSec,
     "numberOfCarrot": numberOfCarrot,
-    "status": statusValues.reverse[status],
+    "status": status,
     "createdAt": createdAt?.toIso8601String(),
     "updatedAt": updatedAt?.toIso8601String(),
   };
 }
-
-enum Category {
-  POWER_UP,
-  SKIN
-}
-
-final categoryValues = EnumValues({
-  "power-up": Category.POWER_UP,
-  "skin": Category.SKIN
-});
-
-enum Status {
-  ACTIVE
-}
-
-final statusValues = EnumValues({
-  "active": Status.ACTIVE
-});
 
 class Meta {
   final int? page;
@@ -150,16 +128,4 @@ class Overview {
     "totalPowerUp": totalPowerUp,
     "totalObstacle": totalObstacle,
   };
-}
-
-class EnumValues<T> {
-  Map<String, T> map;
-  late Map<T, String> reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    reverseMap = map.map((k, v) => MapEntry(v, k));
-    return reverseMap;
-  }
 }
