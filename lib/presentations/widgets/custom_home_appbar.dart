@@ -1,15 +1,36 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rabbit_hole_app/core/config/app_routes/app_routes.dart';
 
+import '../../controllers/profile_controller.dart';
 import '../../core/constants/app_colors.dart';
 import '../../global/custom_assets/assets.gen.dart';
 import 'custom_profile_image.dart';
 import 'custom_text.dart';
 
-class CustomHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
+class CustomHomeAppBar extends StatefulWidget implements PreferredSizeWidget {
   const CustomHomeAppBar({super.key});
+
+  @override
+  State<CustomHomeAppBar> createState() => _CustomHomeAppBarState();
+
+
+  @override
+  Size get preferredSize => Size.fromHeight(75.h);
+}
+
+class _CustomHomeAppBarState extends State<CustomHomeAppBar> {
+  final ProfileController controller = Get.put(ProfileController());
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.getProfile();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +38,7 @@ class CustomHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       child: Container(
         width: 393.w,
         height: 75.h,
-        padding: EdgeInsets.only(
-          top: 10.h,
-          bottom: 10.h,
-          left: 24.w,
-          right: 10.w,
-        ),
+        padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 24.w),
         decoration: const BoxDecoration(
           color: Color(0xFFCCEEFD), // background color
         ),
@@ -42,7 +58,7 @@ class CustomHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CustomText(
-                      text: 'Welcome, Ebrahim',
+                      text: controller.profile.value.fullName ?? 'N/A',
                       color: AppColors.textColor000000,
                       fontsize: 14.sp,
                       fontWeight: FontWeight.w500,

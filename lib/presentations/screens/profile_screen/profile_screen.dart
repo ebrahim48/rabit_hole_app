@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:rabbit_hole_app/presentations/widgets/custom_main_profile.dart';
+import '../../../controllers/profile_controller.dart';
 import '../../../core/config/app_routes/app_routes.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../global/custom_assets/assets.gen.dart';
 import '../../widgets/achievements_card.dart';
+import '../../widgets/custom_loader.dart';
 import '../../widgets/custom_logout_button.dart';
+import '../../widgets/custom_profile_image.dart';
 import '../../widgets/custom_text.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -86,27 +89,56 @@ class ProfileScreen extends StatelessWidget {
                             'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Pori_Moni_%28cropped%29.jpg/960px-Pori_Moni_%28cropped%29.jpg',
                       ),
 
-                      SizedBox(width: 10.w),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CustomText(
-                            text: 'Ebrahim',
-                            color: AppColors.textColor000000,
-                            fontsize: 23.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          CustomText(
-                            text: 'Rabbit Runner',
-                            color: AppColors.textColor000000,
-                            fontsize: 13.sp,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+              Container(
+                width: 346.w,
+                height: 85.h,
+                padding: EdgeInsets.only(
+                  top: 10.h,
+                  bottom: 10.h,
+                  left: 24.w,
+                  right: 10.w,
+                ),
+                decoration:  BoxDecoration(
+                  color: AppColors.textColorFFFFFF,
+                  borderRadius: BorderRadius.circular(12.r),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0x1F000000),
+                      offset: Offset(1.w, 3.h),
+                      blurRadius: 4.r,
+                      spreadRadius: 4,
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ///  (Profile + Text)
+                    Row(
+                      children: [
+                        CustomProfileImage(
+                            imageUrl: controller.profile.value.profileImage ?? 'N/A'),
+                        SizedBox(width: 10.w),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CustomText(
+                              text: controller.profile.value.fullName ?? 'N/A',
+                              color: AppColors.textColor000000,
+                              fontsize: 23.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            CustomText(
+                              text: controller.profile.value.currentGametag ?? 'N/A',
+                              color: AppColors.textColor000000,
+                              fontsize: 13.sp,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
 
                   ///  (Settings Icon)
                   GestureDetector(
@@ -117,10 +149,9 @@ class ProfileScreen extends StatelessWidget {
                       width: 42.w,
                       height: 42.h,
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
 
             SizedBox(height: 16.h),
             Container(
@@ -260,10 +291,6 @@ class ProfileScreen extends StatelessWidget {
                         );
                       },
                     ),
-                  ),
-                ],
-              ),
-            ),
 
             SizedBox(height: 16.h),
             Container(
@@ -281,45 +308,62 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 315.w,
-                    height: 65.h,
-                    padding: EdgeInsets.all(16.w),
-                    decoration: BoxDecoration(
-                      color: AppColors.bottomBackColorB3E5FC,
-                      borderRadius: BorderRadius.circular(8.r),
+
+              SizedBox(height: 16.h),
+              Container(
+                width: 346.w,
+                padding: EdgeInsets.only(top: 16.sp,left: 14.w),
+                decoration: BoxDecoration(
+                  color: AppColors.textColorFFFFFF,
+                  borderRadius: BorderRadius.circular(12.r),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0x1F000000),
+                      offset: Offset(1.w, 3.h),
+                      blurRadius: 4.r,
+                      spreadRadius: 4,
                     ),
-                    child: GestureDetector(
-                      onTap: () {
-                        _showLogoutConfirmationDialog(context);
-                      },
-                      child: Row(
-                        children: [
-                          SizedBox(width: 36.w),
-                          Padding(
-                            padding: EdgeInsets.only(right: 19.w),
-                            child: Assets.icons.logout.svg(
-                              height: 24.h,
-                              width: 24.w,
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 315.w,
+                      height: 65.h,
+                      padding: EdgeInsets.all(16.w),
+                      decoration: BoxDecoration(
+                        color: AppColors.bottomBackColorB3E5FC,
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          _showLogoutConfirmationDialog(context);
+                        },
+                        child: Row(
+                          children: [
+                            SizedBox(width: 36.w),
+                            Padding(
+                              padding: EdgeInsets.only(right: 19.w),
+                              child: Assets.icons.logout.svg(
+                                height: 24.h,
+                                width: 24.w,
+                              ),
                             ),
-                          ),
-                          CustomText(
-                            text: 'Logout',
-                            color: Color(0xFF9C0000),
-                            fontsize: 16.sp,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ],
+                            CustomText(
+                              text: 'Logout',
+                              color: Color(0xFF9C0000),
+                              fontsize: 16.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 16.h),
-                ],
+                    SizedBox(height: 16.h),
+                  ],
+                ),
               ),
-            ),
 
             SizedBox(height: 90.h),
           ],

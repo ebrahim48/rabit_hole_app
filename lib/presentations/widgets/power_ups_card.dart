@@ -9,7 +9,6 @@ class PowerUpsListCard extends StatelessWidget {
   final Widget icon;
   final String title;
   final String name;
-  final String subtitle;
   final String price;
   final VoidCallback? onTap;
 
@@ -18,7 +17,6 @@ class PowerUpsListCard extends StatelessWidget {
     required this.icon,
     required this.name,
     required this.title,
-    required this.subtitle,
     required this.price,
     this.onTap,
   });
