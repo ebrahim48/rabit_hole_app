@@ -22,65 +22,51 @@ class SettingsController extends GetxController{
 
 
 
+/// ================================> Privacy Policy  ==============================>
+
+  RxBool getPrivacyPolicyLoading = false.obs;
+  RxString value = "".obs;
+  privacyPolicy() async {
+    getPrivacyPolicyLoading(true);
+    var response = await ApiClient.getData(ApiConstants.privacyEndPoint);
+    if (response.statusCode == 200) {
+      value.value = response.body['data']['attributes'];
+      getPrivacyPolicyLoading(false);
+    } else if (response.statusCode == 404) {
+      getPrivacyPolicyLoading(false);
+    }
+  }
 
 
+  /// ================================> About Us  ==============================>
 
+  RxBool getAboutUsLoading = false.obs;
+  RxString about = "".obs;
+  aboutUs() async {
+    getAboutUsLoading(true);
+    var response = await ApiClient.getData(ApiConstants.aboutUsEndPoint);
+    if (response.statusCode == 200) {
+      about.value = response.body['data'];
+      getAboutUsLoading(false);
+    } else if (response.statusCode == 404) {
+      getAboutUsLoading(false);
+    }
+  }
 
+  /// ================================> Terms Condition ==============================>
 
-
-
-
-
-
-
-
-
-
-// /// ================================> Privacy Policy  ==============================>
-  //
-  // RxBool getPrivacyPolicyLoading = false.obs;
-  // RxString value = "".obs;
-  // privacyPolicy() async {
-  //   getPrivacyPolicyLoading(true);
-  //   var response = await ApiClient.getData(ApiConstants.privacyEndPoint);
-  //   if (response.statusCode == 200) {
-  //     value.value = response.body['data']['attributes']['privacyPolicy'];
-  //     getPrivacyPolicyLoading(false);
-  //   } else if (response.statusCode == 404) {
-  //     getPrivacyPolicyLoading(false);
-  //   }
-  // }
-  //
-  //
-  // /// ================================> About Us  ==============================>
-  //
-  // RxBool getAboutUsLoading = false.obs;
-  // RxString about = "".obs;
-  // aboutUs() async {
-  //   getAboutUsLoading(true);
-  //   var response = await ApiClient.getData(ApiConstants.aboutEndPoint);
-  //   if (response.statusCode == 200) {
-  //     about.value = response.body['data']['attributes']['aboutUs'];
-  //     getAboutUsLoading(false);
-  //   } else if (response.statusCode == 404) {
-  //     getAboutUsLoading(false);
-  //   }
-  // }
-  //
-  // /// ================================> Terms Condition ==============================>
-  //
-  // RxBool getTermsConditionLoading = false.obs;
-  // RxString terms = "".obs;
-  // termsCondition() async {
-  //   getTermsConditionLoading(true);
-  //   var response = await ApiClient.getData(ApiConstants.termsEndPoint);
-  //   if (response.statusCode == 200) {
-  //     terms.value = response.body['data']['attributes']['termsConditions'];
-  //     getTermsConditionLoading(false);
-  //   } else if (response.statusCode == 404) {
-  //     getTermsConditionLoading(false);
-  //   }
-  // }
+  RxBool getTermsConditionLoading = false.obs;
+  RxString terms = "".obs;
+  termsCondition() async {
+    getTermsConditionLoading(true);
+    var response = await ApiClient.getData(ApiConstants.termsEndPoint);
+    if (response.statusCode == 200) {
+      terms.value = response.body['data']['attributes'];
+      getTermsConditionLoading(false);
+    } else if (response.statusCode == 404) {
+      getTermsConditionLoading(false);
+    }
+  }
 
 
 }

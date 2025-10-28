@@ -1,13 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 
 import '../../../../../core/constants/app_colors.dart';
+import '../../../controllers/settings_controller.dart';
 import '../../widgets/custom_text.dart';
 
 
-class TermsServiceScreen extends StatelessWidget {
+class TermsServiceScreen extends StatefulWidget {
   const TermsServiceScreen({super.key});
+
+  @override
+  State<TermsServiceScreen> createState() => _TermsServiceScreenState();
+}
+
+class _TermsServiceScreenState extends State<TermsServiceScreen> {
+
+
+  SettingsController controller = Get.put(SettingsController());
+
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.termsCondition();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,9 +113,4 @@ class TermsServiceScreen extends StatelessWidget {
       ),
     );
   }
-
-
-
-
-
 }

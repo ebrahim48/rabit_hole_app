@@ -1,13 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 
 import '../../../../../core/constants/app_colors.dart';
+import '../../../controllers/settings_controller.dart';
 import '../../widgets/custom_text.dart';
 
 
-class PrivacyScreen extends StatelessWidget {
+class PrivacyScreen extends StatefulWidget {
   const PrivacyScreen({super.key});
+
+  @override
+  State<PrivacyScreen> createState() => _PrivacyScreenState();
+}
+
+class _PrivacyScreenState extends State<PrivacyScreen> {
+
+
+  SettingsController controller = Get.put(SettingsController());
+
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.privacyPolicy();
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +95,7 @@ class PrivacyScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                          
+
                       child: CustomText(
                         maxline: 100,
                         textAlign: TextAlign.start,
@@ -94,9 +114,4 @@ class PrivacyScreen extends StatelessWidget {
       ),
     );
   }
-
-
-
-
-
 }

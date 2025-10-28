@@ -72,6 +72,23 @@ class ApiClient extends GetxService {
     }
   }
 
+  static Future<Response> patchData(
+      String url, {
+        Map<String, dynamic>? body,
+      }) async {
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': bearerToken,
+    };
+
+    final response = await http.patch(
+      Uri.parse(ApiConstants.baseUrl + url),
+      headers: headers,
+      body: body != null ? jsonEncode(body) : null,
+    );
+
+    return handleResponse(response, url);
+  }
 
 
 

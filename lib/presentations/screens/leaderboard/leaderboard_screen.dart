@@ -122,8 +122,8 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
   Widget buildBestScoreCard(LeaderBoardModel board) {
     final bestScore = board.yourBestScore?.highScoreInFt ?? 0;
     return Container(
-      width: 346.w,
-      height: 90.h,
+      width: 348.w,
+      height: 100.h,
       decoration: BoxDecoration(
         color: const Color(0xFFDFE380).withOpacity(0.2),
         borderRadius: BorderRadius.circular(12.r),
@@ -135,23 +135,25 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
       child: Row(
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CustomText(
-                text: 'Your Best',
-                color: AppColors.textColor000000,
-                fontsize: 18.sp,
-                fontWeight: FontWeight.w400,
-              ),
-              CustomText(
-                text: bestScore.toString(),
-                color: AppColors.textColor000000,
-                fontsize: 23.sp,
-                fontWeight: FontWeight.w600,
-              ),
-            ],
+          SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CustomText(
+                  text: 'Your Best',
+                  color: AppColors.textColor000000,
+                  fontsize: 18.sp,
+                  fontWeight: FontWeight.w400,
+                ),
+                CustomText(
+                  text: bestScore.toString(),
+                  color: AppColors.textColor000000,
+                  fontsize: 23.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+              ],
+            ),
           ),
           const Spacer(),
           Assets.images.carrot.image(

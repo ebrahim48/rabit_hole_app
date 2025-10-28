@@ -90,21 +90,23 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                       fontWeight: FontWeight.w400,
                     ),
                     SizedBox(height: 20.h),
-                    Column(
-                      children: [
-                        CustomText(
-                          text: controller.contact.value?.phone ?? 'N/A',
-                          color: AppColors.textColor000000,
-                          fontWeight: FontWeight.w400,
-                          fontsize: 16.sp,
-                        ),
-                        CustomText(
-                          text: controller.contact.value?.email ?? 'N/A',
-                          color: AppColors.textColor000000,
-                          fontWeight: FontWeight.w400,
-                          fontsize: 16.sp,
-                        ),
-                      ],
+                    Obx(()=>
+                       Column(
+                        children: [
+                          CustomText(
+                            text: controller.contact.value?.phone ?? 'N/A',
+                            color: AppColors.textColor000000,
+                            fontWeight: FontWeight.w400,
+                            fontsize: 16.sp,
+                          ),
+                          CustomText(
+                            text: controller.contact.value?.email ?? 'N/A',
+                            color: AppColors.textColor000000,
+                            fontWeight: FontWeight.w400,
+                            fontsize: 16.sp,
+                          ),
+                        ],
+                      ),
                     )
 
                   ],
