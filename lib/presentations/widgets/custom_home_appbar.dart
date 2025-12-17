@@ -3,12 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rabbit_hole_app/core/config/app_routes/app_routes.dart';
-
 import '../../controllers/profile_controller.dart';
 import '../../core/constants/app_colors.dart';
 import '../../global/custom_assets/assets.gen.dart';
 import 'custom_profile_image.dart';
 import 'custom_text.dart';
+import 'package:intl/intl.dart';
 
 class CustomHomeAppBar extends StatefulWidget implements PreferredSizeWidget {
   const CustomHomeAppBar({super.key});
@@ -34,6 +34,12 @@ class _CustomHomeAppBarState extends State<CustomHomeAppBar> {
 
   @override
   Widget build(BuildContext context) {
+
+
+    String formattedDate = controller.profile.value.createdAt != null
+        ? DateFormat('MMMM d, yyyy').format(controller.profile.value.createdAt!)
+        : 'N/A';
+
     return SafeArea(
       child: Container(
         width: 393.w,
@@ -48,10 +54,8 @@ class _CustomHomeAppBarState extends State<CustomHomeAppBar> {
             /// Left Section (Profile + Text)
             Row(
               children: [
-                const CustomProfileImage(
-                  imageUrl:
-                      'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Pori_Moni_%28cropped%29.jpg/960px-Pori_Moni_%28cropped%29.jpg',
-                ),
+                CustomProfileImage(
+                    imageUrl: controller.profile.value.profileImage ?? 'N/A'),
                 SizedBox(width: 10.w),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,11 +68,11 @@ class _CustomHomeAppBarState extends State<CustomHomeAppBar> {
                       fontWeight: FontWeight.w500,
                     ),
                     CustomText(
-                      text: 'Member since March 2024',
+                      text: 'Member Since: $formattedDate',
                       color: AppColors.textColor000000,
                       fontsize: 11.sp,
                       fontWeight: FontWeight.w400,
-                    ),
+                    )
                   ],
                 ),
               ],

@@ -6,7 +6,7 @@ import 'package:rabbit_hole_app/presentations/screens/bottom_navbar/bottom_navba
 import 'package:rabbit_hole_app/presentations/screens/home/game_screen.dart';
 import 'package:rabbit_hole_app/presentations/screens/home/home_screen.dart';
 import 'package:rabbit_hole_app/presentations/screens/leaderboard/leaderboard_screen.dart';
-import 'package:rabbit_hole_app/presentations/screens/profile_screen/edit_profile_screen.dart';
+import 'package:rabbit_hole_app/presentations/screens/profile_screen/update_profile_screen.dart';
 import 'package:rabbit_hole_app/presentations/screens/profile_screen/profile_screen.dart';
 import 'package:rabbit_hole_app/presentations/screens/settings/contact_us_screen.dart';
 import 'package:rabbit_hole_app/presentations/screens/settings/privacy_screen.dart';
@@ -18,6 +18,7 @@ import '../../../helpers/prefs_helper.dart';
 import '../../../presentations/screens/auth/forget_screen/forget_screen.dart';
 import '../../../presentations/screens/auth/reset_screen/reset_screen.dart';
 import '../../../presentations/screens/auth/verify_screen/verify_screen.dart';
+import '../../../presentations/screens/profile_screen/edit_profile_screen.dart';
 import '../../../presentations/screens/settings/about_us_screen.dart';
 import '../../../presentations/screens/splash/splash_screen.dart';
 import '../../app_constants/app_constants.dart';
@@ -42,6 +43,7 @@ class AppRoutes {
   static const String shopScreen = "/shopScreen";
   static const String profileScreen = "/profileScreen";
   static const String editProfileScreen = "/editProfileScreen";
+  static const String updateProfileScreen = "/updateProfileScreen";
   static const String settingsScreen = "/settingsScreen";
   static const String privacyScreen = "/privacyScreen";
   static const String termsServiceScreen = "/termsServiceScreen";
@@ -163,6 +165,15 @@ class AppRoutes {
         pageBuilder:
             (context, state) => _customTransitionPage(ProfileScreen(), state),
       ),
+
+      GoRoute(
+        path: updateProfileScreen,
+        name: updateProfileScreen,
+        pageBuilder:
+            (context, state) =>
+                _customTransitionPage(UpdateProfileScreen(), state),
+      ),
+
 
       GoRoute(
         path: editProfileScreen,

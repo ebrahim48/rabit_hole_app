@@ -12,9 +12,14 @@ import '../../widgets/custom_text.dart';
 import '../../widgets/rank_card.dart';
 
 
-class LeaderBoardScreen extends StatelessWidget {
+class LeaderBoardScreen extends StatefulWidget {
   const LeaderBoardScreen({super.key});
 
+  @override
+  State<LeaderBoardScreen> createState() => _LeaderBoardScreenState();
+}
+
+class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +37,7 @@ class LeaderBoardScreen extends StatelessWidget {
               text: 'Leaderboard',
               color: AppColors.textColor000000,
               fontsize: 18.sp,
-            ),
+            )
           ],
         ),
         actions: [
@@ -44,6 +49,7 @@ class LeaderBoardScreen extends StatelessWidget {
                 IconButton(
                   onPressed: () {
                     context.pushNamed(AppRoutes.settingsScreen);
+
                   },
                   icon: Assets.icons.settings.svg(),
                 ),
@@ -53,136 +59,120 @@ class LeaderBoardScreen extends StatelessWidget {
         ],
       ),
       body:  Obx(() {
-      if (leaderBoardController.getLeaderBoardLoading.value) {
-        return const Center(child: CustomLoader());
-      }
+        if (leaderBoardController.getLeaderBoardLoading.value) {
+          return const Center(child: CustomLoader());
+        }
 
-      final board = leaderBoardController.leaderBoard.value;
+        final board = leaderBoardController.leaderBoard.value;
 
-      if (board == null || board.data == null || board.data!.isEmpty) {
-        return Center(
-          child: CustomText(
-            text: "No leaderboard data available",
-            color: AppColors.textColor000000,
+        if (board == null || board.data == null || board.data!.isEmpty) {
+          return Center(
+            child: CustomText(
+              text: "No leaderboard data available",
+              color: AppColors.textColor000000,
+            ),
+          );
+        }
+
+        final globalRankings = board.data!;
+
+        return SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 28.h),
+                buildBestScoreCard(board),
+                SizedBox(height: 20.h),
+                CustomText(
+                  text: 'Global Rankings',
+                  color: AppColors.textColor000000,
+                  fontsize: 16.sp,
+                  fontWeight: FontWeight.w400,
+                ),
+                SizedBox(height: 16.h),
+                ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: globalRankings.length,
+                  separatorBuilder: (context, index) => SizedBox(height: 12.h),
+                  itemBuilder: (context, index) {
+                    final player = globalRankings[index];
+                    return GlobalListCard(
+                      icon: Assets.icons.win.svg(width: 32.w, height: 32.h),
+                      imageUrl: player.user?.profileImage?.trim() ?? '',
+                      title: player.user?.fullName ?? 'N/A',
+                      subtitle: (player.highScoreInFt ?? 0).toString(),
+                      distance: 'Distance',
+                      onTap: () {
+
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         );
-      }
-
-      final globalRankings = board.data!;
-
-      return SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 28.h),
-              buildBestScoreCard(board),
-              SizedBox(height: 20.h),
-              CustomText(
-                text: 'Global Rankings',
-                color: AppColors.textColor000000,
-                fontsize: 16.sp,
-                fontWeight: FontWeight.w400,
-              ),
-              SizedBox(height: 16.h),
-              ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: globalRankings.length,
-                separatorBuilder: (context, index) => SizedBox(height: 12.h),
-                itemBuilder: (context, index) {
-                  final player = globalRankings[index];
-                  return GlobalListCard(
-                    icon: Assets.icons.win.svg(width: 32.w, height: 32.h),
-                    imageUrl: player.user?.profileImage?.trim() ?? '',
-                    title: player.user?.fullName ?? 'N/A',
-                    subtitle: (player.highScoreInFt ?? 0).toString(),
-                    distance: 'Distance',
-                    onTap: () {
-
-
-              /// ========================> Best Card =============================>
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  buildBestScoreCard(),
-                  SizedBox(height: 20.h),
-                  CustomText(
-                    text: 'Global Rankings',
-                    color: AppColors.textColor000000,
-                    fontsize: 16.sp,
-                    fontWeight: FontWeight.w400,
-                  ),
-                  SizedBox(height: 16.h),
-
-                  /// ============================> Global Rankings ===================>
-                  ListView.separated(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: 6,
-                    separatorBuilder:
-                        (context, index) => SizedBox(height: 12.h),
-                    itemBuilder: (context, index) {
-                      return GlobalListCard(
-                        icon: Assets.icons.win.svg(width: 32.w, height: 32.h),
-                        imageUrl:
-                            'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Pori_Moni_%28cropped%29.jpg/960px-Pori_Moni_%28cropped%29.jpg',
-                        title: "Alex",
-                        subtitle: "25000ft\nDistance",
-                        onTap: () {},
-                      );
-                    },
-                  ),
-                ],
-
-              ),
-            ],
-          ),
-        ),
-      );
-    }),
+      }),
     );
   }
 
-
-  Widget buildBestScoreCard() {
-
+  Widget buildBestScoreCard(LeaderBoardModel board) {
+    final bestScore = board.yourBestScore?.highScoreInFt ?? 0;
     return Container(
-      width: 346.w,
-      height: 90.h,
+      width: 348.w,
+      height: 100.h,
       decoration: BoxDecoration(
         color: const Color(0xFFDFE380).withOpacity(0.2),
         borderRadius: BorderRadius.circular(12.r),
-
-        border: Border.all(color: const Color(0xFFF7FCFF), width: 0.4),
+        border: Border.all(
+          color: const Color(0xFFF7FCFF),
+          width: 0.4,
+        ),
       ),
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
       child: Row(
         children: [
-          /// Best Score Texts
-          Row(
-            children: [
-              CustomText(
-                text: 'Your Best',
-                color: AppColors.textColor000000,
-                fontsize: 18.sp,
-                fontWeight: FontWeight.w400,
-              ),
-              CustomText(
-                text: bestScore.toString(),
-                color: AppColors.textColor000000,
-                fontsize: 23.sp,
-                fontWeight: FontWeight.w600,
-              ),
-            ],
+          SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CustomText(
+                  text: 'Your Best',
+                  color: AppColors.textColor000000,
+                  fontsize: 18.sp,
+                  fontWeight: FontWeight.w400,
+                ),
+                CustomText(
+                  text: bestScore.toString(),
+                  color: AppColors.textColor000000,
+                  fontsize: 23.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+              ],
+            ),
           ),
           const Spacer(),
-
-          /// Carrot Image
-          Assets.images.carrot.image(width: 48.w, height: 48.h),
+          Assets.images.carrot.image(
+            width: 48.w,
+            height: 48.h,
+          ),
         ],
       ),
     );
   }
+
+  LeaderBoardController leaderBoardController = Get.put(LeaderBoardController());
+
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      leaderBoardController.getLeaderBoard();
+    });
+  }
+
+
 }

@@ -1,16 +1,14 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:rabbit_hole_app/presentations/widgets/custom_button.dart';
+
 import '../../../controllers/profile_controller.dart';
 import '../../../core/config/app_routes/app_routes.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../global/custom_assets/assets.gen.dart';
-import '../../widgets/custom_network_image.dart';
+import '../../widgets/custom_profile_image.dart';
 import '../../widgets/custom_text.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -25,10 +23,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   ProfileController controller = Get.put(ProfileController());
 
-
-
-  File? selectedImage;
-  String? profileImagePath;
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.getProfile();
+    });
+  }
 
 
   @override
@@ -54,7 +54,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ),
               child: IconButton(
                 padding: EdgeInsets.zero,
-                icon: Icon(Icons.arrow_back, color: Colors.black, size: 20.r),
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Colors.black,
+                  size: 20.r,
+                ),
                 onPressed: () => Navigator.pop(context),
               ),
             ),
@@ -80,206 +84,121 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ],
       ),
 
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const Stack(
-              alignment: Alignment.bottomRight,
-              children: [
-                CustomMainProfileImage(
-                  imageUrl:
-                      'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Pori_Moni_%28cropped%29.jpg/960px-Pori_Moni_%28cropped%29.jpg',
+      body: Obx(()=>
+         SingleChildScrollView(
+          child: Column(
+            children: [
+              GestureDetector(
+                onTap: () {
+                },
+                child: Stack(
+                  alignment: Alignment.bottomRight,
+                  children: [
+                    CustomProfileImage(
+                        imageUrl: controller.profile.value.profileImage ?? 'N/A'),
+                  ],
                 ),
-              ],
-            ),
-            SizedBox(height: 12.h),
-            // Input fields box
-            Container(
-              width: 393.w,
-              padding: EdgeInsets.symmetric(horizontal: 35.w, vertical: 20.h),
-              decoration: BoxDecoration(
-                color: AppColors.textColorFFFFFF,
-                borderRadius: BorderRadius.circular(24.r),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 50.h),
-                  // Name
-                  CustomText(
-                    text: "Name",
-                    color: AppColors.textColor545454,
-                    fontsize: 13.sp,
-                    fontWeight: FontWeight.w400,
-                  ),
-                  SizedBox(height: 5.h),
-                  TextFormField(
-                    controller: namCtrl,
-                    initialValue: "Jessika",
-                    style: const TextStyle(color: AppColors.textColor545454),
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.r),
-                        borderSide: const BorderSide(
-                          color: AppColors.textColorC7A8AD,
-                        ),
-                      ),
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 12.w,
-                        vertical: 12.h,
-                      ),
+              SizedBox(height: 12.h),
+              // Input fields box
+              Container(
+                width: 393.w,
+                padding: EdgeInsets.symmetric(horizontal: 35.w, vertical: 20.h),
+                decoration: BoxDecoration(
+                  color: AppColors.textColorFFFFFF,
+                  borderRadius: BorderRadius.circular(24.r),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 50.h),
+                    // Name
+                    CustomText(
+                      text: "Name",
+                      color: AppColors.textColor545454,
+                      fontsize: 13.sp,
+                      fontWeight: FontWeight.w400,
                     ),
-                  ),
-                  SizedBox(height: 20.h),
+                    SizedBox(height: 5.h),
+                    inputBox(controller.profile.value.fullName ?? 'N/A'),
+                    SizedBox(height: 20.h),
+                    CustomText(
+                      text: "Email",
+                      color: AppColors.textColor545454,
+                      fontsize: 13.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    SizedBox(height: 5.h),
+                    inputBox(controller.profile.value.email ?? 'N/A'),
+                    SizedBox(height: 20.h),
+                    // Address
+                    CustomText(text: "Address",
+                      color: AppColors.textColor545454,
+                      fontsize: 13.sp,
+                      fontWeight: FontWeight.w400,),
 
-                  // Address
-                  CustomText(
-                    text: "Address",
-                    color: AppColors.textColor545454,
-                    fontsize: 13.sp,
-                    fontWeight: FontWeight.w400,
-                  ),
-                  SizedBox(height: 8.h),
-                  TextFormField(
-                    controller: addressCtrl,
-                    initialValue: "2431 AF AMSTERDAM",
-                    style: const TextStyle(color: AppColors.textColor545454),
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.r),
-                        borderSide: const BorderSide(
-                          color: AppColors.textColorC7A8AD,
-                        ),
-                      ),
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 12.w,
-                        vertical: 12.h,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20.h),
+                    SizedBox(height: 8.h),
+                    inputBox(controller.profile.value.address ?? 'N/A',),
+                    SizedBox(height: 20.h),
 
-                  // Phone
-                  CustomText(
-                    text: "Phone",
-                    color: AppColors.textColor545454,
-                    fontsize: 13.sp,
-                    fontWeight: FontWeight.w400,
-                  ),
-                  SizedBox(height: 8.h),
-                  TextFormField(
-                    controller: phoneCtrl,
-                    initialValue: "************",
-                    style: const TextStyle(color: AppColors.textColor545454),
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.r),
-                        borderSide: const BorderSide(
-                          color: AppColors.textColorC7A8AD,
-                        ),
-                      ),
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 12.w,
-                        vertical: 12.h,
+                    // Phone
+                    CustomText(text: "Phone", color: AppColors.textColor545454,
+                        fontsize: 13.sp,
+                        fontWeight: FontWeight.w400),
+                    SizedBox(height: 8.h),
+                    inputBox(controller.profile.value.phone ?? 'N/A',),
+                    SizedBox(height: 250.h),
+                    Center(
+                      child: CustomButton(
+                        title: 'Update',
+                        onpress: () {
+                          context.pushNamed(AppRoutes.updateProfileScreen,
+                              extra: {
+
+                                "profileImage": controller.profile.value.profileImage ?? 'N/A',
+                                "fullName": controller.profile.value.fullName ?? 'N/A',
+                                "address": controller.profile.value.address ?? 'N/A',
+                                "phone": controller.profile.value.phone ?? 'N/A'
+
+                              }
+                          );
+                        },
+                        width: 245.w,
                       ),
                     ),
-                  ),
-                  SizedBox(height: 310.h),
-                  CustomButton(title: 'Save Change', onpress: () {}),
-                ],
+                    SizedBox(height: 50.h),
+                  ],
+                ),
               ),
-            ),
-          ],
+
+
+
+
+            ],
+          ),
         ),
       ),
     );
   }
-  void showImagePickerOption(BuildContext context) {
-    showModalBottomSheet(
-        backgroundColor: Colors.white.withOpacity(.5),
-        elevation: 3,
-        context: context,
-        builder: (builder) {
-          return Container(
-            decoration: BoxDecoration(
-              border: const Border(
-                  top: BorderSide(color: AppColors.primaryColorC79235, width: 0.25)),
-              borderRadius: BorderRadius.circular(20.r),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(18.0),
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height / 9.2,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Expanded(
-                      child: InkWell(
-                        onTap: () {
-                          _pickImageFromGallery();
-                        },
-                        child: SizedBox(
-                          child: Column(
-                            children: [
-                              Icon(
-                                Icons.image,
-                                size: 50.w,
-                              ),
-                              CustomText(text: 'Gallery')
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: InkWell(
-                        onTap: () {
-                          _pickImageFromCamera();
-                        },
-                        child: SizedBox(
-                          child: Column(
-                            children: [
-                              Icon(
-                                Icons.camera_alt,
-                                size: 50.w,
-                              ),
-                              CustomText(text: 'Camera')
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        });
+  Widget inputBox(String hint, {int maxLines = 1, bool readOnly = true}) {
+    return TextField(
+      maxLines: maxLines,
+      style: TextStyle(color: Colors.white, fontSize: 14.sp),
+      readOnly: readOnly,
+      decoration: InputDecoration(
+        hintText: hint,
+        hintStyle: TextStyle(color: AppColors.textColor545454, fontSize: 14.sp),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.r),
+          borderSide: const BorderSide(
+            color: Color(0xFFC7A8AD),
+            width: 1.0,
+          ),
+        ),
+      ),
+    );
   }
 
-  Future<void> _pickImageFromGallery() async {
-    final pickedFile =
-    await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      Navigator.pop(context);
-      selectedImage = File(pickedFile.path);
-      setState(() {});
-    }
-  }
 
-  Future<void> _pickImageFromCamera() async {
-    final pickedFile =
-    await ImagePicker().pickImage(source: ImageSource.camera);
-    if (pickedFile != null) {
-      Navigator.pop(context);
-      selectedImage = File(pickedFile.path);
-      setState(() {});
-    }
-  }
 
-  TextEditingController namCtrl = TextEditingController();
-  TextEditingController addressCtrl = TextEditingController();
-  TextEditingController phoneCtrl = TextEditingController();
 }

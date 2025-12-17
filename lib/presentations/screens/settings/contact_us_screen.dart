@@ -1,14 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 
 import '../../../../../core/constants/app_colors.dart';
+import '../../../controllers/settings_controller.dart';
 import '../../../global/custom_assets/assets.gen.dart';
 import '../../widgets/custom_text.dart';
 
 
-class ContactUsScreen extends StatelessWidget {
+class ContactUsScreen extends StatefulWidget {
   const ContactUsScreen({super.key});
+
+  @override
+  State<ContactUsScreen> createState() => _ContactUsScreenState();
+}
+
+class _ContactUsScreenState extends State<ContactUsScreen> {
+
+
+  SettingsController controller = Get.put(SettingsController());
+
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.contactUs();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,21 +90,23 @@ class ContactUsScreen extends StatelessWidget {
                       fontWeight: FontWeight.w400,
                     ),
                     SizedBox(height: 20.h),
-                    Column(
-                      children: [
-                        CustomText(
-                          text: '(609)327-7992',
-                          color: AppColors.textColor000000,
-                          fontWeight: FontWeight.w400,
-                          fontsize: 16.sp,
-                        ),
-                        CustomText(
-                          text: 'bta2bigma@gmail.com',
-                          color: AppColors.textColor000000,
-                          fontWeight: FontWeight.w400,
-                          fontsize: 16.sp,
-                        ),
-                      ],
+                    Obx(()=>
+                       Column(
+                        children: [
+                          CustomText(
+                            text: controller.contact.value?.phone ?? 'N/A',
+                            color: AppColors.textColor000000,
+                            fontWeight: FontWeight.w400,
+                            fontsize: 16.sp,
+                          ),
+                          CustomText(
+                            text: controller.contact.value?.email ?? 'N/A',
+                            color: AppColors.textColor000000,
+                            fontWeight: FontWeight.w400,
+                            fontsize: 16.sp,
+                          ),
+                        ],
+                      ),
                     )
 
                   ],
@@ -97,9 +118,4 @@ class ContactUsScreen extends StatelessWidget {
       ),
     );
   }
-
-
-
-
-
 }

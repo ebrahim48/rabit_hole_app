@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:rabbit_hole_app/controllers/shop_controller.dart';
+import 'package:rabbit_hole_app/presentations/widgets/custom_loader.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../global/custom_assets/assets.gen.dart';
 import '../../widgets/carrot_packs-card.dart';
@@ -180,23 +181,30 @@ class _ShopScreenState extends State<ShopScreen> {
                 ],
               ),
               SizedBox(height: 16.h),
-              ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: shopPackageController.contentPowerUp.value.contents!.length,
-                separatorBuilder:
-                    (context, index) =>
-                    SizedBox(height: 12.h),
-                itemBuilder: (context, index) {
-                  final contentPowerUp = shopPackageController.contentPowerUp.value.contents?[index];
-                  return PowerUpsListCard(
-                    icon: Assets.icons.shield.svg(width: 32.w, height: 32.h),
-                    title: contentPowerUp?.name ??'N/A',
-                    name: contentPowerUp?.category.toString() ??'N/A',
-                    price: contentPowerUp?.timeInSec.toString() ??'N/A',
-                    onTap: () {},
-                  );
-                },
+              Obx((){
+                if (shopPackageController.contentPowerUp.value.contents == null) {
+                  return const Center(child: CustomLoader());
+                }
+                return ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: shopPackageController.contentPowerUp.value.contents?.length ?? 0,
+                  separatorBuilder:
+                      (context, index) =>
+                      SizedBox(height: 12.h),
+                  itemBuilder: (context, index) {
+                    final contentPowerUp = shopPackageController.contentPowerUp.value.contents?[index];
+                    return PowerUpsListCard(
+                      icon: Assets.icons.shield.svg(width: 32.w, height: 32.h),
+                      title: contentPowerUp?.name ??'N/A',
+                      name: contentPowerUp?.category.toString() ??'N/A',
+                      price: contentPowerUp?.timeInSec.toString() ??'N/A',
+                      onTap: () {},
+                    );
+                  },
+                );
+              }
+
               ),
 
 
