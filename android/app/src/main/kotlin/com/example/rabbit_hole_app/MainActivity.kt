@@ -1,4 +1,4 @@
-package com.example.rabbit_hole_app
+package com.rabbithole.game
 
 import io.flutter.embedding.android.FlutterActivity
 

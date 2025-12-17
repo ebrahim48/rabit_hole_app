@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import 'package:device_preview/device_preview.dart';
-import 'package:rabbit_hole_app/core/app_constants/app_constants.dart';
 import 'package:rabbit_hole_app/core/helpers/haptic_helper.dart';
 import 'package:rabbit_hole_app/presentations/controller/theme_controller.dart';
 
@@ -22,7 +21,8 @@ void main() async {
 
   // Initialize haptic feedback setting with default value
   bool hapticFeedbackEnabled = await HapticHelper.getHapticFeedbackStatus();
-  if (hapticFeedbackEnabled == false) { // If not set before, set to true as default
+  if (hapticFeedbackEnabled == false) {
+    // If not set before, set to true as default
     await HapticHelper.setHapticFeedbackStatus(true);
   }
 
@@ -51,9 +51,6 @@ class MyApp extends StatelessWidget {
           routeInformationParser: AppRoutes.goRouter.routeInformationParser,
           routeInformationProvider: AppRoutes.goRouter.routeInformationProvider,
           routerDelegate: AppRoutes.goRouter.routerDelegate,
-          // builder: (context, child) {
-          //   return Scaffold(body: NoInterNetScreen(child: child!));
-          // },
         );
       },
     );
