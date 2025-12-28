@@ -22,6 +22,7 @@ class VerifyScreen extends StatefulWidget {
     required this.screenType,
     required this.email,
     required this.token
+
   });
 
   @override
