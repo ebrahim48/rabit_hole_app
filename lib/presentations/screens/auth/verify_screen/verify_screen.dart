@@ -12,22 +12,47 @@ import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_text.dart';
 import 'custom_pin_text_field.dart';
 
-
-class VerifyScreen extends StatelessWidget {
-
+class VerifyScreen extends StatefulWidget {
   final String screenType;
   final String email;
   final String token;
 
-  VerifyScreen({super.key,required this.screenType, required this.email,required this.token});
+  const VerifyScreen({
+    super.key,
+    required this.screenType,
+    required this.email,
+    required this.token
+  });
 
+  @override
+  State<VerifyScreen> createState() => _VerifyScreenState();
+}
 
-  AuthController authController = Get.put(AuthController());
+class _VerifyScreenState extends State<VerifyScreen> {
+  final AuthController authController = Get.put(AuthController());
+  late final TextEditingController otpTEController;
+  String _otpValue = '';
+
+  // Store the current token, update it when resend is successful
+  late String currentToken;
+
+  @override
+  void initState() {
+    super.initState();
+    otpTEController = TextEditingController();
+    currentToken = widget.token;
+  }
+
+  @override
+  void dispose() {
+    otpTEController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  const CustomAppBar(
+      appBar: const CustomAppBar(
         title: 'Verify',
       ),
       body: SingleChildScrollView(
@@ -37,7 +62,12 @@ class VerifyScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(height: 42.h),
-              Center(child: Assets.images.logo.image(height: 100.h, width: 100.w)),
+              Center(
+                  child: Assets.images.logo.image(
+                      height: 100.h,
+                      width: 100.w
+                  )
+              ),
               SizedBox(height: 24.h),
 
               CustomText(
@@ -60,101 +90,96 @@ class VerifyScreen extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CustomPinCodeTextField(textEditingController: otpTEController),
+                  CustomPinCodeTextField(
+                      textEditingController: otpTEController,
+                      onChanged: (value) {
+                        setState(() {
+                          _otpValue = value;
+                        });
+                      }
+                  ),
                   SizedBox(height: 13.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CustomText(
                         textAlign: TextAlign.center,
-                        text: 'Didn’t get the code?',
-                        color: AppColors.textColor000000,
+                        text: 'Didnt get the code?',
+                      color: AppColors.textColor000000,
                         fontWeight: FontWeight.w400,
                         fontsize: 13.sp,
+                      ),
+                      Obx(() {
+                        final isLoading = authController.resendLoading.value;
+                        final isCounting = authController.isCountingDown.value;
+                        final isDisabled = isLoading || isCounting;
 
-                      ),
-                      GestureDetector(
-                        onTap: isCountingDown.value
-                            ? null
-                            : () {
-                          startCountdown();
-                        },
-                        child: CustomText(
-                          fontWeight: FontWeight.w600,
-                          text: isCountingDown.value
-                              ? '${'Resend in'} ${countdown.value}s'
-                              : ' Resend',
-                          color: isCountingDown.value
-                              ? AppColors.secondary836531
-                              : AppColors.textColor8C7720,
-                          textDecoration: TextDecoration.underline,
-                          fontsize: 14.sp,
-                        ),
-                      ),
+                        return GestureDetector(
+                          onTap: isDisabled
+                              ? null
+                              : () async {
+                            final newToken = await authController.reSendOtp(widget.email);
+                            if (newToken != null && newToken.isNotEmpty) {
+                              setState(() {
+                                currentToken = newToken;
+                              });
+                            }
+                            if (!authController.resendLoading.value) {
+                              authController.startCountdown();
+                            }
+                          },
+                          child:
+                          CustomText(
+                            fontWeight: FontWeight.w600,
+                            text: isCounting
+                                ? 'Resend in ${authController.countdown.value}s'
+                                : 'Resend',
+                            color: isDisabled
+                                ? AppColors.secondary836531
+                                : AppColors.textColor8C7720,
+                            textDecoration: TextDecoration.underline,
+                            fontsize: 14.sp,
+                          ),
+                        );
+                      }),
                     ],
                   ),
-
                 ],
               ),
 
-
-
               SizedBox(height: 27.h),
 
+              /// Verify Button
+              Obx(() => CustomButton(
+                loading: authController.verifyLoading.value,
+                title: "Verify",
+                onpress: () {
+                  if (_otpValue.isEmpty) {
+                    ToastMessageHelper.showToastMessage("Please enter OTP");
+                    return;
+                  }
 
-              /// ============================================ Button ====================================>
+                  if (_otpValue.length != 6) {
+                    ToastMessageHelper.showToastMessage("Please enter valid 6-digit OTP");
+                    return;
+                  }
 
-              Obx(() =>
-                  CustomButton(
-                    loading: authController.verifyLoading.value,
-                    title: "Verify",
-                    onpress: () {
-                      if (otpTEController.text.isEmpty) {
-                        ToastMessageHelper.showToastMessage("Please enter OTP");
-                        return;
-                      }
-
-                      authController.verfyEmail(
-                        otpTEController.text,
-                        email,
-                        token,
-                        screenType: screenType,
-                        type: screenType == "signup" ? "Sign Up" : "Forgot",
-                        context: context,
-                      );
-                    },
-                  ),),
+                  // Use currentToken instead of widget.token
+                  authController.verfyEmail(
+                    _otpValue,
+                    widget.email,
+                    currentToken,
+                    screenType: widget.screenType,
+                    type: widget.screenType == "signup" ? "Sign Up" : "Forgot",
+                    context: context,
+                  );
+                },
+              )),
               SizedBox(height: 27.h),
-
             ],
           ),
         ),
       ),
     );
   }
-
-
-
-
-  final TextEditingController emailCtrl = TextEditingController();
-
-  final TextEditingController otpTEController = TextEditingController();
-
-  final RxInt countdown = 60.obs;
-  final RxBool isCountingDown = false.obs;
-
-  void startCountdown() {
-    isCountingDown.value = true;
-    countdown.value = 60;
-    Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (countdown.value > 0) {
-        countdown.value--;
-      } else {
-        timer.cancel();
-        isCountingDown.value = false;
-      }
-    });
-  }
-
-
 }

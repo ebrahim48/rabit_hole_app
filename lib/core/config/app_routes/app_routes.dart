@@ -117,9 +117,12 @@ class AppRoutes {
       GoRoute(
         path: resetPasswordScreen,
         name: resetPasswordScreen,
-        pageBuilder:
-            (context, state) =>
-                _customTransitionPage(ResetPasswordScreen(), state),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final email = extra?['email'] as String?;
+
+          return ResetPasswordScreen(email: email);
+        },
       ),
 
       GoRoute(

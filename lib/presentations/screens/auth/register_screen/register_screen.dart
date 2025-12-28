@@ -340,8 +340,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Assets.icons.google.svg(width: 40.w, height: 40.h),
-                    SizedBox(width: 30.h),
-                    Assets.icons.gmail.svg(width: 40.w, height: 40.h),
+                    // SizedBox(width: 30.h),
+                    // Assets.icons.gmail.svg(width: 40.w, height: 40.h),
                   ],
                 ),
 
