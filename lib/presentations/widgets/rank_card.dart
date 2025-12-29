@@ -11,6 +11,7 @@ class GlobalListCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final String distance;
+  final bool isCurrentUser;
   final VoidCallback? onTap;
 
   const GlobalListCard({
@@ -20,6 +21,7 @@ class GlobalListCard extends StatelessWidget {
     required this.distance,
     required this.title,
     required this.subtitle,
+    this.isCurrentUser = false,
     this.onTap,
   });
 
@@ -32,8 +34,16 @@ class GlobalListCard extends StatelessWidget {
         height: 75.h,
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
         decoration: BoxDecoration(
-          color: AppColors.textColorFFFFFF,
+          color: isCurrentUser
+              ? const Color(0xFF0000001A).withValues(alpha: 0.1)  // Current user highlight color
+              : AppColors.textColorFFFFFF,
           borderRadius: BorderRadius.circular(8.r),
+          border: isCurrentUser
+              ? Border.all(
+            color: const Color(0xFF0000001A),
+            width: 1.5,
+          )
+              : null,
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
@@ -51,20 +61,21 @@ class GlobalListCard extends StatelessWidget {
             Row(
               children: [
                 CustomProfileImage(
-                    imageUrl: imageUrl),
+                  imageUrl: imageUrl,
+                ),
                 SizedBox(width: 10.w),
                 CustomText(
                   text: title,
                   color: AppColors.textColor000000,
                   fontsize: 16.sp,
-                  fontWeight: FontWeight.w400,
+                  fontWeight: isCurrentUser ? FontWeight.w600 : FontWeight.w400,
                 ),
               ],
             ),
 
             const Spacer(),
 
-            /// ====================================> Score  Label  ============================================>
+            /// Score Label
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,

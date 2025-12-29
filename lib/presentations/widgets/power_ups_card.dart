@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../core/constants/app_colors.dart';
 import '../../global/custom_assets/assets.gen.dart';
 import 'custom_text.dart';
 
 class PowerUpsListCard extends StatelessWidget {
-  final Widget icon;
+  final String imageUrl;
   final String title;
   final String name;
   final String price;
@@ -14,7 +15,7 @@ class PowerUpsListCard extends StatelessWidget {
 
   const PowerUpsListCard({
     super.key,
-    required this.icon,
+    required this.imageUrl,
     required this.name,
     required this.title,
     required this.price,
@@ -42,7 +43,41 @@ class PowerUpsListCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-            icon,
+            // Dynamic Image from URL
+            ClipRRect(
+              borderRadius: BorderRadius.circular(6.r),
+              child: CachedNetworkImage(
+                imageUrl: imageUrl,
+                width: 32.w,
+                height: 32.h,
+                fit: BoxFit.cover,
+                placeholder: (context, url) => Container(
+                  width: 32.w,
+                  height: 32.h,
+                  color: Colors.grey[200],
+                  child: Center(
+                    child: SizedBox(
+                      width: 16.w,
+                      height: 16.h,
+                      child: const CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                  ),
+                ),
+                errorWidget: (context, url, error) => Container(
+                  width: 32.w,
+                  height: 32.h,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(6.r),
+                  ),
+                  child: Icon(
+                    Icons.power_settings_new,
+                    size: 18.sp,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ),
+            ),
             SizedBox(width: 15.w),
 
             ///  Name side by side

@@ -11,7 +11,6 @@ import '../../widgets/custom_loader.dart';
 import '../../widgets/custom_text.dart';
 import '../../widgets/rank_card.dart';
 
-
 class LeaderBoardScreen extends StatefulWidget {
   const LeaderBoardScreen({super.key});
 
@@ -20,6 +19,16 @@ class LeaderBoardScreen extends StatefulWidget {
 }
 
 class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
+  LeaderBoardController leaderBoardController = Get.put(LeaderBoardController());
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      leaderBoardController.getLeaderBoard();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +58,6 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                 IconButton(
                   onPressed: () {
                     context.pushNamed(AppRoutes.settingsScreen);
-
                   },
                   icon: Assets.icons.settings.svg(),
                 ),
@@ -58,7 +66,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
           ),
         ],
       ),
-      body:  Obx(() {
+      body: Obx(() {
         if (leaderBoardController.getLeaderBoardLoading.value) {
           return const Center(child: CustomLoader());
         }
@@ -75,6 +83,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
         }
 
         final globalRankings = board.data!;
+        final loggedInUserId = board.yourBestScore?.user ?? '';
 
         return SingleChildScrollView(
           child: Padding(
@@ -99,15 +108,41 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                   separatorBuilder: (context, index) => SizedBox(height: 12.h),
                   itemBuilder: (context, index) {
                     final player = globalRankings[index];
+                    final rank = index + 1;
+                    final isCurrentUser = player.user?.id == loggedInUserId;
+
+
+                    Widget rankIcon;
+                    String rankText = '';
+
+                    if (rank == 1) {
+                      rankIcon = Assets.icons.win.svg(width: 32.w, height: 32.h);
+                    } else if (rank == 2) {
+                      rankIcon = Assets.icons.secondWin.svg(width: 32.w, height: 32.h);
+                    } else if (rank == 3) {
+                      rankIcon = Assets.icons.thirdWin.svg(width: 32.w, height: 32.h);
+                    } else {
+                      rankIcon = Container(
+                        width: 32.w,
+                        height: 32.h,
+                        alignment: Alignment.center,
+                        child: CustomText(
+                          text: '#$rank',
+                          color: AppColors.textColor000000,
+                          fontsize: 14.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      );
+                    }
+
                     return GlobalListCard(
-                      icon: Assets.icons.win.svg(width: 32.w, height: 32.h),
+                      icon: rankIcon,
                       imageUrl: player.user?.profileImage?.trim() ?? '',
                       title: player.user?.fullName ?? 'N/A',
-                      subtitle: (player.highScoreInFt ?? 0).toString(),
+                      subtitle: (player.highScoreInFt ?? 0).toString() + 'ft',
                       distance: 'Distance',
-                      onTap: () {
-
-                      },
+                      isCurrentUser: isCurrentUser,
+                      onTap: () {},
                     );
                   },
                 ),
@@ -147,7 +182,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                   fontWeight: FontWeight.w400,
                 ),
                 CustomText(
-                  text: bestScore.toString(),
+                  text: bestScore.toString() + 'ft',
                   color: AppColors.textColor000000,
                   fontsize: 23.sp,
                   fontWeight: FontWeight.w600,
@@ -164,15 +199,4 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
       ),
     );
   }
-
-  LeaderBoardController leaderBoardController = Get.put(LeaderBoardController());
-
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      leaderBoardController.getLeaderBoard();
-    });
-  }
-
-
 }

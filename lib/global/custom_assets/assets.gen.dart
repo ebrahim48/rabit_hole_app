@@ -188,6 +188,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/scores.svg
   SvgGenImage get scores => const SvgGenImage('assets/icons/scores.svg');
 
+  /// File path: assets/icons/secondWin.svg
+  SvgGenImage get secondWin => const SvgGenImage('assets/icons/secondWin.svg');
+
   /// File path: assets/icons/settings.svg
   SvgGenImage get settings => const SvgGenImage('assets/icons/settings.svg');
 
@@ -213,6 +216,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/terms.svg
   SvgGenImage get terms => const SvgGenImage('assets/icons/terms.svg');
+
+  /// File path: assets/icons/thirdWin.svg
+  SvgGenImage get thirdWin => const SvgGenImage('assets/icons/thirdWin.svg');
 
   /// File path: assets/icons/trump_card.svg
   SvgGenImage get trumpCard => const SvgGenImage('assets/icons/trump_card.svg');
@@ -277,6 +283,7 @@ class $AssetsIconsGen {
     rabit,
     scoreicon,
     scores,
+    secondWin,
     settings,
     share,
     shield,
@@ -285,6 +292,7 @@ class $AssetsIconsGen {
     start,
     statistics,
     terms,
+    thirdWin,
     trumpCard,
     watch,
     win,

@@ -195,7 +195,7 @@ class _ShopScreenState extends State<ShopScreen> {
                   itemBuilder: (context, index) {
                     final contentPowerUp = shopPackageController.contentPowerUp.value.contents?[index];
                     return PowerUpsListCard(
-                      icon: Assets.icons.shield.svg(width: 32.w, height: 32.h),
+                      imageUrl: contentPowerUp?.imgUrl ?? '',
                       title: contentPowerUp?.name ??'N/A',
                       name: contentPowerUp?.category.toString() ??'N/A',
                       price: contentPowerUp?.timeInSec.toString() ??'N/A',
