@@ -373,9 +373,10 @@ class AuthController extends GetxController {
 
   ///===============Resend================<>
 
+
   RxBool resendLoading = false.obs;
 
-  reSendOtp(String email) async {
+  Future<String?> reSendOtp(String email) async {
     resendLoading(true);
 
     String token = await PrefsHelper.getString(AppConstants.bearerToken);
@@ -402,17 +403,18 @@ class AuthController extends GetxController {
       if (newToken != null) {
         await PrefsHelper.setString(AppConstants.bearerToken, newToken);
         logger.d("✅ New token saved: $newToken");
+        ToastMessageHelper.showToastMessage("✅ OTP sent successfully to your email.");
+        return newToken;
       }
-
-      ToastMessageHelper.showToastMessage("✅ OTP sent successfully to your email.");
     } else {
       ToastMessageHelper.showToastMessage(
         response.body["message"] ?? "❌ Failed to resend OTP",
         title: "Error",
       );
     }
-  }
 
+    return null;
+  }
   final RxInt countdown = 60.obs;
   final RxBool isCountingDown = false.obs;
   Timer? _timer;

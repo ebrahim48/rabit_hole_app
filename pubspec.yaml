@@ -72,6 +72,14 @@ dev_dependencies:
   flutter_gen_runner:
   flutter_launcher_icons:
 
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/app_logo.png"
+  adaptive_icon_foreground: "assets/images/app_logo.png"
+  adaptive_icon_background: "#99DEFE"
+
+
 flutter_gen:
   output: lib/global/custom_assets/ # Optional (default: lib/gen/)
   line_length: 80 # Optional (default: 80)

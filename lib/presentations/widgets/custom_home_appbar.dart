@@ -48,49 +48,50 @@ class _CustomHomeAppBarState extends State<CustomHomeAppBar> {
         decoration: const BoxDecoration(
           color: Color(0xFFCCEEFD), // background color
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            /// Left Section (Profile + Text)
-            Row(
-              children: [
-                CustomProfileImage(
-                    imageUrl: controller.profile.value.profileImage ?? 'N/A'),
-                SizedBox(width: 10.w),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CustomText(
-                      text: controller.profile.value.fullName ?? 'N/A',
-                      color: AppColors.textColor000000,
-                      fontsize: 14.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    CustomText(
-                      text: 'Member Since: $formattedDate',
-                      color: AppColors.textColor000000,
-                      fontsize: 11.sp,
-                      fontWeight: FontWeight.w400,
-                    )
-                  ],
-                ),
-              ],
-            ),
+        child: Obx( ()=>
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              /// Left Section (Profile + Text)
+              Row(
+                children: [
+                  CustomProfileImage(
+                      imageUrl: controller.profile.value.profileImage ?? 'N/A'),
+                  SizedBox(width: 10.w),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CustomText(
+                        text: controller.profile.value.fullName ?? 'N/A',
+                        color: AppColors.textColor000000,
+                        fontsize: 14.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      CustomText(
+                        text: 'Member Since: $formattedDate',
+                        color: AppColors.textColor000000,
+                        fontsize: 11.sp,
+                        fontWeight: FontWeight.w400,
+                      )
+                    ],
+                  ),
+                ],
+              ),
 
-            /// Right Section (Settings Icon)
-            GestureDetector(
-              onTap: () {
-                context.pushNamed(AppRoutes.settingsScreen);
-              },
-              child: Assets.icons.settings.svg(width: 32.w, height: 32.h),
-            ),
-          ],
+              /// Right Section (Settings Icon)
+              GestureDetector(
+                onTap: () {
+                  context.pushNamed(AppRoutes.settingsScreen);
+                },
+                child: Assets.icons.settings.svg(width: 32.w, height: 32.h),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  @override
   Size get preferredSize => Size.fromHeight(75.h);
 }

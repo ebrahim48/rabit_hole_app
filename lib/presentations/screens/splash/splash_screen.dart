@@ -37,7 +37,7 @@ class SplashScreen extends StatelessWidget {
                     SizedBox(height: 16.h),
 
                     /// Title
-                    Assets.images.rabbit.image(
+                    Assets.images.carrotchase.image(
                       width: 220.w,
                       height: 45.h,
                     ),

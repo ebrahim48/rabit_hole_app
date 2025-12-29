@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     /// Title
                     CustomText(
-                      text: 'Rabbit Run',
+                      text: 'Carrot Chase',
                       color: AppColors.textColor000000,
                       fontsize: 29.sp,
                       fontWeight: FontWeight.w700,
@@ -115,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             width: 32.w,
                           ),
                           onTap: () {
-
+                            context.pushNamed(AppRoutes.leaderBoardScreen);
                           },
                         ),
                         _buildOptionCard(

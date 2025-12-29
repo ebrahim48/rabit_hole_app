@@ -38,8 +38,15 @@ class $AssetsIconsGen {
   SvgGenImage get backgroundmusic =>
       const SvgGenImage('assets/icons/backgroundmusic.svg');
 
+  /// File path: assets/icons/ball.svg
+  SvgGenImage get ball => const SvgGenImage('assets/icons/ball.svg');
+
   /// File path: assets/icons/bigpacks.svg
   SvgGenImage get bigpacks => const SvgGenImage('assets/icons/bigpacks.svg');
+
+  /// File path: assets/icons/blue_rabbit.svg
+  SvgGenImage get blueRabbit =>
+      const SvgGenImage('assets/icons/blue_rabbit.svg');
 
   /// File path: assets/icons/cake.svg
   SvgGenImage get cake => const SvgGenImage('assets/icons/cake.svg');
@@ -103,6 +110,9 @@ class $AssetsIconsGen {
   SvgGenImage get hapticfeedback =>
       const SvgGenImage('assets/icons/hapticfeedback.svg');
 
+  /// File path: assets/icons/hat.svg
+  SvgGenImage get hat => const SvgGenImage('assets/icons/hat.svg');
+
   /// File path: assets/icons/heart.svg
   SvgGenImage get heart => const SvgGenImage('assets/icons/heart.svg');
 
@@ -119,6 +129,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/leaderboard.svg
   SvgGenImage get leaderboard =>
       const SvgGenImage('assets/icons/leaderboard.svg');
+
+  /// File path: assets/icons/life.svg
+  SvgGenImage get life => const SvgGenImage('assets/icons/life.svg');
 
   /// File path: assets/icons/logout.svg
   SvgGenImage get logout => const SvgGenImage('assets/icons/logout.svg');
@@ -139,6 +152,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/play.svg
   SvgGenImage get play => const SvgGenImage('assets/icons/play.svg');
 
+  /// File path: assets/icons/power.svg
+  SvgGenImage get power => const SvgGenImage('assets/icons/power.svg');
+
   /// File path: assets/icons/powerups.svg
   SvgGenImage get powerups => const SvgGenImage('assets/icons/powerups.svg');
 
@@ -156,9 +172,15 @@ class $AssetsIconsGen {
   SvgGenImage get rabbitSkin =>
       const SvgGenImage('assets/icons/rabbitSkin.svg');
 
+  /// File path: assets/icons/rabbit_3d.svg
+  SvgGenImage get rabbit3d => const SvgGenImage('assets/icons/rabbit_3d.svg');
+
   /// File path: assets/icons/rabbitmain.svg
   SvgGenImage get rabbitmain =>
       const SvgGenImage('assets/icons/rabbitmain.svg');
+
+  /// File path: assets/icons/rabit.svg
+  SvgGenImage get rabit => const SvgGenImage('assets/icons/rabit.svg');
 
   /// File path: assets/icons/scoreicon.svg
   SvgGenImage get scoreicon => const SvgGenImage('assets/icons/scoreicon.svg');
@@ -192,6 +214,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/terms.svg
   SvgGenImage get terms => const SvgGenImage('assets/icons/terms.svg');
 
+  /// File path: assets/icons/trump_card.svg
+  SvgGenImage get trumpCard => const SvgGenImage('assets/icons/trump_card.svg');
+
   /// File path: assets/icons/watch.svg
   SvgGenImage get watch => const SvgGenImage('assets/icons/watch.svg');
 
@@ -206,7 +231,9 @@ class $AssetsIconsGen {
     arrow,
     audio,
     backgroundmusic,
+    ball,
     bigpacks,
+    blueRabbit,
     cake,
     call,
     camera,
@@ -226,23 +253,28 @@ class $AssetsIconsGen {
     gmail,
     google,
     hapticfeedback,
+    hat,
     heart,
     highscores,
     home,
     key,
     leaderboard,
+    life,
     logout,
     nameProfile,
     others,
     pass,
     phone,
     play,
+    power,
     powerups,
     privacy,
     profileedit,
     rabbit,
     rabbitSkin,
+    rabbit3d,
     rabbitmain,
+    rabit,
     scoreicon,
     scores,
     settings,
@@ -253,6 +285,7 @@ class $AssetsIconsGen {
     start,
     statistics,
     terms,
+    trumpCard,
     watch,
     win,
   ];
@@ -261,8 +294,16 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/app_logo.png
+  AssetGenImage get appLogo =>
+      const AssetGenImage('assets/images/app_logo.png');
+
   /// File path: assets/images/carrot.png
   AssetGenImage get carrot => const AssetGenImage('assets/images/carrot.png');
+
+  /// File path: assets/images/carrotchase.png
+  AssetGenImage get carrotchase =>
+      const AssetGenImage('assets/images/carrotchase.png');
 
   /// File path: assets/images/contactImage.png
   AssetGenImage get contactImage =>
@@ -271,18 +312,30 @@ class $AssetsImagesGen {
   /// File path: assets/images/logo.png
   AssetGenImage get logo => const AssetGenImage('assets/images/logo.png');
 
+  /// File path: assets/images/mainrabbit.png
+  AssetGenImage get mainrabbit =>
+      const AssetGenImage('assets/images/mainrabbit.png');
+
   /// File path: assets/images/rabbit.png
   AssetGenImage get rabbit => const AssetGenImage('assets/images/rabbit.png');
+
+  /// File path: assets/images/rabbitvai.png
+  AssetGenImage get rabbitvai =>
+      const AssetGenImage('assets/images/rabbitvai.png');
 
   /// File path: assets/images/splash.png
   AssetGenImage get splash => const AssetGenImage('assets/images/splash.png');
 
   /// List of all assets
   List<AssetGenImage> get values => [
+    appLogo,
     carrot,
+    carrotchase,
     contactImage,
     logo,
+    mainrabbit,
     rabbit,
+    rabbitvai,
     splash,
   ];
 }

@@ -1,6 +1,6 @@
 class ApiConstants{
 
-  static const String baseUrl = "https://api.rhrunnerapp.com/api/v1";
+  static const String baseUrl = "https://jakuan3035.syedbipul.me/api/v1";
   static const String imageBaseUrl = "https://api.rhrunnerapp.com/";
 
 
@@ -21,14 +21,17 @@ class ApiConstants{
   static  String shopSkinEndPoint = "/content?category=skin";
   static  String powerUpEndPoint = "/content?category=power-up";
   static  String gamingDashboardEndPoint = "/gaming-dashboard";
+  static  String createDashboardEndPoint = "/gaming-dashboard";
+  static  String updateDashboardEndPoint = "/gaming-dashboard";
+  static  String shareSkinDashboardEndPoint = "/gaming-dashboard/share-and-get-skin";
+  static  String watchCarrotsDashboardEndPoint = "/gaming-dashboard/watch-ads-and-get-carrots";
   static  String userAccountEndPoint = "/user/account";
   static  String updateProfileEndPoint = "/user/update-profile";
   static  String contactUsEndPoint = "/settings/support-and-contact";
   static  String privacyEndPoint = "/settings/privacy-policy";
   static  String aboutUsEndPoint = "/settings/about-us";
   static  String termsEndPoint = "/settings/terms-conditions";
-  static  String createGamingDashBoardEndPoint = "/gaming-dashboard";
-  static  String updateGamingDashBoardEndPoint = "/gaming-dashboard";
+
 
 
 }
