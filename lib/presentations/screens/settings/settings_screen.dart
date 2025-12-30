@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rabbit_hole_app/core/config/app_routes/app_routes.dart';
-import 'package:rabbit_hole_app/presentations/widgets/custom_button.dart';
 import 'package:rabbit_hole_app/presentations/widgets/custom_music_slider.dart';
 import '../../../controllers/auth-controller.dart';
 import '../../../core/constants/app_colors.dart';
@@ -12,9 +11,9 @@ import '../../../global/custom_assets/assets.gen.dart';
 import '../../widgets/custom_haptic_feedback_slider.dart';
 import '../../widgets/custom_slider.dart';
 import '../../widgets/custom_text.dart';
-import '../../widgets/custom_text_field.dart';
 import '../../widgets/menu_item.dart';
 import '../../widgets/toggle_button.dart';
+import 'change_password_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -24,7 +23,8 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  // Initialize AuthController at the top
+
+
   final AuthController authController = Get.put(AuthController());
 
   bool soundEffects = true;
@@ -410,150 +410,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void _showChangePasswordModal(BuildContext context) {
-    final currentPassWordCtrl = TextEditingController();
-    final newPassWordCtrl = TextEditingController();
-    final confirmNewPassWordCtrl = TextEditingController();
-    final formKey = GlobalKey<FormState>();
-    final RxBool isMatched = false.obs;
-
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      isDismissible: true,
+      enableDrag: true,
       backgroundColor: AppColors.bgColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
       ),
       builder: (modalContext) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(modalContext).viewInsets.bottom,
-          ),
-          child: Container(
-            width: 393.w,
-            padding: EdgeInsets.all(20.w),
-            decoration: BoxDecoration(
-              color: AppColors.bgColor,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
-            ),
-            child: SingleChildScrollView(
-              child: Form(
-                key: formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Center(
-                      child: Container(
-                        width: 40.w,
-                        height: 4.h,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[400],
-                          borderRadius: BorderRadius.circular(10.r),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 39.h),
-                    CustomText(
-                      text: 'Password Change',
-                      color: AppColors.textColor000000,
-                      fontsize: 20.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    SizedBox(height: 28.h),
-                    CustomTextField(
-                      hintextColor: AppColors.textColor545454,
-                      controller: currentPassWordCtrl,
-                      prefixIcon: Assets.icons.pass.svg(),
-                      hintText: "Current Password",
-                      isPassword: true,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your current password';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 22.h),
-                    CustomTextField(
-                      hintextColor: AppColors.textColor545454,
-                      controller: newPassWordCtrl,
-                      prefixIcon: Assets.icons.pass.svg(),
-                      hintText: "New Password",
-                      isPassword: true,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your new password';
-                        } else if (value.length < 6) {
-                          return 'Password must be at least 6 characters';
-                        } else if (value == currentPassWordCtrl.text) {
-                          return 'New password must be different';
-                        }
-                        return null;
-                      },
-                    ),
-                    CustomTextField(
-                      hintextColor: AppColors.textColor545454,
-                      controller: confirmNewPassWordCtrl,
-                      prefixIcon: Assets.icons.pass.svg(),
-                      hintText: "Confirm New Password",
-                      isPassword: true,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          Future.delayed(
-                              Duration.zero, () => isMatched.value = false);
-                          return 'Please confirm your new password';
-                        } else if (newPassWordCtrl.text == value) {
-                          Future.delayed(
-                              Duration.zero, () => isMatched.value = true);
-                          return null;
-                        } else {
-                          Future.delayed(
-                              Duration.zero, () => isMatched.value = false);
-                          return 'Passwords do not match';
-                        }
-                      },
-                      onChanged: (value) {
-                        isMatched.value = newPassWordCtrl.text == value;
-                      },
-                    ),
-                    Obx(() => Align(
-                      alignment: Alignment.centerLeft,
-                      child: CustomText(
-                        text: isMatched.value ? 'Password Matched ✓' : "",
-                        color: Colors.green,
-                        fontsize: 14.sp,
-                      ),
-                    )),
-                    SizedBox(height: 24.h),
-                    Obx(() => CustomButton(
-                      loading: authController.changePasswordLoading.value,
-                      title: 'Save Change',
-                      onpress: () async {
-                        if (formKey.currentState!.validate()) {
-                          final success = await authController.changePassword(
-                            currentPassWordCtrl.text,
-                            newPassWordCtrl.text,
-                          );
-
-                          if (success) {
-                            Navigator.pop(modalContext);
-                          }
-                        }
-                      },
-                    )),
-                    SizedBox(height: 20.h),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
+        return ChangePasswordModalContent(authController: authController);
       },
-    ).whenComplete(() {
-      currentPassWordCtrl.dispose();
-      newPassWordCtrl.dispose();
-      confirmNewPassWordCtrl.dispose();
-    });
+    );
   }
 
   BoxDecoration _cardDecoration() {
@@ -570,4 +439,5 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ],
     );
   }
+
 }

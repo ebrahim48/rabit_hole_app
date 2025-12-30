@@ -490,10 +490,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           if (context.mounted) {
                             context.go(AppRoutes.signInScreen);
                           }
-                          ToastMessageHelper.showToastMessage(
-                              'Logged out successfully',
-                              title: 'Success'
-                          );
+                          // ToastMessageHelper.showToastMessage(
+                          //     'Logged out successfully',
+                          //     title: 'Success'
+                          // );
                         },
                       ),
                     ),

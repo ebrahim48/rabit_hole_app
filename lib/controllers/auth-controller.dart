@@ -364,7 +364,7 @@ class AuthController extends GetxController {
       ToastMessageHelper.showToastMessage("Server error! \n Please try later");
       return false;
     } else {
-      ToastMessageHelper.showToastMessage(response.body['message']);
+      ToastMessageHelper.showToastMessage(response.body['message'],title: 'error');
       changePasswordLoading(false);
       return false;
     }
