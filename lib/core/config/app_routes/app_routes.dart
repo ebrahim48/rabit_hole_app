@@ -58,16 +58,16 @@ class AppRoutes {
         path: splashScreen,
         name: splashScreen,
         builder: (context, state) => const SplashScreen(),
-        redirect: (context, state) {
-          Future.delayed(const Duration(seconds: 3), () async {
-            var token = await PrefsHelper.getString(AppConstants.bearerToken);
-            if (token != "") {
-              AppRoutes.goRouter.replaceNamed(AppRoutes.bottomNavbarScreen);
-            }
-          });
-
-          return;
-        },
+        // redirect: (context, state) {
+        //   Future.delayed(const Duration(seconds: 3), () async {
+        //     var token = await PrefsHelper.getString(AppConstants.bearerToken);
+        //     if (token != "") {
+        //       AppRoutes.goRouter.replaceNamed(AppRoutes.bottomNavbarScreen);
+        //     }
+        //   });
+        //
+        //   return;
+        // },
       ),
 
       GoRoute(

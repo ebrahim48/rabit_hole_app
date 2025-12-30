@@ -290,59 +290,71 @@ Download now: $appLink
 
 
 
+
   /// ================================> Update Profile ==============================>
-
-
   var updateProfileLoading = false.obs;
 
-  updateProfile({
-    String? fullName,
-    String? address,
-    String? phone,
+  Future<void> updateProfile({
+    required String fullName,
+    required String address,
+    required String phone,
     File? file,
     required BuildContext context
-
   }) async {
-
     updateProfileLoading(true);
 
-    List<MultipartBody> multipartBody = [];
-    if (file != null) {
-      multipartBody.add(MultipartBody("file", file));
-    }
+    try {
+      List<MultipartBody> multipartBody = [];
 
+      // Add image file if provided
+      if (file != null) {
+        multipartBody.add(MultipartBody("profileImage", file));
+      }
 
+      // Prepare body data
+      var body = {
+        "fullName": fullName.trim(),
+        "address": address.trim(),
+        "phone": phone.trim(),
+      };
 
-    var body = {
-      "fullName": "$fullName",
-      "address": "$address",
-      "phone": "$phone",
-    };
-
-
-    updateProfileLoading(true);
-
-    var response = await ApiClient.patchMultipartData(
+      // Call API
+      var response = await ApiClient.patchMultipartData(
         ApiConstants.updateProfileEndPoint,
         body,
-        multipartBody: multipartBody
-    );
+        multipartBody: multipartBody,
+      );
 
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        ToastMessageHelper.showToastMessage(
+            response.body["message"] ?? "Profile updated successfully",
+            title: 'Success'
+        );
 
+        // Refresh profile data
+        await getProfile();
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      ToastMessageHelper.showToastMessage("${response.body["message"]}");
-      await getProfile();
-
+        // Navigate back
+        if (context.mounted) {
+          context.pop();
+        }
+      } else {
+        ToastMessageHelper.showToastMessage(
+            response.body["message"] ?? "Failed to update profile",
+            title: 'Error'
+        );
+      }
+    } catch (e) {
+      print('Update Profile error: $e');
+      ToastMessageHelper.showToastMessage(
+          "Failed to update profile",
+          title: 'Error'
+      );
+    } finally {
       updateProfileLoading(false);
-      context.pop();
       update();
-    } else {
-      updateProfileLoading(false);
-      ToastMessageHelper.showToastMessage("Failed Update data.");
     }
   }
-
 
 
 }

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../core/constants/app_colors.dart';
 import 'custom_text.dart';
 
 class AchievementsListCard extends StatelessWidget {
-  final Widget icon;
+  final String imageUrl;
   final String title;
   final String name;
   final String subtitle;
@@ -13,7 +14,7 @@ class AchievementsListCard extends StatelessWidget {
 
   const AchievementsListCard({
     super.key,
-    required this.icon,
+    required this.imageUrl,
     required this.name,
     required this.title,
     required this.subtitle,
@@ -33,7 +34,7 @@ class AchievementsListCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(8.r),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 5,
               offset: const Offset(0, 2),
             ),
@@ -41,50 +42,89 @@ class AchievementsListCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-            icon,
-            SizedBox(width: 6.w),
-
-            ///  Name side by side
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    CustomText(
-                      text: title,
-                      color: AppColors.textColor000000,
-                      fontsize: 16.sp,
-                      fontWeight: FontWeight.w400,
-                    ),
-                    SizedBox(width: 20.h),
-                    Container(
-                      width: 84.w,
+            // Dynamic Image from URL
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8.r),
+              child: CachedNetworkImage(
+                imageUrl: imageUrl,
+                width: 42.w,
+                height: 42.h,
+                fit: BoxFit.cover,
+                placeholder: (context, url) => Container(
+                  width: 42.w,
+                  height: 42.h,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+                  child: Center(
+                    child: SizedBox(
+                      width: 20.w,
                       height: 20.h,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF7FA3B3).withOpacity(0.4),
-                        borderRadius: BorderRadius.circular(24.r),
-                      ),
-                      child: CustomText(
-                        text: subtitle,
-                        color: AppColors.textColor000000,
-                        fontsize: 11.sp,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    )
-
-                  ],
+                      child: const CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                  ),
                 ),
-                CustomText(
-                  text: name,
-                  color: AppColors.textColor000000,
-                  fontsize: 13.sp,
-                  fontWeight: FontWeight.w400,
+                errorWidget: (context, url, error) => Container(
+                  width: 42.w,
+                  height: 42.h,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+                  child: Icon(
+                    Icons.emoji_events,
+                    size: 24.sp,
+                    color: Colors.grey[600],
+                  ),
                 ),
-              ],
+              ),
             ),
-
+            SizedBox(width: 6.w),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Flexible(
+                        child: CustomText(
+                          text: title,
+                          color: AppColors.textColor000000,
+                          fontsize: 16.sp,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      SizedBox(width: 8.w),
+                      Container(
+                        width: 84.w,
+                        height: 20.h,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF7FA3B3).withOpacity(0.4),
+                          borderRadius: BorderRadius.circular(24.r),
+                        ),
+                        child: CustomText(
+                          text: subtitle,
+                          color: AppColors.textColor000000,
+                          fontsize: 11.sp,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
+                  CustomText(
+                    text: name,
+                    color: AppColors.textColor000000,
+                    fontsize: 13.sp,
+                    fontWeight: FontWeight.w400,
+                    maxline: 1,
+                    textOverflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),

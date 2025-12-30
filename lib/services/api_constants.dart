@@ -1,6 +1,6 @@
 class ApiConstants{
 
-  static const String baseUrl = "https://jakuan3035.syedbipul.me/api/v1";
+  static const String baseUrl = "https://api.rhrunnerapp.com/api/v1";
   static const String imageBaseUrl = "https://api.rhrunnerapp.com/";
 
 

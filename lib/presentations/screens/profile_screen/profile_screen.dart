@@ -3,9 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import '../../../controllers/profile_controller.dart';
+import '../../../core/app_constants/app_constants.dart';
 import '../../../core/config/app_routes/app_routes.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/helpers/prefs_helper.dart';
 import '../../../global/custom_assets/assets.gen.dart';
+import '../../../helpers/toast_message_helper.dart';
 import '../../widgets/achievements_card.dart';
 import '../../widgets/custom_loader.dart';
 import '../../widgets/custom_logout_button.dart';
@@ -134,9 +137,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ///  (Settings Icon)
                     GestureDetector(
                       onTap: () {
-                        context.pushNamed(AppRoutes.editProfileScreen);
+                        context.pushNamed(AppRoutes.updateProfileScreen,
+                            extra: {
 
+                              "profileImage": controller.profile.value.profileImage ?? 'N/A',
+                              "fullName": controller.profile.value.fullName ?? 'N/A',
+                              "address": controller.profile.value.address ?? 'N/A',
+                              "phone": controller.profile.value.phone ?? 'N/A'
 
+                            }
+                        );
 
                       },
                       child: Assets.icons.profileedit.svg(
@@ -272,33 +282,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                     SizedBox(height: 16.h),
-
-
-
-                    Obx((){
+                    Obx(() {
                       if (controller.gamingDashBoardLoading.value) {
                         return const Center(child: CustomLoader());
                       }
+
+                      final achievedBadges = controller.gamingDashBoard.value.gameDashboard?.achievedBadges ?? [];
+
+                      if (achievedBadges.isEmpty) {
+                        return Expanded(
+                          child: Center(
+                            child: CustomText(
+                              text: 'No achievements yet',
+                              color: Colors.grey,
+                            ),
+                          ),
+                        );
+                      }
+
                       return Expanded(
                         child: ListView.separated(
                           physics: const NeverScrollableScrollPhysics(),
-                          itemCount: controller.gamingDashBoard.value.gameDashboard?.achievedBadges?.length ?? 0,
+                          itemCount: achievedBadges.length,
                           separatorBuilder: (context, index) => SizedBox(height: 12.h),
                           itemBuilder: (context, index) {
-                            final achievements = controller.gamingDashBoard.value.gameDashboard?.achievedBadges?[index];
+                            final achievement = achievedBadges[index];
                             return AchievementsListCard(
-                              icon: Assets.icons.firstfall.svg(width: 42.w, height: 42.h),
-                              title: achievements?.name ?? 'N/A',
-                              name: achievements?.description ?? 'N/A',
+                              imageUrl: achievement.imgUrl ?? '',
+                              title: achievement.name ?? 'N/A',
+                              name: achievement.description ?? 'N/A',
                               subtitle: "Unlocked",
                               onTap: () {},
                             );
                           },
                         ),
                       );
-                    }
-
-                    ),
+                    }),
 
 
                   ],
@@ -348,7 +367,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                             CustomText(
                               text: 'Logout',
-                              color: Color(0xFF9C0000),
+                              color: const Color(0xFF9C0000),
                               fontsize: 16.sp,
                               fontWeight: FontWeight.w500,
                             ),
@@ -461,7 +480,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         bgColor: AppColors.buttonColorE8A533,
                         textColor: AppColors.textColorFFFFFF,
                         onTap: () async {
-                          context.pushNamed(AppRoutes.signInScreen);
+                          Navigator.pop(context);
+                          await PrefsHelper.remove(AppConstants.bearerToken);
+                          await PrefsHelper.remove(AppConstants.userId);
+                          await PrefsHelper.remove(AppConstants.email);
+                          await PrefsHelper.remove(AppConstants.role);
+                          await PrefsHelper.setBool(AppConstants.isLogged, false);
+                          Get.delete<ProfileController>(force: true);
+                          if (context.mounted) {
+                            context.go(AppRoutes.signInScreen);
+                          }
+                          ToastMessageHelper.showToastMessage(
+                              'Logged out successfully',
+                              title: 'Success'
+                          );
                         },
                       ),
                     ),

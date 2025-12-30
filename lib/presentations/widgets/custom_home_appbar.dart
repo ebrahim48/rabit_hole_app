@@ -16,7 +16,6 @@ class CustomHomeAppBar extends StatefulWidget implements PreferredSizeWidget {
   @override
   State<CustomHomeAppBar> createState() => _CustomHomeAppBarState();
 
-
   @override
   Size get preferredSize => Size.fromHeight(75.h);
 }
@@ -32,51 +31,67 @@ class _CustomHomeAppBarState extends State<CustomHomeAppBar> {
     });
   }
 
+
+  String getFormattedDate(DateTime? date) {
+    if (date == null) return 'N/A';
+    try {
+      return DateFormat('MMMM d, yyyy').format(date);
+    } catch (e) {
+      return 'N/A';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-
-
-    String formattedDate = controller.profile.value.createdAt != null
-        ? DateFormat('MMMM d, yyyy').format(controller.profile.value.createdAt!)
-        : 'N/A';
-
     return SafeArea(
       child: Container(
         width: 393.w,
         height: 75.h,
         padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 24.w),
         decoration: const BoxDecoration(
-          color: Color(0xFFCCEEFD), // background color
+          color: Color(0xFFCCEEFD),
         ),
-        child: Obx( ()=>
-          Row(
+        child: Obx(() {
+
+          final formattedDate = getFormattedDate(controller.profile.value?.createdAt);
+
+          return Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               /// Left Section (Profile + Text)
-              Row(
-                children: [
-                  CustomProfileImage(
-                      imageUrl: controller.profile.value.profileImage ?? 'N/A'),
-                  SizedBox(width: 10.w),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CustomText(
-                        text: controller.profile.value.fullName ?? 'N/A',
-                        color: AppColors.textColor000000,
-                        fontsize: 14.sp,
-                        fontWeight: FontWeight.w500,
+              Expanded(
+                child: Row(
+                  children: [
+                    CustomProfileImage(
+                        imageUrl: controller.profile.value.profileImage ?? ''
+                    ),
+                    SizedBox(width: 10.w),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CustomText(
+                            text: controller.profile.value.fullName ?? 'Loading...',
+                            color: AppColors.textColor000000,
+                            fontsize: 14.sp,
+                            fontWeight: FontWeight.w500,
+                            maxline: 1,
+                            textOverflow: TextOverflow.ellipsis,
+                          ),
+                          CustomText(
+                            text: 'Member Since: $formattedDate',
+                            color: AppColors.textColor000000,
+                            fontsize: 11.sp,
+                            fontWeight: FontWeight.w400,
+                            maxline: 1,
+                            textOverflow: TextOverflow.ellipsis,
+                          )
+                        ],
                       ),
-                      CustomText(
-                        text: 'Member Since: $formattedDate',
-                        color: AppColors.textColor000000,
-                        fontsize: 11.sp,
-                        fontWeight: FontWeight.w400,
-                      )
-                    ],
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               ),
 
               /// Right Section (Settings Icon)
@@ -84,14 +99,18 @@ class _CustomHomeAppBarState extends State<CustomHomeAppBar> {
                 onTap: () {
                   context.pushNamed(AppRoutes.settingsScreen);
                 },
-                child: Assets.icons.settings.svg(width: 32.w, height: 32.h),
+                child: Assets.icons.settings.svg(
+                    width: 32.w,
+                    height: 32.h
+                ),
               ),
             ],
-          ),
-        ),
+          );
+        }),
       ),
     );
   }
 
+  @override
   Size get preferredSize => Size.fromHeight(75.h);
 }
