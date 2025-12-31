@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:rabbit_hole_app/controllers/shop_controller.dart';
-import 'package:rabbit_hole_app/presentations/widgets/custom_loader.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../global/custom_assets/assets.gen.dart';
 import '../../widgets/carrot_packs-card.dart';
 import '../../widgets/custom_text.dart';
 import '../../widgets/power_ups_card.dart';
 import '../../widgets/rabbit_skin_card.dart';
-
 
 class ShopScreen extends StatefulWidget {
   const ShopScreen({super.key});
@@ -20,9 +19,9 @@ class ShopScreen extends StatefulWidget {
 }
 
 class _ShopScreenState extends State<ShopScreen> {
-
   ShopPackageController shopPackageController = Get.put(ShopPackageController());
 
+  @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -59,8 +58,7 @@ class _ShopScreenState extends State<ShopScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
-                  onPressed: () {
-                  },
+                  onPressed: () {},
                   icon: Assets.icons.bigpacks.svg(),
                 ),
                 CustomText(
@@ -73,7 +71,7 @@ class _ShopScreenState extends State<ShopScreen> {
           ),
         ],
       ),
-      body: Obx((){
+      body: Obx(() {
         return SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
           child: Column(
@@ -95,12 +93,16 @@ class _ShopScreenState extends State<ShopScreen> {
                 ],
               ),
               SizedBox(height: 16.h),
+
+              // Carrot Packs with Shimmer
               SizedBox(
                 height: 180.h,
-                child: AnimationLimiter(
+                child: shopPackageController.shopPackageLoading.value
+                    ? _buildHorizontalShimmer()
+                    : AnimationLimiter(
                   child: GridView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: shopPackageController.shopPackage.value.data?.length,
+                    itemCount: shopPackageController.shopPackage.value.data?.length ?? 0,
                     padding: EdgeInsets.symmetric(vertical: 1.h),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 1,
@@ -109,7 +111,7 @@ class _ShopScreenState extends State<ShopScreen> {
                     ),
                     itemBuilder: (context, index) {
                       final package = shopPackageController.shopPackage.value.data?[index];
-                      return  CarrotPacksCard(
+                      return CarrotPacksCard(
                         title: package?.name ?? 'N/A',
                         subtitle: "${package?.amount ?? 'N/A'} Carrots",
                         price: "\$ ${package?.price.toString() ?? 'N/A'}",
@@ -137,28 +139,30 @@ class _ShopScreenState extends State<ShopScreen> {
                 ],
               ),
               SizedBox(height: 16.h),
-              Obx(()=>
-                SizedBox(
-                  height: 180.h,
-                  child: AnimationLimiter(
-                    child: GridView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: shopPackageController.content.value.contents?.length,
-                      padding: EdgeInsets.symmetric(vertical: 1.h),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 1,
-                        mainAxisSpacing: 16.w,
-                        childAspectRatio: 162 / 162,
-                      ),
-                      itemBuilder: (context, index) {
-                        final content = shopPackageController.content.value.contents?[index];
-                        return  RabbitSkinCard(
-                          title: content?.name ?? 'N/A',
-                          subtitle: content?.category.toString() ?? 'N/A',
-                          price: content?.numberOfCarrot.toString() ?? 'N/A',
-                        );
-                      },
+
+              // Rabbit Skin with Shimmer
+              SizedBox(
+                height: 180.h,
+                child: shopPackageController.contentLoading.value
+                    ? _buildHorizontalShimmer()
+                    : AnimationLimiter(
+                  child: GridView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: shopPackageController.content.value.contents?.length ?? 0,
+                    padding: EdgeInsets.symmetric(vertical: 1.h),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 1,
+                      mainAxisSpacing: 16.w,
+                      childAspectRatio: 162 / 162,
                     ),
+                    itemBuilder: (context, index) {
+                      final content = shopPackageController.content.value.contents?[index];
+                      return RabbitSkinCard(
+                        title: content?.name ?? 'N/A',
+                        subtitle: content?.category.toString() ?? 'N/A',
+                        price: content?.numberOfCarrot.toString() ?? 'N/A',
+                      );
+                    },
                   ),
                 ),
               ),
@@ -181,39 +185,77 @@ class _ShopScreenState extends State<ShopScreen> {
                 ],
               ),
               SizedBox(height: 16.h),
-              Obx((){
-                if (shopPackageController.contentPowerUp.value.contents == null) {
-                  return const Center(child: CustomLoader());
-                }
-                return ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: shopPackageController.contentPowerUp.value.contents?.length ?? 0,
-                  separatorBuilder:
-                      (context, index) =>
-                      SizedBox(height: 12.h),
-                  itemBuilder: (context, index) {
-                    final contentPowerUp = shopPackageController.contentPowerUp.value.contents?[index];
-                    return PowerUpsListCard(
-                      imageUrl: contentPowerUp?.imgUrl ?? '',
-                      title: contentPowerUp?.name ??'N/A',
-                      name: contentPowerUp?.category.toString() ??'N/A',
-                      price: contentPowerUp?.timeInSec.toString() ??'N/A',
-                      onTap: () {},
-                    );
-                  },
-                );
-              }
 
+              // Power-Ups with Shimmer
+              shopPackageController.contentPowerUpLoading.value
+                  ? _buildVerticalShimmer()
+                  : ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: shopPackageController.contentPowerUp.value.contents?.length ?? 0,
+                separatorBuilder: (context, index) => SizedBox(height: 12.h),
+                itemBuilder: (context, index) {
+                  final contentPowerUp = shopPackageController.contentPowerUp.value.contents?[index];
+                  return PowerUpsListCard(
+                    imageUrl: contentPowerUp?.imgUrl ?? '',
+                    title: contentPowerUp?.name ?? 'N/A',
+                    name: contentPowerUp?.category.toString() ?? 'N/A',
+                    price: contentPowerUp?.numberOfCarrot.toString() ?? 'N/A',
+                    onTap: () {},
+                  );
+                },
               ),
-
-
-
             ],
           ),
         );
-      })
+      }),
+    );
+  }
 
+  // Horizontal Shimmer for Carrot Packs and Rabbit Skin
+  Widget _buildHorizontalShimmer() {
+    return ListView.separated(
+      scrollDirection: Axis.horizontal,
+      itemCount: 3,
+      separatorBuilder: (context, index) => SizedBox(width: 16.w),
+      itemBuilder: (context, index) {
+        return Shimmer.fromColors(
+          baseColor: Colors.grey[300]!,
+          highlightColor: Colors.grey[100]!,
+          child: Container(
+            width: 162.w,
+            height: 162.h,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8.r),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  // Vertical Shimmer for Power-Ups
+  Widget _buildVerticalShimmer() {
+    return ListView.separated(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: 5,
+      separatorBuilder: (context, index) => SizedBox(height: 12.h),
+      itemBuilder: (context, index) {
+        return Shimmer.fromColors(
+          baseColor: Colors.grey[300]!,
+          highlightColor: Colors.grey[100]!,
+          child: Container(
+            width: 346.w,
+            height: 75.h,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8.r),
+            ),
+          ),
+        );
+      },
     );
   }
 }

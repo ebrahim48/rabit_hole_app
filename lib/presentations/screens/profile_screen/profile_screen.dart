@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../controllers/profile_controller.dart';
 import '../../../core/app_constants/app_constants.dart';
 import '../../../core/config/app_routes/app_routes.dart';
@@ -10,11 +11,9 @@ import '../../../core/helpers/prefs_helper.dart';
 import '../../../global/custom_assets/assets.gen.dart';
 import '../../../helpers/toast_message_helper.dart';
 import '../../widgets/achievements_card.dart';
-import '../../widgets/custom_loader.dart';
 import '../../widgets/custom_logout_button.dart';
 import '../../widgets/custom_profile_image.dart';
 import '../../widgets/custom_text.dart';
-
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -24,11 +23,9 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-
-
-
   ProfileController controller = Get.put(ProfileController());
 
+  @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -36,7 +33,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       controller.getProfile();
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -70,19 +66,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   },
                   icon: Assets.icons.settings.svg(),
                 ),
-
               ],
             ),
           ),
         ],
       ),
-      body: Obx((){
+      body: Obx(() {
         return SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
+              // Profile Card
               Container(
                 width: 346.w,
                 height: 85.h,
@@ -92,7 +87,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   left: 24.w,
                   right: 10.w,
                 ),
-                decoration:  BoxDecoration(
+                decoration: BoxDecoration(
                   color: AppColors.textColorFFFFFF,
                   borderRadius: BorderRadius.circular(12.r),
                   boxShadow: [
@@ -107,11 +102,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ///  (Profile + Text)
                     Row(
                       children: [
                         CustomProfileImage(
-                            imageUrl: controller.profile.value?.profileImage ?? 'N/A'),
+                            imageUrl: controller.profile.value?.profileImage ?? 'N/A'
+                        ),
                         SizedBox(width: 10.w),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,21 +128,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ],
                     ),
-
-                    ///  (Settings Icon)
                     GestureDetector(
                       onTap: () {
-                        context.pushNamed(AppRoutes.updateProfileScreen,
+                        context.pushNamed(
+                            AppRoutes.updateProfileScreen,
                             extra: {
-
-                              "profileImage": controller.profile.value.profileImage ?? 'N/A',
-                              "fullName": controller.profile.value.fullName ?? 'N/A',
-                              "address": controller.profile.value.address ?? 'N/A',
-                              "phone": controller.profile.value.phone ?? 'N/A'
-
+                              "profileImage": controller.profile.value?.profileImage ?? '',
+                              "fullName": controller.profile.value?.fullName ?? '',
+                              "address": controller.profile.value?.address ?? '',
+                              "phone": controller.profile.value?.phone ?? ''
                             }
                         );
-
                       },
                       child: Assets.icons.profileedit.svg(
                         width: 42.w,
@@ -159,6 +150,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
 
               SizedBox(height: 16.h),
+
+              // Statistics Section with Shimmer
               Container(
                 width: 346.w,
                 height: 380.h,
@@ -191,11 +184,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                     SizedBox(height: 16.h),
-                    ///  Grid of statistics cards
-                    Obx((){
+
+                    // Statistics Grid with Shimmer
+                    Obx(() {
                       if (controller.gamingDashBoardLoading.value) {
-                        return const Center(child: CustomLoader());
+                        return Expanded(child: _buildStatisticsShimmer());
                       }
+
                       return Expanded(
                         child: GridView.count(
                           shrinkWrap: true,
@@ -243,13 +238,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ],
                         ),
                       );
-                    }
-
-                    ),
+                    }),
                   ],
                 ),
               ),
+
               SizedBox(height: 16.h),
+
+              // Achievements Section with Shimmer
               Container(
                 width: 346.w,
                 height: 327.h,
@@ -282,9 +278,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                     SizedBox(height: 16.h),
+
+                    // Achievements List with Shimmer
                     Obx(() {
                       if (controller.gamingDashBoardLoading.value) {
-                        return const Center(child: CustomLoader());
+                        return Expanded(child: _buildAchievementsShimmer());
                       }
 
                       final achievedBadges = controller.gamingDashBoard.value.gameDashboard?.achievedBadges ?? [];
@@ -292,9 +290,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       if (achievedBadges.isEmpty) {
                         return Expanded(
                           child: Center(
-                            child: CustomText(
-                              text: 'No achievements yet',
-                              color: Colors.grey,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.emoji_events_outlined,
+                                  size: 48.sp,
+                                  color: Colors.grey[400],
+                                ),
+                                SizedBox(height: 8.h),
+                                CustomText(
+                                  text: 'No achievements yet',
+                                  color: Colors.grey[600]!,
+                                  fontsize: 14.sp,
+                                ),
+                              ],
                             ),
                           ),
                         );
@@ -318,16 +328,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       );
                     }),
-
-
                   ],
                 ),
               ),
 
               SizedBox(height: 16.h),
+
+              // Logout Button
               Container(
                 width: 346.w,
-                padding: EdgeInsets.only(top: 16.sp,left: 14.w),
+                padding: EdgeInsets.only(top: 16.sp, left: 14.w),
                 decoration: BoxDecoration(
                   color: AppColors.textColorFFFFFF,
                   borderRadius: BorderRadius.circular(12.r),
@@ -380,18 +390,60 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
 
-
               SizedBox(height: 90.h)
-
-
-
             ],
           ),
         );
-      }
+      }),
+    );
+  }
 
+  // Statistics Shimmer
+  Widget _buildStatisticsShimmer() {
+    return GridView.count(
+      shrinkWrap: true,
+      crossAxisCount: 2,
+      crossAxisSpacing: 16.w,
+      mainAxisSpacing: 16.h,
+      physics: const NeverScrollableScrollPhysics(),
+      children: List.generate(
+        4,
+            (index) => Shimmer.fromColors(
+          baseColor: Colors.grey[300]!,
+          highlightColor: Colors.grey[100]!,
+          child: Container(
+            width: 150.w,
+            height: 80.h,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8.r),
+            ),
+          ),
+        ),
       ),
+    );
+  }
 
+  // Achievements Shimmer
+  Widget _buildAchievementsShimmer() {
+    return ListView.separated(
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: 3,
+      separatorBuilder: (context, index) => SizedBox(height: 12.h),
+      itemBuilder: (context, index) {
+        return Shimmer.fromColors(
+          baseColor: Colors.grey[300]!,
+          highlightColor: Colors.grey[100]!,
+          child: Container(
+            width: 346.w,
+            height: 75.h,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8.r),
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -427,7 +479,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               fontWeight: FontWeight.w400,
               color: AppColors.textColor000000,
             ),
-
           ],
         ),
       ),
@@ -490,10 +541,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           if (context.mounted) {
                             context.go(AppRoutes.signInScreen);
                           }
-                          // ToastMessageHelper.showToastMessage(
-                          //     'Logged out successfully',
-                          //     title: 'Success'
-                          // );
                         },
                       ),
                     ),
