@@ -82,7 +82,7 @@ class AuthController extends GetxController {
           "token": token,
         },
       );
-      ToastMessageHelper.showToastMessage("User created successfully, please verify your email");
+      // ToastMessageHelper.showToastMessage("User created successfully, please verify your email");
       signUpLoading(false);
     } else {
       // ToastMessageHelper.showToastMessage(
@@ -113,13 +113,13 @@ class AuthController extends GetxController {
       await PrefsHelper.setString(AppConstants.bearerToken, accessToken);
       if (type == 'Sign Up' && screenType == 'signup') {
         context.go(AppRoutes.signInScreen);
-        ToastMessageHelper.showToastMessage("${response.body["message"]}", title: 'Success');
+        // ToastMessageHelper.showToastMessage("${response.body["message"]}", title: 'Success');
       } else if (type == 'Forgot' && screenType == 'forgot') {
         context.go(
             AppRoutes.resetPasswordScreen,
             extra: {'email': email}
         );
-        ToastMessageHelper.showToastMessage("OTP verified! Now reset your password", title: 'Success');
+        // ToastMessageHelper.showToastMessage("OTP verified! Now reset your password", title: 'Success');
       } else {
         if (screenType == 'signup') {
           context.go(AppRoutes.signInScreen);
@@ -129,7 +129,7 @@ class AuthController extends GetxController {
               extra: {'email': email}
           );
         }
-        ToastMessageHelper.showToastMessage("${response.body["message"]}", title: 'Success');
+        // ToastMessageHelper.showToastMessage("${response.body["message"]}", title: 'Success');
       }
 
       verifyLoading(false);
@@ -237,7 +237,7 @@ class AuthController extends GetxController {
       if (role == "user") {
         await PrefsHelper.setBool(AppConstants.isLogged, true);
         context.go(AppRoutes.bottomNavbarScreen);
-        ToastMessageHelper.showToastMessage("You are logged in",title: 'Success');
+        // ToastMessageHelper.showToastMessage("You are logged in",title: 'Success');
       } else {
         final message = response.body["message"];
 
@@ -323,10 +323,10 @@ class AuthController extends GetxController {
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       context.go(AppRoutes.signInScreen);
-      ToastMessageHelper.showToastMessage(
-          'Password reset successfully! Please login',
-          title: 'success'
-      );
+      // ToastMessageHelper.showToastMessage(
+      //     'Password reset successfully! Please login',
+      //     title: 'success'
+      // );
       setPasswordLoading(false);
     } else if (response.statusCode == 1) {
       setPasswordLoading(false);
@@ -356,7 +356,7 @@ class AuthController extends GetxController {
     );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      ToastMessageHelper.showToastMessage('Password Changed Successfully');
+      // ToastMessageHelper.showToastMessage('Password Changed Successfully');
       changePasswordLoading(false);
       return true; // Success indicator
     } else if (response.statusCode == 1) {
@@ -403,7 +403,7 @@ class AuthController extends GetxController {
       if (newToken != null) {
         await PrefsHelper.setString(AppConstants.bearerToken, newToken);
         logger.d("✅ New token saved: $newToken");
-        ToastMessageHelper.showToastMessage("✅ OTP sent successfully to your email.");
+        // ToastMessageHelper.showToastMessage("✅ OTP sent successfully to your email.");
         return newToken;
       }
     } else {
