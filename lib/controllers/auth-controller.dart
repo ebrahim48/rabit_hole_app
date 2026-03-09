@@ -237,7 +237,7 @@ class AuthController extends GetxController {
       if (role == "user") {
         await PrefsHelper.setBool(AppConstants.isLogged, true);
         context.go(AppRoutes.bottomNavbarScreen);
-        // ToastMessageHelper.showToastMessage("You are logged in",title: 'Success');
+        ToastMessageHelper.showToastMessage("You are logged in",title: 'Success');
       } else {
         final message = response.body["message"];
 
