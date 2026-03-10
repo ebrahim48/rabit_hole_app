@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../../global/custom_assets/assets.gen.dart';
 import '../../../../controllers/auth-controller.dart';
+import '../../../../core/app_constants/app_constants.dart';
 import '../../../../core/config/app_routes/app_routes.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../widgets/custom_app_bar.dart';
@@ -141,32 +142,53 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     hintText: "User name",
                     prefixIcon: Assets.icons.nameProfile.svg()),
 
+                // Email field
                 CustomTextField(
-                    hintextColor: AppColors.textColor545454,
-                    controller: emailCtrl,
-                    hintText: "Email",
-                    prefixIcon: Assets.icons.email.svg(),
-                    isEmail: true),
+                  hintextColor: AppColors.textColor545454,
+                  controller: emailCtrl,
+                  hintText: "Email",
+                  prefixIcon: Assets.icons.email.svg(),
+                  isEmail: true,
+                  onChanged: (_) {
+                    authController.signUpEmailError.value = '';
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter email';
+                    }
+                    if (!AppConstants.emailValidate.hasMatch(value)) {
+                      return 'Please check your email!';
+                    }
+                    if (authController.signUpEmailError.value.isNotEmpty) {
+                      return authController.signUpEmailError.value;
+                    }
+                    return null;
+                  },
+                ),
 
+// Phone field
                 CustomTextField(
                   keyboardType: TextInputType.phone,
                   hintextColor: AppColors.textColor545454,
                   controller: phoneCtrl,
                   hintText: "Phone Number",
-                  prefixIcon: Assets.icons.phone.svg(
-                    color: AppColors.textColor000000
-                  ),
+                  prefixIcon: Assets.icons.phone.svg(color: AppColors.textColor000000),
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                     LengthLimitingTextInputFormatter(11),
                   ],
+                  onChanged: (_) {
+                    authController.signUpPhoneError.value = '';
+                  },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter phone number';
-                    } else if (value.length < 11) {
+                    }
+                    if (value.length < 11) {
                       return 'Phone number must be 11 digits';
-                    } else if (value.length > 11) {
-                      return 'Phone number cannot exceed 11 digits';
+                    }
+                    if (authController.signUpPhoneError.value.isNotEmpty) {
+                      return authController.signUpPhoneError.value;
                     }
                     return null;
                   },
@@ -190,6 +212,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     prefixIcon: Assets.icons.pass.svg(),
                     hintText: "Password",
                     isPassword: true),
+
+
                 CustomTextField(
                   hintextColor: AppColors.textColor545454,
                   controller: confirmPassWordCtrl,
@@ -212,6 +236,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     isMatched.value = passWordCtrl.text == value;
                   },
                 ),
+                Obx(() => authController.signUpError.value.isNotEmpty
+                    ? Padding(
+                  padding: EdgeInsets.only(top: 4.h, left: 12.w, bottom: 4.h),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      authController.signUpError.value,
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 12.sp,
+                      ),
+                    ),
+                  ),
+                )
+                    : const SizedBox.shrink()),
                 Obx(() => Align(
                     alignment: Alignment.centerLeft,
                     child: CustomText(
@@ -293,6 +332,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             profileImage: selectedImage,
                             context: context,
                             screenType: "signup",
+                            formKey: formKey,
                           );
                         }
 

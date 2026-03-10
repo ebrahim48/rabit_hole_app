@@ -75,6 +75,22 @@ class SignInScreen extends StatelessWidget {
                     prefixIcon: Assets.icons.pass.svg(),
                     hintText: "Password",
                     isPassword: true),
+                Obx(() => authController.loginError.value.isNotEmpty
+                    ? Padding(
+                  padding: EdgeInsets.only(top: 6.h, left: 12.w),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      authController.loginError.value,
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 12.sp,
+                      ),
+                    ),
+                  ),
+                )
+                    : const SizedBox.shrink()),
+
                 SizedBox(height: 20.h),
 
                 /// ====================================> Check Box ========================>

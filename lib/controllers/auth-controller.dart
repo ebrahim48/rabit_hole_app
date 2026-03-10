@@ -33,26 +33,32 @@ class AuthController extends GetxController {
   }
 
 
+
+  ///========================================== Sign up ==================================<>
   RxBool signUpLoading = false.obs;
-
-  ///========================================== Sing up ==================================<>
-
-  handleSignUp(
-      {String?
-        email,
-        fullName,
-        password,
-        phone,
-        address,
-        File? profileImage,
-        confirmpassword,
-        required BuildContext context,
-        required String screenType}) async {
+  RxString signUpEmailError = ''.obs;
+  RxString signUpPhoneError = ''.obs;
+  RxString signUpError = ''.obs;
+  handleSignUp({
+    String? email,
+    fullName,
+    password,
+    phone,
+    address,
+    File? profileImage,
+    confirmpassword,
+    required BuildContext context,
+    required String screenType,
+    GlobalKey<FormState>? formKey,
+  }) async {
 
     List<MultipartBody> multipartBody =
     profileImage == null ? [] : [MultipartBody("profileImage", profileImage)];
 
     signUpLoading(true);
+    signUpEmailError.value = '';
+    signUpPhoneError.value = '';
+
     var body = {
       "email": "$email",
       "phone": "$phone",
@@ -64,16 +70,14 @@ class AuthController extends GetxController {
 
     var response = await ApiClient.postMultipartData(
       ApiConstants.signUpEndPoint,
-        body,
-        multipartBody: multipartBody
+      body,
+      multipartBody: multipartBody,
     );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      await PrefsHelper.setString(AppConstants.bearerToken,
-          response.body["data"]["attributes"]["verificationToken"]);
-
       final token = response.body["data"]["attributes"]["verificationToken"];
       await PrefsHelper.setString(AppConstants.bearerToken, token);
+
       context.pushNamed(
         AppRoutes.verifyScreen,
         extra: {
@@ -82,14 +86,75 @@ class AuthController extends GetxController {
           "token": token,
         },
       );
-      // ToastMessageHelper.showToastMessage("User created successfully, please verify your email");
       signUpLoading(false);
     } else {
-      // ToastMessageHelper.showToastMessage(
-      //     "${response.body["message"]}", title: 'Fail');
       signUpLoading(false);
+
+      final message = (response.body["message"] ?? "").toString();
+
+      if (message.toLowerCase().contains("phone")) {
+        signUpPhoneError.value = message;
+      } else if (message.toLowerCase().contains("email")) {
+        signUpEmailError.value = message;
+      }
+
+      // error set হওয়ার পরে form revalidate
+      Future.delayed(Duration.zero, () => formKey?.currentState?.validate());
     }
   }
+  // handleSignUp(
+  //     {String?
+  //       email,
+  //       fullName,
+  //       password,
+  //       phone,
+  //       address,
+  //       File? profileImage,
+  //       confirmpassword,
+  //       required BuildContext context,
+  //       required String screenType}) async {
+  //
+  //   List<MultipartBody> multipartBody =
+  //   profileImage == null ? [] : [MultipartBody("profileImage", profileImage)];
+  //
+  //   signUpLoading(true);
+  //   var body = {
+  //     "email": "$email",
+  //     "phone": "$phone",
+  //     "address": "$address",
+  //     "fullName": "$fullName",
+  //     "password": "$password",
+  //     "confirmpassword": "$confirmpassword",
+  //   };
+  //
+  //   var response = await ApiClient.postMultipartData(
+  //     ApiConstants.signUpEndPoint,
+  //       body,
+  //       multipartBody: multipartBody
+  //   );
+  //
+  //   if (response.statusCode == 200 || response.statusCode == 201) {
+  //     await PrefsHelper.setString(AppConstants.bearerToken,
+  //         response.body["data"]["attributes"]["verificationToken"]);
+  //
+  //     final token = response.body["data"]["attributes"]["verificationToken"];
+  //     await PrefsHelper.setString(AppConstants.bearerToken, token);
+  //     context.pushNamed(
+  //       AppRoutes.verifyScreen,
+  //       extra: {
+  //         "screenType": "signup",
+  //         "email": email,
+  //         "token": token,
+  //       },
+  //     );
+  //     // ToastMessageHelper.showToastMessage("User created successfully, please verify your email");
+  //     signUpLoading(false);
+  //   } else {
+  //     // ToastMessageHelper.showToastMessage(
+  //     //     "${response.body["message"]}", title: 'Fail');
+  //     signUpLoading(false);
+  //   }
+  // }
 
 
   ///========================================Verify Email===========================================<>
@@ -193,11 +258,11 @@ class AuthController extends GetxController {
 
   ///============================================= Log in ===============================================<>
   RxBool logInLoading = false.obs;
+  RxString loginError = ''.obs;
 
-  handleLogIn(String email,
-      String password,
-      {required BuildContext context}) async {
+  handleLogIn(String email, String password, {required BuildContext context}) async {
     logInLoading.value = true;
+    loginError.value = '';
 
     var headers = {'Content-Type': 'application/json'};
     var body = {
@@ -218,16 +283,12 @@ class AuthController extends GetxController {
     if (response.statusCode == 200 || response.statusCode == 201) {
       var data = response.body['data']['attributes']["userWithoutPassword"];
 
-
       logger.d("token  .....");
-      /// Access token save
-      var token=response.body["data"]['attributes']["tokens"]["accessToken"];
+      var token = response.body["data"]['attributes']["tokens"]["accessToken"];
       logger.d("token   .... ======>> $token");
-      await PrefsHelper.setString(AppConstants.bearerToken, token,
-      );
+      await PrefsHelper.setString(AppConstants.bearerToken, token);
       await PrefsHelper.setString(AppConstants.role, data['role']);
 
-      /// Save user details
       await PrefsHelper.setString(AppConstants.email, email);
       await PrefsHelper.setString(AppConstants.userId, data['_id']);
 
@@ -237,30 +298,95 @@ class AuthController extends GetxController {
       if (role == "user") {
         await PrefsHelper.setBool(AppConstants.isLogged, true);
         context.go(AppRoutes.bottomNavbarScreen);
-        ToastMessageHelper.showToastMessage("You are logged in",title: 'Success');
       } else {
         final message = response.body["message"];
-
-        if (message == "Email not verified. Please verify your email.") {
-          final verificationToken = response.body["data"]['attributes']["tokens"]["accessToken"];
-
-          await PrefsHelper.setString(AppConstants.bearerToken, verificationToken);
-
-          ToastMessageHelper.showToastMessage(
-            "We've sent an OTP to your email. Please verify your email.",
-          );
-        } else if (message == "⛔ Wrong password! ⛔") {
-          ToastMessageHelper.showToastMessage(message);
-        } else {
-          ToastMessageHelper.showToastMessage(
-            message,
-            title: 'attention',
-          );
-        }
+        loginError.value = message ?? "Access denied";
       }
+    } else {
+      final message = response.body["message"];
 
+      if (message == "Email not verified. Please verify your email.") {
+        loginError.value = "Email not verified. Please verify your email.";
+      } else if (message == "⛔ Wrong password! ⛔") {
+        loginError.value = "Wrong password. Please try again.";
+      } else {
+        loginError.value = message ?? "Account not found. Please register.";
+      }
     }
   }
+
+
+
+
+
+  // RxBool logInLoading = false.obs;
+  //
+  // handleLogIn(String email,
+  //     String password,
+  //     {required BuildContext context}) async {
+  //   logInLoading.value = true;
+  //
+  //   var headers = {'Content-Type': 'application/json'};
+  //   var body = {
+  //     "email": email,
+  //     "password": password,
+  //   };
+  //
+  //   var response = await ApiClient.postData(
+  //     ApiConstants.loginUpEndPoint,
+  //     jsonEncode(body),
+  //     headers: headers,
+  //   );
+  //
+  //   logInLoading.value = false;
+  //
+  //   print("========================${response.statusCode} \n ${response.body}");
+  //
+  //   if (response.statusCode == 200 || response.statusCode == 201) {
+  //     var data = response.body['data']['attributes']["userWithoutPassword"];
+  //
+  //
+  //     logger.d("token  .....");
+  //     /// Access token save
+  //     var token=response.body["data"]['attributes']["tokens"]["accessToken"];
+  //     logger.d("token   .... ======>> $token");
+  //     await PrefsHelper.setString(AppConstants.bearerToken, token,
+  //     );
+  //     await PrefsHelper.setString(AppConstants.role, data['role']);
+  //
+  //     /// Save user details
+  //     await PrefsHelper.setString(AppConstants.email, email);
+  //     await PrefsHelper.setString(AppConstants.userId, data['_id']);
+  //
+  //     var role = data['role'];
+  //     print("========================================= role : $role");
+  //
+  //     if (role == "user") {
+  //       await PrefsHelper.setBool(AppConstants.isLogged, true);
+  //       context.go(AppRoutes.bottomNavbarScreen);
+  //     } else {
+  //       final message = response.body["message"];
+  //
+  //       if (message == "Email not verified. Please verify your email.") {
+  //         final verificationToken = response.body["data"]['attributes']["tokens"]["accessToken"];
+  //
+  //         await PrefsHelper.setString(AppConstants.bearerToken, verificationToken);
+  //
+  //         ToastMessageHelper.showToastMessage(
+  //           "We've sent an OTP to your email. Please verify your email.",
+  //         );
+  //       } else if (message == "⛔ Wrong password! ⛔") {
+  //         ToastMessageHelper.showToastMessage(message);
+  //       } else {
+  //         ToastMessageHelper.showToastMessage(
+  //           message,
+  //           title: 'attention',
+  //         );
+  //       }
+  //     }
+  //
+  //   }
+  // }
 
 
   ///===========================================> Forgot Password ====================================================<>
