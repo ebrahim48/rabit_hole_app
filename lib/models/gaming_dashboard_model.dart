@@ -24,7 +24,7 @@ class GamingDashBoardModel {
 
 class GameDashboard {
   final String? id;
-  final int? totalCarrots;
+  final num? totalCarrots;
   final User? user;
   final int? level;
   final int? highScoreInFt;
@@ -45,7 +45,7 @@ class GameDashboard {
 
   factory GameDashboard.fromJson(Map<String, dynamic> json) => GameDashboard(
     id: json["_id"],
-    totalCarrots: json["totalCarrots"],
+    totalCarrots: json["totalCarrots"] is num ? json["totalCarrots"] as num : null,
     user: json["user"] == null ? null : User.fromJson(json["user"]),
     level: json["level"],
     highScoreInFt: json["highScoreInFt"],
@@ -121,7 +121,7 @@ class AchievedBadge {
 class User {
   final String? id;
   final String? email;
-  final int? totalCarrots;
+  final num? totalCarrots;
   final String? fullName;
   final DateTime? lastLoginAt;
   final String? phone;
@@ -164,7 +164,7 @@ class User {
   factory User.fromJson(Map<String, dynamic> json) => User(
     id: json["_id"],
     email: json["email"],
-    totalCarrots: json["totalCarrots"],
+    totalCarrots: json["totalCarrots"] is num ? json["totalCarrots"] as num : null,
     fullName: json["fullName"],
     lastLoginAt: json["lastLoginAt"] == null ? null : DateTime.parse(json["lastLoginAt"]),
     phone: json["phone"],

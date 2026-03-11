@@ -191,7 +191,7 @@ Download: $appLink
       print('Share error: $e');
       ToastMessageHelper.showToastMessage(
           'Failed to share',
-          title: 'Error'
+          title: ''
       );
     } finally {
       shareSkinLoading.value = false;
@@ -254,14 +254,14 @@ Download now: $appLink
       } else {
         ToastMessageHelper.showToastMessage(
             response.body['message'] ?? 'Failed to get carrots',
-            title: 'Error'
+            title: ''
         );
       }
     } catch (e) {
       print('Watch Ads error: $e');
       ToastMessageHelper.showToastMessage(
           'Failed to watch ad',
-          title: 'Error'
+          title: ''
       );
     } finally {
       watchAdsLoading.value = false;

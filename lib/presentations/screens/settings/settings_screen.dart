@@ -91,9 +91,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
             _buildControlsCard(),
             SizedBox(height: 18.h),
 
-            /// ================== Notifications ==================
-            _buildNotificationsCard(),
-            SizedBox(height: 18.h),
+            // /// ================== Notifications ==================
+            // _buildNotificationsCard(),
+            // SizedBox(height: 18.h),
 
             /// ================== Others ==================
             _buildOthersCard(),

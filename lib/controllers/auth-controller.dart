@@ -98,7 +98,7 @@ class AuthController extends GetxController {
         signUpEmailError.value = message;
       }
 
-      // error set হওয়ার পরে form revalidate
+
       Future.delayed(Duration.zero, () => formKey?.currentState?.validate());
     }
   }

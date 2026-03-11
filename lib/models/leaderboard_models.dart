@@ -36,7 +36,7 @@ class LeaderBoardModel {
 
 class Datum {
   final String? id;
-  final int? totalCarrots;
+  final num? totalCarrots;
   final User? user;
   final int? level;
   final int? highScoreInFt;
@@ -53,7 +53,7 @@ class Datum {
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
     id: json["_id"],
-    totalCarrots: json["totalCarrots"],
+    totalCarrots: json["totalCarrots"] is num ? json["totalCarrots"] as num : null,
     user: json["user"] == null ? null : User.fromJson(json["user"]),
     level: json["level"],
     highScoreInFt: json["highScoreInFt"],
@@ -72,7 +72,7 @@ class Datum {
 
 class User {
   final String? id;
-  final int? totalCarrots;
+  final num? totalCarrots;
   final String? fullName;
   final CurrentGametag? currentGametag;
   final String? profileImage;
@@ -87,7 +87,7 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) => User(
     id: json["_id"],
-    totalCarrots: json["totalCarrots"],
+    totalCarrots: json["totalCarrots"] is num ? json["totalCarrots"] as num : null,
     fullName: json["fullName"],
     currentGametag: currentGametagValues.map[json["CurrentGametag"]],
     profileImage: json["profileImage"],
@@ -138,7 +138,7 @@ class Meta {
 
 class YourBestScore {
   final String? id;
-  final int? totalCarrots;
+  final num? totalCarrots;
   final String? user;
   final int? level;
   final int? highScoreInFt;
@@ -159,7 +159,7 @@ class YourBestScore {
 
   factory YourBestScore.fromJson(Map<String, dynamic> json) => YourBestScore(
     id: json["_id"],
-    totalCarrots: json["totalCarrots"],
+    totalCarrots: json["totalCarrots"] is num ? json["totalCarrots"] as num : null,
     user: json["user"],
     level: json["level"],
     highScoreInFt: json["highScoreInFt"],
