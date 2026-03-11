@@ -1,10 +1,68 @@
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import '../core/helpers/settings_helper.dart';
 import '../models/contact_model.dart';
 import '../services/api_client.dart';
 import '../services/api_constants.dart';
 
 class SettingsController extends GetxController{
+
+  // Sound Effects
+  RxBool soundEffects = true.obs;
+  RxDouble soundEffectsVolume = 0.83.obs;
+
+  // Background Music
+  RxBool backgroundMusic = true.obs;
+  RxDouble backgroundMusicVolume = 0.83.obs;
+
+  // Haptic Feedback
+  RxBool hapticFeedback = true.obs;
+  RxDouble hapticFeedbackIntensity = 0.83.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    loadSettings();
+  }
+
+  Future<void> loadSettings() async {
+    soundEffects.value = await SettingsHelper.getSoundEffects();
+    soundEffectsVolume.value = await SettingsHelper.getSoundEffectsVolume();
+    backgroundMusic.value = await SettingsHelper.getBackgroundMusic();
+    backgroundMusicVolume.value = await SettingsHelper.getBackgroundMusicVolume();
+    hapticFeedback.value = await SettingsHelper.getHapticFeedback();
+    hapticFeedbackIntensity.value = await SettingsHelper.getHapticFeedbackIntensity();
+  }
+
+  Future<void> setSoundEffects(bool value) async {
+    soundEffects.value = value;
+    await SettingsHelper.setSoundEffects(value);
+  }
+
+  Future<void> setSoundEffectsVolume(double value) async {
+    soundEffectsVolume.value = value;
+    await SettingsHelper.setSoundEffectsVolume(value);
+  }
+
+  Future<void> setBackgroundMusic(bool value) async {
+    backgroundMusic.value = value;
+    await SettingsHelper.setBackgroundMusic(value);
+  }
+
+  Future<void> setBackgroundMusicVolume(double value) async {
+    backgroundMusicVolume.value = value;
+    await SettingsHelper.setBackgroundMusicVolume(value);
+  }
+
+  Future<void> setHapticFeedback(bool value) async {
+    hapticFeedback.value = value;
+    await SettingsHelper.setHapticFeedback(value);
+  }
+
+  Future<void> setHapticFeedbackIntensity(double value) async {
+    hapticFeedbackIntensity.value = value;
+    await SettingsHelper.setHapticFeedbackIntensity(value);
+  }
 
 
   RxBool getContactUsLoading = false.obs;

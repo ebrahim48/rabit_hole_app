@@ -5,8 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:rabbit_hole_app/core/config/app_routes/app_routes.dart';
 import 'package:rabbit_hole_app/presentations/widgets/custom_music_slider.dart';
 import '../../../controllers/auth-controller.dart';
+import '../../../controllers/settings_controller.dart';
 import '../../../core/constants/app_colors.dart';
-import '../../../core/helpers/haptic_helper.dart';
 import '../../../global/custom_assets/assets.gen.dart';
 import '../../widgets/custom_haptic_feedback_slider.dart';
 import '../../widgets/custom_slider.dart';
@@ -23,25 +23,8 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-
-
   final AuthController authController = Get.put(AuthController());
-
-  bool soundEffects = true;
-  bool backgroundMusic = true;
-  bool hapticFeedback = true;
-  bool notification = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadSettings();
-  }
-
-  Future<void> _loadSettings() async {
-    hapticFeedback = await HapticHelper.getHapticFeedbackStatus();
-    setState(() {});
-  }
+  final SettingsController settingsController = Get.put(SettingsController());
 
   @override
   Widget build(BuildContext context) {
@@ -151,15 +134,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ],
               ),
-              ToggleButtonWidget(
-                status: soundEffects,
+              Obx(() => ToggleButtonWidget(
+                status: settingsController.soundEffects.value,
                 onToggle: (value) {
-                  setState(() {
-                    soundEffects = value;
-                  });
+                  settingsController.setSoundEffects(value);
                 },
                 activeColor: AppColors.buttonColorF9B039,
-              ),
+              )),
             ],
           ),
           SizedBox(height: 16.h),
@@ -191,15 +172,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ],
               ),
-              ToggleButtonWidget(
-                status: backgroundMusic,
+              Obx(() => ToggleButtonWidget(
+                status: settingsController.backgroundMusic.value,
                 onToggle: (value) {
-                  setState(() {
-                    backgroundMusic = value;
-                  });
+                  settingsController.setBackgroundMusic(value);
                 },
                 activeColor: AppColors.buttonColorF9B039,
-              ),
+              )),
             ],
           ),
           SizedBox(height: 16.h),
@@ -256,16 +235,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ],
               ),
-              ToggleButtonWidget(
-                status: hapticFeedback,
+              Obx(() => ToggleButtonWidget(
+                status: settingsController.hapticFeedback.value,
                 onToggle: (value) async {
-                  setState(() {
-                    hapticFeedback = value;
-                  });
-                  await HapticHelper.setHapticFeedbackStatus(value);
+                  await settingsController.setHapticFeedback(value);
                 },
                 activeColor: AppColors.buttonColorF9B039,
-              ),
+              )),
             ],
           ),
           SizedBox(height: 16.h),
@@ -275,69 +251,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
             text: 'How responsive the rabbit movement is',
             color: AppColors.textColor545454,
             fontsize: 13.sp,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNotificationsCard() {
-    return Container(
-      width: 345.w,
-      padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 22.h),
-      decoration: _cardDecoration(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Assets.icons.audio.svg(),
-              SizedBox(width: 12.w),
-              CustomText(
-                text: "Notification",
-                fontsize: 16.sp,
-                fontWeight: FontWeight.w400,
-                color: AppColors.textColor000000,
-              ),
-            ],
-          ),
-          SizedBox(height: 16.h),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Assets.icons.hapticfeedback.svg(),
-                  SizedBox(width: 21.w),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CustomText(
-                        text: "Haptic Feedback",
-                        fontsize: 16.sp,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.textColor000000,
-                      ),
-                      CustomText(
-                        text: "Vibration on collision",
-                        fontsize: 11.sp,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.textColor000000,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              ToggleButtonWidget(
-                status: notification,
-                onToggle: (value) {
-                  setState(() {
-                    notification = value;
-                  });
-                },
-                activeColor: AppColors.buttonColorF9B039,
-              ),
-            ],
           ),
         ],
       ),

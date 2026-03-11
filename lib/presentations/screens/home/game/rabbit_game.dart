@@ -4,7 +4,8 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:rabbit_hole_app/core/constants/app_colors.dart';
+import 'package:get/get.dart';
+import 'package:rabbit_hole_app/core/helpers/audio_service.dart';
 import 'package:rabbit_hole_app/core/helpers/haptic_helper.dart';
 import 'package:rabbit_hole_app/presentations/screens/home/game/rabbit.dart';
 import 'package:rabbit_hole_app/presentations/screens/home/game/spawn_manager.dart';
@@ -31,13 +32,25 @@ class RabbitGame extends FlameGame with HasCollisionDetection, DragCallbacks {
   double countdownTimer = 0;
   Random random = Random();
 
+  late AudioService audioService;
+
   @override
   Future<void> onLoad() async {
+    // Get existing AudioService or create new one
+    if (!Get.isRegistered<AudioService>()) {
+      Get.put(AudioService());
+    }
+    audioService = Get.find<AudioService>();
+    
     rabbit =
         Rabbit()
           ..position = Vector2(size.x / 2, size.y - 64)
           ..anchor = Anchor.center;
     add(rabbit);
+
+    // Start background music
+    audioService.playMusic();
+
     startCountdown();
   }
 
@@ -106,11 +119,13 @@ class RabbitGame extends FlameGame with HasCollisionDetection, DragCallbacks {
 
   void collectCarrot() {
     carrots++;
+    audioService.playCollectSound();
   }
 
   void collectLife() {
     if (lives < maxLives) {
       lives++;
+      audioService.playCollectSound();
     }
   }
 
@@ -118,10 +133,12 @@ class RabbitGame extends FlameGame with HasCollisionDetection, DragCallbacks {
     // Increase speed by 50%
     baseSpeed *= 1.5;
     speed = baseSpeed;
+    audioService.playPowerUpSound();
   }
 
   void hitObstacle() {
     lives--;
+    audioService.playHitSound();
     if (lives <= 0) {
       gameOver();
     }

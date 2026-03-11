@@ -12,6 +12,11 @@ class AppConstants{
   static const String mechanicType = "mechanicType";
   static const String emailValidator = "emailValidator";
   static const String hapticFeedback = "hapticFeedback";
+  static const String soundEffects = "soundEffects";
+  static const String soundEffectsVolume = "soundEffectsVolume";
+  static const String backgroundMusic = "backgroundMusic";
+  static const String backgroundMusicVolume = "backgroundMusicVolume";
+  static const String hapticFeedbackIntensity = "hapticFeedbackIntensity";
 
 
 

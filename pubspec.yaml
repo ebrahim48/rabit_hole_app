@@ -63,6 +63,7 @@ dependencies:
 
   device_preview:
   haptic_feedback: ^0.5.1+1
+  audioplayers: ^6.4.0
 
 dev_dependencies:
   flutter_test:
@@ -103,6 +104,7 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/lottie/
+    - assets/audio/
 
 #example:
   fonts:

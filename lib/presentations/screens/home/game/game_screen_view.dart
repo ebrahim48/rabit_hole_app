@@ -1,5 +1,7 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:rabbit_hole_app/core/helpers/audio_service.dart';
 import 'package:rabbit_hole_app/presentations/screens/home/game/rabbit_game.dart';
 import 'package:rabbit_hole_app/presentations/screens/home/game/widgets/all_widgets.dart';
 import 'package:rabbit_hole_app/presentations/screens/home/game/widgets/road_separator_painter.dart';
@@ -17,11 +19,24 @@ class _GameScreenState extends State<GameScreen> {
   @override
   void initState() {
     super.initState();
+    
+    // Initialize AudioService if not already done
+    if (!Get.isRegistered<AudioService>()) {
+      Get.put(AudioService());
+    }
+    
     game = RabbitGame(
       onGameOver: () {
         setState(() {});
       },
     );
+  }
+
+  @override
+  void dispose() {
+    // Stop music when leaving game screen
+    Get.find<AudioService>().stopMusic();
+    super.dispose();
   }
 
   void restartGame() {
