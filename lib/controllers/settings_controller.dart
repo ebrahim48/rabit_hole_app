@@ -1,5 +1,7 @@
+import 'package:flutter/services.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import '../core/helpers/audio_service.dart';
 import '../core/helpers/settings_helper.dart';
 import '../models/contact_model.dart';
 import '../services/api_client.dart';
@@ -42,21 +44,42 @@ class SettingsController extends GetxController{
   Future<void> setSoundEffectsVolume(double value) async {
     soundEffectsVolume.value = value;
     await SettingsHelper.setSoundEffectsVolume(value);
+    // Real-time: update AudioService so next sound plays at new volume
+    try {
+      AudioService.instance.soundEffectsVolume.value = value;
+    } catch (_) {}
   }
 
   Future<void> setBackgroundMusic(bool value) async {
     backgroundMusic.value = value;
     await SettingsHelper.setBackgroundMusic(value);
+    // Real-time: pause or resume the music player immediately
+    try {
+      final audio = AudioService.instance;
+      if (value) {
+        await audio.resumeMusic();
+      } else {
+        await audio.pauseMusic();
+      }
+    } catch (_) {}
   }
 
   Future<void> setBackgroundMusicVolume(double value) async {
     backgroundMusicVolume.value = value;
     await SettingsHelper.setBackgroundMusicVolume(value);
+    // Real-time: apply volume to the active music player
+    try {
+      await AudioService.instance.applyMusicVolume(value);
+    } catch (_) {}
   }
 
   Future<void> setHapticFeedback(bool value) async {
     hapticFeedback.value = value;
     await SettingsHelper.setHapticFeedback(value);
+    // Real-time: vibrate immediately when haptic is turned on
+    if (value) {
+      HapticFeedback.mediumImpact();
+    }
   }
 
   Future<void> setHapticFeedbackIntensity(double value) async {

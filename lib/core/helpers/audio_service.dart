@@ -44,6 +44,12 @@ class AudioService extends GetxController {
     }
   }
 
+  /// Apply volume directly to the player without saving to prefs (called from SettingsController)
+  Future<void> applyMusicVolume(double volume) async {
+    musicVolume.value = volume;
+    await _musicPlayer.setVolume(volume);
+  }
+
   Future<void> playMusic() async {
     bool musicEnabled = await SettingsHelper.getBackgroundMusic();
     if (!musicEnabled) return;
