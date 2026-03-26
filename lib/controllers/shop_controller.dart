@@ -1,8 +1,9 @@
+import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../models/content_model.dart';
 import '../models/content_powerUp_model.dart';
-import '../models/gaming_dashboard_model.dart';
 import '../models/shop_package_model.dart';
 import '../services/api_client.dart';
 import '../services/api_constants.dart';
@@ -49,7 +50,6 @@ class ShopPackageController extends GetxController {
 
 
 
-
   RxBool contentPowerUpLoading = false.obs;
   Rx<ContentPowerUpModel> contentPowerUp = Rx<ContentPowerUpModel>(ContentPowerUpModel());
 
@@ -67,16 +67,44 @@ class ShopPackageController extends GetxController {
     }
   }
 
+  // ─────────────────────────────────────────────────────────────────────────
+  // Make Payment — called after a successful IAP purchase
+  // ─────────────────────────────────────────────────────────────────────────
+  RxBool makePaymentLoading = false.obs;
 
+  /// [packageId]     → backend package _id  (Datum.id from ShopPackageModel)
+  /// [transactionId] → Google Play purchaseID (PurchaseDetails.purchaseID)
+  Future<bool> makePayment({
+    required String packageId,
+    required String transactionId,
+    required BuildContext context,
+  }) async {
+    makePaymentLoading.value = true;
+    try {
+      final body = jsonEncode({
+        "package": packageId,
+        "transactionId": transactionId,
+        "status": "success",
+        "PaymentMethod": "google_play",
+      });
 
+      final response = await ApiClient.postData(
+        ApiConstants.makePaymentEndPoint,
+        body,
+      );
 
-
-
-
-
-
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        debugPrint('Payment recorded successfully: ${response.body}');
+        return true;
+      } else {
+        debugPrint('Payment API error ${response.statusCode}: ${response.statusText}');
+        return false;
+      }
+    } catch (e) {
+      debugPrint('makePayment exception: $e');
+      return false;
+    } finally {
+      makePaymentLoading.value = false;
+    }
+  }
 }
-
-
-
-

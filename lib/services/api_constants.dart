@@ -35,6 +35,8 @@ class ApiConstants{
   static  String privacyEndPoint = "/settings/privacy-policy";
   static  String aboutUsEndPoint = "/settings/about-us";
   static  String termsEndPoint = "/settings/terms-conditions";
+  static  String makePaymentEndPoint = "/transaction/make-payment";
+
 
 
 
