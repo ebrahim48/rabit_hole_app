@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
         builder: (context, child) {
           return MaterialApp.router(
             debugShowCheckedModeBanner: false,
-            title: 'Rabbit Hole App',
+            title: 'Carrot Chase',
             theme: Themes().lightTheme,
             darkTheme: Themes().lightTheme,
             builder: DevicePreview.appBuilder,

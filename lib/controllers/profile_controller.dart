@@ -151,7 +151,7 @@ class ProfileController extends GetxController {
 
     try {
       // Share message with app link
-      const String appLink = 'https://play.google.com/store/apps/details?id=com.example.rabbit_hole_app';
+      const String appLink = 'https://play.google.com/store/apps/details?id=com.rabbithole.game';
       const String shareMessage = '''
 🐰 Carrot Chase - Rabbit Hole Game! 🥕
 
@@ -201,7 +201,7 @@ Download: $appLink
   /// ================================>  Share App Link  ==============================>
   Future<void> _shareAppLink() async {
     try {
-      const String appLink = 'https://play.google.com/store/apps/details?id=com.example.rabbit_hole_app'; // Replace with your actual app link
+      const String appLink = 'https://play.google.com/store/apps/details?id=com.rabbithole.game'; // Replace with your actual app link
       const String message = '''
 🐰 Carrot Chase - Rabbit Hole Game! 🥕
 
