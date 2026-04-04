@@ -317,8 +317,107 @@ class _SettingsScreenState extends State<SettingsScreen> {
               text: "About Us",
             ),
           ),
+          SizedBox(height: 34.h),
+          Divider(color: const Color(0xFFFFE4E4), thickness: 1),
+          SizedBox(height: 16.h),
+          GestureDetector(
+            onTap: () => _showDeleteAccountDialog(context),
+            child: Row(
+              children: [
+                Icon(Icons.delete_outline_rounded, color: const Color(0xFFD32F2F), size: 22.r),
+                SizedBox(width: 21.w),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomText(
+                      text: "Delete Account",
+                      fontsize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                      color: const Color(0xFFD32F2F),
+                    ),
+                    CustomText(
+                      text: "Permanently remove your account",
+                      fontsize: 11.sp,
+                      fontWeight: FontWeight.w400,
+                      color: const Color(0xFFE57373),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 8.h),
         ],
       ),
+    );
+  }
+
+  void _showDeleteAccountDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        return AlertDialog(
+          backgroundColor: AppColors.textColorFFFFFF,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+          title: Row(
+            children: [
+              Icon(Icons.warning_amber_rounded, color: const Color(0xFFD32F2F), size: 24.r),
+              SizedBox(width: 8.w),
+              CustomText(
+                text: "Delete Account",
+                fontsize: 18.sp,
+                fontWeight: FontWeight.w600,
+                color: const Color(0xFFD32F2F),
+              ),
+            ],
+          ),
+          content: CustomText(
+            text: "Are you sure you want to permanently delete your account? This action cannot be undone.",
+            fontsize: 14.sp,
+            fontWeight: FontWeight.w400,
+            color: AppColors.textColor333333,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext),
+              child: CustomText(
+                text: "Cancel",
+                fontsize: 14.sp,
+                fontWeight: FontWeight.w500,
+                color: AppColors.textColor545454,
+              ),
+            ),
+            Obx(() => settingsController.deleteAccountLoading.value
+                ? Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                    child: SizedBox(
+                      width: 20.w,
+                      height: 20.h,
+                      child: const CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Color(0xFFD32F2F),
+                      ),
+                    ),
+                  )
+                : TextButton(
+                    onPressed: () async {
+                      final success = await settingsController.deleteAccount();
+                      if (dialogContext.mounted) Navigator.pop(dialogContext);
+                      if (success && context.mounted) {
+                        context.go(AppRoutes.signInScreen);
+                      }
+                    },
+                    child: CustomText(
+                      text: "Delete",
+                      fontsize: 14.sp,
+                      fontWeight: FontWeight.w600,
+                      color: const Color(0xFFD32F2F),
+                    ),
+                  )),
+          ],
+        );
+      },
     );
   }
 

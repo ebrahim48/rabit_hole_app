@@ -1,7 +1,9 @@
 import 'package:flutter/services.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import '../core/app_constants/app_constants.dart';
 import '../core/helpers/audio_service.dart';
+import '../core/helpers/prefs_helper.dart';
 import '../core/helpers/settings_helper.dart';
 import '../models/contact_model.dart';
 import '../services/api_client.dart';
@@ -221,6 +223,29 @@ class SettingsController extends GetxController{
   //   }
   // }
 
+
+  /// ================================> Delete Account ==============================>
+  RxBool deleteAccountLoading = false.obs;
+
+  Future<bool> deleteAccount() async {
+    deleteAccountLoading(true);
+    try {
+      var response = await ApiClient.deleteData(ApiConstants.deleteAccountEndPoint);
+      if (response.statusCode == 200) {
+        await PrefsHelper.remove(AppConstants.bearerToken);
+        await PrefsHelper.remove(AppConstants.userId);
+        await PrefsHelper.remove(AppConstants.email);
+        await PrefsHelper.remove(AppConstants.role);
+        await PrefsHelper.setBool(AppConstants.isLogged, false);
+        return true;
+      }
+      return false;
+    } catch (_) {
+      return false;
+    } finally {
+      deleteAccountLoading(false);
+    }
+  }
 
   /// ================================> Terms Condition ==============================>
   RxBool getTermsConditionLoading = false.obs;

@@ -36,6 +36,7 @@ class ApiConstants{
   static  String aboutUsEndPoint = "/settings/about-us";
   static  String termsEndPoint = "/settings/terms-conditions";
   static  String makePaymentEndPoint = "/transaction/make-payment";
+  static  String deleteAccountEndPoint = "/user/account";
 
 
 
