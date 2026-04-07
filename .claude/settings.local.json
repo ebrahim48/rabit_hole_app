@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(keytool:*)",
+      "Bash(ls C:/Users/ebu/StudioProjects/rabbit_hole_app/android/app/build.gradle*)",
+      "Bash(flutter build:*)",
+      "Bash(taskkill /F /IM \"java.exe\" /T)",
+      "Bash(taskkill /F /IM \"javaw.exe\" /T)",
+      "Bash(cmd:*)"
+    ]
+  }
+}

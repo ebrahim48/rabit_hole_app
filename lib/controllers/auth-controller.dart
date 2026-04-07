@@ -302,8 +302,10 @@ class AuthController extends GetxController {
         final message = response.body["message"];
         loginError.value = message ?? "Access denied";
       }
+    } else if (response.statusCode == 1) {
+      loginError.value = "No internet connection. Please try again.";
     } else {
-      final message = response.body["message"];
+      final message = response.body?["message"];
 
       if (message == "Email not verified. Please verify your email.") {
         loginError.value = "Email not verified. Please verify your email.";
