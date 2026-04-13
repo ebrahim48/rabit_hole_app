@@ -4,10 +4,10 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rabbit_hole_app/controllers/leaderboard_controller.dart';
 import 'package:rabbit_hole_app/core/config/app_routes/app_routes.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../global/custom_assets/assets.gen.dart';
 import '../../../models/leaderboard_models.dart';
-import '../../widgets/custom_loader.dart';
 import '../../widgets/custom_text.dart';
 import '../../widgets/rank_card.dart';
 
@@ -68,7 +68,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
       ),
       body: Obx(() {
         if (leaderBoardController.getLeaderBoardLoading.value) {
-          return const Center(child: CustomLoader());
+          return _LeaderBoardShimmer();
         }
 
         final board = leaderBoardController.leaderBoard.value;
@@ -151,6 +151,60 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
           ),
         );
       }),
+    );
+  }
+
+  Widget _LeaderBoardShimmer() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey.shade300,
+      highlightColor: Colors.grey.shade100,
+      child: SingleChildScrollView(
+        physics: const NeverScrollableScrollPhysics(),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 28.h),
+              // Best score card shimmer
+              Container(
+                width: 348.w,
+                height: 100.h,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+              ),
+              SizedBox(height: 20.h),
+              // "Global Rankings" label shimmer
+              Container(
+                width: 130.w,
+                height: 16.h,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(4.r),
+                ),
+              ),
+              SizedBox(height: 16.h),
+              // List item shimmers
+              ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: 8,
+                separatorBuilder: (_, __) => SizedBox(height: 12.h),
+                itemBuilder: (_, __) => Container(
+                  width: 346.w,
+                  height: 75.h,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 

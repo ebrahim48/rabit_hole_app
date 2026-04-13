@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
+import 'package:rabbit_hole_app/controllers/bottom_nav_controller.dart';
 import '../../core/app_constants/app_constants.dart';
 import '../../core/config/app_routes/app_routes.dart';
 import '../../core/helpers/prefs_helper.dart';
@@ -297,6 +298,9 @@ class AuthController extends GetxController {
 
       if (role == "user") {
         await PrefsHelper.setBool(AppConstants.isLogged, true);
+        if (Get.isRegistered<BottomNavController>()) {
+          BottomNavController.instance.resetToHome();
+        }
         context.go(AppRoutes.bottomNavbarScreen);
       } else {
         final message = response.body["message"];

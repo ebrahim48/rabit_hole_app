@@ -113,6 +113,7 @@ class RabbitGame extends FlameGame with HasCollisionDetection, DragCallbacks {
     overlays.clear();
     overlays.add('GameOver');
     pauseEngine();
+    audioService.stopMusic();
     HapticHelper.triggerErrorFeedback();
     onGameOver();
   }

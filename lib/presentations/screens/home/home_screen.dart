@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:rabbit_hole_app/controllers/bottom_nav_controller.dart';
 
 import '../../../core/config/app_routes/app_routes.dart';
 import '../../../core/constants/app_colors.dart';
@@ -115,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             width: 32.w,
                           ),
                           onTap: () {
-                            context.pushNamed(AppRoutes.leaderBoardScreen);
+                            BottomNavController.instance.switchTab(1);
                           },
                         ),
                         _buildOptionCard(
@@ -125,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             width: 32.w,
                           ),
                           onTap: () {
-                            context.pushNamed(AppRoutes.shopScreen);
+                            BottomNavController.instance.switchTab(2);
                           },
                         ),
                         _buildOptionCard(
@@ -135,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             width: 32.w,
                           ),
                           onTap: () {
-                            context.pushNamed(AppRoutes.profileScreen);
+                            BottomNavController.instance.switchTab(3);
                           },
                         ),
                         _buildOptionCard(
