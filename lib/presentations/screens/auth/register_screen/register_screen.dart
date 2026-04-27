@@ -338,52 +338,52 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                   }),
                 ),
-                SizedBox(height: 27.h),
-                /// ===================================> Divider =============================>
-                Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        height: 1,
-                        margin: EdgeInsets.only(left: 7.w),
-                        decoration: const BoxDecoration(
-                            color: AppColors.textColor000000
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.w),
-                      child: CustomText(
-                        text: 'Or Sign in with',
-                        color: AppColors.textColor000000,
-                        fontsize: 14.sp,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        height: 1,
-                        margin: EdgeInsets.only(right: 7.w),
-                        decoration:  const BoxDecoration(
-                            color: AppColors.textColor000000
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-
-
-                /// =================================> Social Icon ===========================>
-                SizedBox(height: 18.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Assets.icons.google.svg(width: 40.w, height: 40.h),
-                    // SizedBox(width: 30.h),
-                    // Assets.icons.gmail.svg(width: 40.w, height: 40.h),
-                  ],
-                ),
+                // SizedBox(height: 27.h),
+                // /// ===================================> Divider =============================>
+                // Row(
+                //   children: [
+                //     Expanded(
+                //       child: Container(
+                //         height: 1,
+                //         margin: EdgeInsets.only(left: 7.w),
+                //         decoration: const BoxDecoration(
+                //             color: AppColors.textColor000000
+                //         ),
+                //       ),
+                //     ),
+                //     Padding(
+                //       padding: EdgeInsets.symmetric(horizontal: 8.w),
+                //       child: CustomText(
+                //         text: 'Or Sign in with',
+                //         color: AppColors.textColor000000,
+                //         fontsize: 14.sp,
+                //         fontWeight: FontWeight.w400,
+                //       ),
+                //     ),
+                //     Expanded(
+                //       child: Container(
+                //         height: 1,
+                //         margin: EdgeInsets.only(right: 7.w),
+                //         decoration:  const BoxDecoration(
+                //             color: AppColors.textColor000000
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                //
+                //
+                // /// =================================> Social Icon ===========================>
+                // SizedBox(height: 18.h),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   crossAxisAlignment: CrossAxisAlignment.center,
+                //   children: [
+                //     Assets.icons.google.svg(width: 40.w, height: 40.h),
+                //     // SizedBox(width: 30.h),
+                //     // Assets.icons.gmail.svg(width: 40.w, height: 40.h),
+                //   ],
+                // ),
 
 
                 SizedBox(height: 16.h),
