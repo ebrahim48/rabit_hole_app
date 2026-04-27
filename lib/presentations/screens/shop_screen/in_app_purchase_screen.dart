@@ -2,25 +2,38 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
-class InAppPurchaseSubscriptionScreen extends StatefulWidget {
-  const InAppPurchaseSubscriptionScreen({super.key});
+class InAppPurchaseScreen extends StatefulWidget {
+  const InAppPurchaseScreen({super.key});
 
   @override
-  State<InAppPurchaseSubscriptionScreen> createState() => _InAppPurchaseSubscriptionScreenState();
+  State<InAppPurchaseScreen> createState() => _InAppPurchaseScreenState();
 }
 
-class _InAppPurchaseSubscriptionScreenState extends State<InAppPurchaseSubscriptionScreen> {
+class _InAppPurchaseScreenState extends State<InAppPurchaseScreen> {
   final InAppPurchase _iap = InAppPurchase.instance;
   bool _available = false;
   bool _loading = true;
   List<ProductDetails> _products = [];
   StreamSubscription<List<PurchaseDetails>>? _subscription;
   String? _error;
+  int _totalCoins = 0;
+
 
   final Set<String> _productIds = {
-    'rabbithole_monthly',
-    'rabbithole_yearly',
-    'rabbithole_weekly',
+    'coinsmall2', // Small Coin Pack — 100 coins
+    'coinsmall1', // Large Coin Pack — 500 coins
+  };
+
+
+  final Map<String, int> _coinRewards = {
+    'coinsmall2': 100,
+    'coinsmall1': 500,
+  };
+
+
+  final Map<String, String> _productNames = {
+    'coinsmall2': 'Small Coin Pack',
+    'coinsmall1': 'Large Coin Pack',
   };
 
   @override
@@ -30,7 +43,6 @@ class _InAppPurchaseSubscriptionScreenState extends State<InAppPurchaseSubscript
   }
 
   Future<void> _initialize() async {
-    // Check if in-app purchase is available
     final available = await _iap.isAvailable();
 
     if (!available) {
@@ -42,7 +54,6 @@ class _InAppPurchaseSubscriptionScreenState extends State<InAppPurchaseSubscript
       return;
     }
 
-    // Listen to purchase updates
     _subscription = _iap.purchaseStream.listen(
       _onPurchaseUpdate,
       onDone: () => _subscription?.cancel(),
@@ -57,11 +68,7 @@ class _InAppPurchaseSubscriptionScreenState extends State<InAppPurchaseSubscript
       _available = available;
     });
 
-    // Load products
     await _loadProducts();
-
-    // Restore past purchases
-    await _restorePurchases();
   }
 
   Future<void> _loadProducts() async {
@@ -90,8 +97,13 @@ class _InAppPurchaseSubscriptionScreenState extends State<InAppPurchaseSubscript
         return;
       }
 
+
+      final sorted = response.productDetails
+        ..sort((a, b) =>
+            (_coinRewards[a.id] ?? 0).compareTo(_coinRewards[b.id] ?? 0));
+
       setState(() {
-        _products = response.productDetails;
+        _products = sorted;
         _loading = false;
       });
     } catch (e) {
@@ -102,73 +114,47 @@ class _InAppPurchaseSubscriptionScreenState extends State<InAppPurchaseSubscript
     }
   }
 
-  Future<void> _restorePurchases() async {
-    try {
-      await _iap.restorePurchases();
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error restoring purchases: $e'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-      debugPrint('Error restoring purchases: $e');
-    }
-  }
-
   void _onPurchaseUpdate(List<PurchaseDetails> purchaseDetailsList) {
     for (var purchaseDetails in purchaseDetailsList) {
       if (purchaseDetails.status == PurchaseStatus.pending) {
-        _showPendingUI();
-      } else {
-        if (purchaseDetails.status == PurchaseStatus.error) {
-          _handleError(purchaseDetails.error!);
-        } else if (purchaseDetails.status == PurchaseStatus.purchased ||
-            purchaseDetails.status == PurchaseStatus.restored) {
-          _verifyAndDeliverProduct(purchaseDetails);
-        }
+        _showMessage('Purchase pending...', Colors.orange);
+      } else if (purchaseDetails.status == PurchaseStatus.error) {
+        _handleError(purchaseDetails.error!);
+      } else if (purchaseDetails.status == PurchaseStatus.purchased) {
+        _deliverCoins(purchaseDetails);
+      }
 
-        if (purchaseDetails.pendingCompletePurchase) {
-          _iap.completePurchase(purchaseDetails);
-        }
+
+      if (purchaseDetails.pendingCompletePurchase) {
+        _iap.completePurchase(purchaseDetails);
       }
     }
   }
 
-  void _showPendingUI() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Purchase pending...')),
-    );
+  void _deliverCoins(PurchaseDetails purchaseDetails) {
+    final int coins = _coinRewards[purchaseDetails.productID] ?? 0;
+
+
+    setState(() {
+      _totalCoins += coins;
+    });
+
+    _showMessage('🎉 $coins coins added to your account!', Colors.green);
   }
 
   void _handleError(IAPError error) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Purchase failed: ${error.message}'),
-        backgroundColor: Colors.red,
-      ),
-    );
+    _showMessage('Purchase failed: ${error.message}', Colors.red);
   }
 
-  Future<void> _verifyAndDeliverProduct(PurchaseDetails purchaseDetails) async {
-    // TODO: Verify the purchase on your server
-    // For now, we'll just show a success message
-
+  void _showMessage(String message, Color color) {
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(
-          purchaseDetails.status == PurchaseStatus.restored
-              ? 'Subscription restored!'
-              : 'Subscription activated!',
-        ),
-        backgroundColor: Colors.green,
+        content: Text(message),
+        backgroundColor: color,
+        behavior: SnackBarBehavior.floating,
       ),
     );
-
-    // TODO: Update your app's subscription state
-    // e.g., unlock premium features, save to database, etc.
   }
 
   Future<void> _buyProduct(ProductDetails product) async {
@@ -177,23 +163,13 @@ class _InAppPurchaseSubscriptionScreenState extends State<InAppPurchaseSubscript
     );
 
     try {
-      await _iap.buyNonConsumable(purchaseParam: purchaseParam);
+
+      await _iap.buyConsumable(purchaseParam: purchaseParam);
     } catch (e) {
       setState(() {
         _error = e.toString();
       });
     }
-  }
-
-  String _formatPrice(ProductDetails product) {
-    return '${product.price} / ${_getSubscriptionPeriod(product.id)}';
-  }
-
-  String _getSubscriptionPeriod(String productId) {
-    if (productId.contains('weekly')) return 'week';
-    if (productId.contains('monthly')) return 'month';
-    if (productId.contains('yearly')) return 'year';
-    return 'period';
   }
 
   @override
@@ -205,13 +181,39 @@ class _InAppPurchaseSubscriptionScreenState extends State<InAppPurchaseSubscript
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF8F8F8),
       appBar: AppBar(
-        title: const Text('Choose Your Plan'),
+        title: const Text(
+          'Buy Coins',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 0,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.restore),
-            onPressed: _restorePurchases,
-            tooltip: 'Restore Purchases',
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.amber.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.monetization_on,
+                      color: Colors.amber, size: 18),
+                  const SizedBox(width: 4),
+                  Text(
+                    '$_totalCoins',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
@@ -221,193 +223,235 @@ class _InAppPurchaseSubscriptionScreenState extends State<InAppPurchaseSubscript
 
   Widget _buildBody() {
     if (!_available) {
-      return Center(
+      return _buildError(_error ?? 'In-app purchases not available');
+    }
+
+    if (_loading) {
+      return const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(height: 16),
+            Text('Loading coin packages...'),
+          ],
+        ),
+      );
+    }
+
+    if (_error != null) {
+      return _buildError(_error!);
+    }
+
+    if (_products.isEmpty) {
+      return const Center(child: Text('No coin packages available'));
+    }
+
+    return ListView(
+      padding: const EdgeInsets.all(20),
+      children: [
+        const SizedBox(height: 16),
+
+        // Header
+        const Icon(Icons.monetization_on, color: Colors.amber, size: 72),
+        const SizedBox(height: 16),
+        const Text(
+          'Get Coins',
+          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 8),
+        const Text(
+          'Choose a coin package to get started',
+          style: TextStyle(fontSize: 15, color: Colors.grey),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 36),
+
+        // Product Cards
+        ..._products.map((product) => _buildCoinCard(product)),
+
+        const SizedBox(height: 20),
+
+        // Footer note
+        const Text(
+          'Purchases are non-refundable.\nCoins will be added instantly after purchase.',
+          style: TextStyle(fontSize: 12, color: Colors.grey),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCoinCard(ProductDetails product) {
+    final int coins = _coinRewards[product.id] ?? 0;
+    final bool isBestValue = product.id == 'coinsmall1'; // Large pack
+    final String displayName =
+        _productNames[product.id] ?? product.title;
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: isBestValue
+            ? Border.all(color: Colors.amber, width: 2.5)
+            : Border.all(color: Colors.grey.shade200),
+        boxShadow: [
+          BoxShadow(
+            color: isBestValue
+                ? Colors.amber.withValues(alpha: 0.15)
+                : Colors.black.withValues(alpha: 0.04),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            // Best value badge
+            if (isBestValue) ...[
+              Container(
+                padding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+                decoration: BoxDecoration(
+                  color: Colors.amber,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Text(
+                  '⭐ BEST VALUE',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
+
+            Row(
+              children: [
+                // Coin icon
+                Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: isBestValue
+                        ? Colors.amber.withValues(alpha: 0.15)
+                        : Colors.blue.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Icon(
+                    Icons.monetization_on,
+                    color: isBestValue ? Colors.amber : Colors.blue,
+                    size: 36,
+                  ),
+                ),
+                const SizedBox(width: 16),
+
+                // Info
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        displayName,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '$coins Coins',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey[600],
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        product.description,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey[500],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 16),
+
+            // Price & Buy button
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  product.price,
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: isBestValue ? Colors.amber.shade700 : Colors.green,
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () => _buyProduct(product),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                    isBestValue ? Colors.amber : Colors.blue,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 28,
+                      vertical: 12,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: isBestValue ? 4 : 1,
+                  ),
+                  child: const Text(
+                    'Buy Now',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildError(String message) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Icon(Icons.error_outline, size: 64, color: Colors.red),
             const SizedBox(height: 16),
             Text(
-              _error ?? 'In-app purchases not available',
+              message,
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 16),
             ),
-          ],
-        ),
-      );
-    }
-
-    if (_loading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    }
-
-    if (_error != null) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.error_outline, size: 64, color: Colors.orange),
-            const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                _error!,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 16),
-              ),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
+            const SizedBox(height: 20),
+            ElevatedButton.icon(
               onPressed: _loadProducts,
-              child: const Text('Retry'),
+              icon: const Icon(Icons.refresh),
+              label: const Text('Retry'),
             ),
           ],
-        ),
-      );
-    }
-
-    if (_products.isEmpty) {
-      return const Center(
-        child: Text(
-          'No subscription plans available',
-          style: TextStyle(fontSize: 16),
-        ),
-      );
-    }
-
-    return RefreshIndicator(
-      onRefresh: _loadProducts,
-      child: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          const Text(
-            'Choose your subscription plan',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            'Subscribe to unlock premium features',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 32),
-          ..._products.map((product) => _buildProductCard(product)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildProductCard(ProductDetails product) {
-    final bool isPopular = product.id.contains('monthly');
-
-    return Card(
-      margin: const EdgeInsets.only(bottom: 16),
-      elevation: isPopular ? 8 : 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: isPopular
-            ? const BorderSide(color: Colors.blue, width: 2)
-            : BorderSide.none,
-      ),
-      child: Container(
-        decoration: isPopular
-            ? BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Colors.blue.withValues(alpha: 0.1),
-              Colors.transparent,
-            ],
-          ),
-        )
-            : null,
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (isPopular)
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Text(
-                    'MOST POPULAR',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              if (isPopular) const SizedBox(height: 12),
-              Text(
-                product.title,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                product.description,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey[600],
-                ),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    _formatPrice(product),
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => _buyProduct(product),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: isPopular ? Colors.blue : null,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 32,
-                        vertical: 12,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Text(
-                      'Subscribe',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
         ),
       ),
     );

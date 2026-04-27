@@ -4,6 +4,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:rabbit_hole_app/controllers/profile_controller.dart';
 import 'package:rabbit_hole_app/controllers/shop_controller.dart';
 import 'package:rabbit_hole_app/services/iap_service.dart';
 import '../../../core/constants/app_colors.dart';
@@ -23,18 +24,20 @@ class ShopScreen extends StatefulWidget {
 class _ShopScreenState extends State<ShopScreen> {
   late final ShopPackageController shopPackageController;
   late final IAPService iapService;
+  late final ProfileController profileController;
 
   @override
   void initState() {
     super.initState();
     shopPackageController = Get.put(ShopPackageController());
-    // Register IAPService as singleton — safe to call multiple times
     iapService = Get.put(IAPService(), permanent: true);
+    profileController = Get.find<ProfileController>();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       shopPackageController.getShopPackage();
       shopPackageController.getContent();
       shopPackageController.getContentPowerUp();
+      profileController.getProfile();
     });
   }
 
@@ -94,6 +97,7 @@ class _ShopScreenState extends State<ShopScreen> {
     );
 
     if (success) {
+      await profileController.getProfile();
       _showSnackBar('Purchase successful! Carrots added to your account.', isError: false, isSuccess: true);
     } else {
       _showSnackBar(
@@ -148,11 +152,11 @@ class _ShopScreenState extends State<ShopScreen> {
                   onPressed: () {},
                   icon: Assets.icons.bigpacks.svg(),
                 ),
-                CustomText(
-                  text: '45',
+                Obx(() => CustomText(
+                  text: '${profileController.profile.value.totalCarrots ?? 0}',
                   color: AppColors.textColor000000,
                   fontsize: 18.sp,
-                )
+                ))
               ],
             ),
           ),
