@@ -56,7 +56,7 @@ class AudioService extends GetxController {
 
     try {
       await _musicPlayer.setVolume(musicVolume.value);
-      await _musicPlayer.play(AssetSource('audio/background_music.mp3'));
+      await _musicPlayer.play(AssetSource('audio/CC Background mp3.mp3'));
       isMusicPlaying.value = true;
     } catch (e) {
       print('Error playing music: $e');
@@ -113,15 +113,15 @@ class AudioService extends GetxController {
   }
 
   Future<void> playCollectSound() async {
-    await playSound('collect_carrot');
+    await playSound('CC Item Pickup mp3');
   }
 
   Future<void> playHitSound() async {
-    await playSound('hit_obstacle');
+    await playSound('CC Obstacle Hit mp3');
   }
 
   Future<void> playPowerUpSound() async {
-    await playSound('power_up');
+    await playSound('CC PowerUp mp3');
   }
 
   @override
