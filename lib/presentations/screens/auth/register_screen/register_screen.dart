@@ -8,7 +8,6 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../../global/custom_assets/assets.gen.dart';
 import '../../../../controllers/auth-controller.dart';
-import '../../../../core/app_constants/app_constants.dart';
 import '../../../../core/config/app_routes/app_routes.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../widgets/custom_app_bar.dart';
@@ -16,7 +15,6 @@ import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_network_image.dart';
 import '../../../widgets/custom_text.dart';
 import '../../../widgets/custom_text_field.dart';
-
 
 class RegisterScreen extends StatefulWidget {
   RegisterScreen({super.key});
@@ -26,16 +24,13 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-
   AuthController authController = Get.put(AuthController());
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  const CustomAppBar(
-         title: 'Register',
-      ),
+      appBar: const CustomAppBar(title: 'Register'),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -44,7 +39,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Center(child: Assets.images.logo.image(height: 100.h, width: 100.w)),
+                Center(
+                  child: Assets.images.logo.image(height: 100.h, width: 100.w),
+                ),
                 SizedBox(height: 58.h),
 
                 Row(
@@ -70,6 +67,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ),
                     SizedBox(width: 12.w),
+
                     /// ======================================> Profile image  camera icon ====================================>
                     GestureDetector(
                       onTap: () => showImagePickerOption(context),
@@ -88,17 +86,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                             ),
                             child: ClipOval(
-                              child: selectedImage != null
-                                  ? Image.file(
-                                selectedImage!,
-                                fit: BoxFit.cover,
-                              )
-                                  : CustomNetworkImage(
-                                boxShape: BoxShape.circle,
-                                imageUrl: profileImagePath ?? "",
-                                height: 60.w,
-                                width: 60.w,
-                              ),
+                              child:
+                                  selectedImage != null
+                                      ? Image.file(
+                                        selectedImage!,
+                                        fit: BoxFit.cover,
+                                      )
+                                      : CustomNetworkImage(
+                                        boxShape: BoxShape.circle,
+                                        imageUrl: profileImagePath ?? "",
+                                        height: 60.w,
+                                        width: 60.w,
+                                      ),
                             ),
                           ),
 
@@ -131,89 +130,66 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ],
                 ),
-                const Divider(
-                  color: AppColors.textColor000000,
-                ),
+                const Divider(color: AppColors.textColor000000),
 
                 /// <<< ============><>>> sign up text flied  << < ==============>>>
                 CustomTextField(
-                    hintextColor: AppColors.textColor545454,
-                    controller: nameCtrl,
-                    hintText: "User name",
-                    prefixIcon: Assets.icons.nameProfile.svg()),
+                  hintextColor: AppColors.textColor545454,
+                  controller: nameCtrl,
+                  hintText: "User name",
+                  prefixIcon: Assets.icons.nameProfile.svg(),
+                ),
 
-                // Email field
                 CustomTextField(
                   hintextColor: AppColors.textColor545454,
                   controller: emailCtrl,
                   hintText: "Email",
                   prefixIcon: Assets.icons.email.svg(),
                   isEmail: true,
-                  onChanged: (_) {
-                    authController.signUpEmailError.value = '';
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter email';
-                    }
-                    if (!AppConstants.emailValidate.hasMatch(value)) {
-                      return 'Please check your email!';
-                    }
-                    if (authController.signUpEmailError.value.isNotEmpty) {
-                      return authController.signUpEmailError.value;
-                    }
-                    return null;
-                  },
                 ),
 
-// Phone field
                 CustomTextField(
                   keyboardType: TextInputType.phone,
                   hintextColor: AppColors.textColor545454,
                   controller: phoneCtrl,
                   hintText: "Phone Number",
-                  prefixIcon: Assets.icons.phone.svg(color: AppColors.textColor000000),
+                  prefixIcon: Assets.icons.phone.svg(
+                    color: AppColors.textColor000000,
+                  ),
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                     LengthLimitingTextInputFormatter(11),
                   ],
-                  onChanged: (_) {
-                    authController.signUpPhoneError.value = '';
-                  },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter phone number';
-                    }
-                    if (value.length < 11) {
+                    } else if (value.length < 11) {
                       return 'Phone number must be 11 digits';
-                    }
-                    if (authController.signUpPhoneError.value.isNotEmpty) {
-                      return authController.signUpPhoneError.value;
+                    } else if (value.length > 11) {
+                      return 'Phone number cannot exceed 11 digits';
                     }
                     return null;
                   },
                 ),
 
                 CustomTextField(
-                    hintextColor: AppColors.textColor545454,
-                    controller: addressCtrl,
-                    hintText: "Address",
-                    prefixIcon: Assets.icons.address.svg(
-                      color: AppColors.textColor000000,
-                      height: 20.h,
-                      width: 20.w
-                    ),),
-
-
+                  hintextColor: AppColors.textColor545454,
+                  controller: addressCtrl,
+                  hintText: "Address",
+                  prefixIcon: Assets.icons.address.svg(
+                    color: AppColors.textColor000000,
+                    height: 20.h,
+                    width: 20.w,
+                  ),
+                ),
 
                 CustomTextField(
-                    hintextColor: AppColors.textColor545454,
-                    controller: passWordCtrl,
-                    prefixIcon: Assets.icons.pass.svg(),
-                    hintText: "Password",
-                    isPassword: true),
-
-
+                  hintextColor: AppColors.textColor545454,
+                  controller: passWordCtrl,
+                  prefixIcon: Assets.icons.pass.svg(),
+                  hintText: "Password",
+                  isPassword: true,
+                ),
                 CustomTextField(
                   hintextColor: AppColors.textColor545454,
                   controller: confirmPassWordCtrl,
@@ -222,13 +198,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   isPassword: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      Future.delayed(Duration.zero, () => isMatched.value = false);
+                      Future.delayed(
+                        Duration.zero,
+                        () => isMatched.value = false,
+                      );
                       return 'Please enter your confirm password';
                     } else if (passWordCtrl.text == value) {
-                      Future.delayed(Duration.zero, () => isMatched.value = true);
+                      Future.delayed(
+                        Duration.zero,
+                        () => isMatched.value = true,
+                      );
                       return null;
                     } else {
-                      Future.delayed(Duration.zero, () => isMatched.value = false);
+                      Future.delayed(
+                        Duration.zero,
+                        () => isMatched.value = false,
+                      );
                       return 'Password Not Matching';
                     }
                   },
@@ -236,44 +221,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     isMatched.value = passWordCtrl.text == value;
                   },
                 ),
-                Obx(() => authController.signUpError.value.isNotEmpty
-                    ? Padding(
-                  padding: EdgeInsets.only(top: 4.h, left: 12.w, bottom: 4.h),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      authController.signUpError.value,
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 12.sp,
-                      ),
-                    ),
-                  ),
-                )
-                    : const SizedBox.shrink()),
-                Obx(() => Align(
+                Obx(
+                  () => Align(
                     alignment: Alignment.centerLeft,
                     child: CustomText(
                       text: isMatched.value ? 'Password Matched' : "",
                       color: Colors.green,
                       fontsize: 14.sp,
-                    ))),
-
+                    ),
+                  ),
+                ),
 
                 SizedBox(height: 20.h),
 
                 /// ====================================> Check Box ========================>
-
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Obx(
-                          () => Transform.translate(
+                      () => Transform.translate(
                         offset: const Offset(0, -18),
                         child: Checkbox(
                           activeColor: AppColors.primaryColorC79235,
                           checkColor: AppColors.splashColor,
-                          side: BorderSide(color: AppColors.textColor333333,width: 2.w),
+                          side: BorderSide(
+                            color: AppColors.textColor333333,
+                            width: 2.w,
+                          ),
                           value: isChecked.value,
                           onChanged: (value) {
                             isChecked.value = value!;
@@ -285,26 +259,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: RichText(
                         text: TextSpan(
                           style: TextStyle(
-                              color: AppColors.textColor333333,
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w400
+                            color: AppColors.textColor333333,
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w400,
                           ),
                           children: [
-                            const TextSpan(text: 'I have read & agreed to After hours '),
+                            const TextSpan(
+                              text: 'I have read & agreed to After hours ',
+                            ),
                             TextSpan(
                               text: 'Terms & Condition',
-                              style:  TextStyle(
+                              style: TextStyle(
                                 fontWeight: FontWeight.w400,
                                 fontSize: 12.sp,
                                 color: AppColors.textColor8C7720,
                                 decoration: TextDecoration.underline,
                               ),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  context.pushNamed(AppRoutes.termsServiceScreen);
-                                },
+                              recognizer:
+                                  TapGestureRecognizer()
+                                    ..onTap = () {
+                                      context.pushNamed(
+                                        AppRoutes.termsServiceScreen,
+                                      );
+                                    },
                             ),
-
                           ],
                         ),
                       ),
@@ -315,76 +293,87 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 SizedBox(height: 32.h),
 
                 /// ============================================ Button ====================================>
-
-                Obx(()=>
-                   CustomButton(
-                        loading: authController.signUpLoading.value,
-                      title: "Register",
-                      onpress: () {
-                        if(formKey.currentState?.validate()?? true){
-                          authController.handleSignUp(
-                            email: emailCtrl.text,
-                            fullName: nameCtrl.text.trim(),
-                            password: passWordCtrl.text.trim(),
-                            confirmpassword: confirmPassWordCtrl.text.trim(),
-                            address: addressCtrl.text.trim(),
-                            phone: phoneCtrl.text.trim(),
-                            profileImage: selectedImage,
-                            context: context,
-                            screenType: "signup",
-                            formKey: formKey,
-                          );
-                        }
-
-                  }),
+                Obx(
+                  () => CustomButton(
+                    loading: authController.signUpLoading.value,
+                    title: "Register",
+                    onpress: () {
+                      if (formKey.currentState?.validate() ?? true) {
+                        authController.handleSignUp(
+                          email: emailCtrl.text,
+                          fullName: nameCtrl.text.trim(),
+                          password: passWordCtrl.text.trim(),
+                          confirmpassword: confirmPassWordCtrl.text.trim(),
+                          address: addressCtrl.text.trim(),
+                          phone: phoneCtrl.text.trim(),
+                          profileImage: selectedImage,
+                          context: context,
+                          screenType: "signup",
+                        );
+                      }
+                    },
+                  ),
                 ),
-                // SizedBox(height: 27.h),
-                // /// ===================================> Divider =============================>
-                // Row(
-                //   children: [
-                //     Expanded(
-                //       child: Container(
-                //         height: 1,
-                //         margin: EdgeInsets.only(left: 7.w),
-                //         decoration: const BoxDecoration(
-                //             color: AppColors.textColor000000
-                //         ),
-                //       ),
-                //     ),
-                //     Padding(
-                //       padding: EdgeInsets.symmetric(horizontal: 8.w),
-                //       child: CustomText(
-                //         text: 'Or Sign in with',
-                //         color: AppColors.textColor000000,
-                //         fontsize: 14.sp,
-                //         fontWeight: FontWeight.w400,
-                //       ),
-                //     ),
-                //     Expanded(
-                //       child: Container(
-                //         height: 1,
-                //         margin: EdgeInsets.only(right: 7.w),
-                //         decoration:  const BoxDecoration(
-                //             color: AppColors.textColor000000
-                //         ),
-                //       ),
-                //     ),
-                //   ],
-                // ),
-                //
-                //
-                // /// =================================> Social Icon ===========================>
-                // SizedBox(height: 18.h),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   crossAxisAlignment: CrossAxisAlignment.center,
-                //   children: [
-                //     Assets.icons.google.svg(width: 40.w, height: 40.h),
-                //     // SizedBox(width: 30.h),
-                //     // Assets.icons.gmail.svg(width: 40.w, height: 40.h),
-                //   ],
-                // ),
+                SizedBox(height: 27.h),
 
+                /// ===================================> Divider =============================>
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        height: 1,
+                        margin: EdgeInsets.only(left: 7.w),
+                        decoration: const BoxDecoration(
+                          color: AppColors.textColor000000,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.w),
+                      child: CustomText(
+                        text: 'Or Sign in with',
+                        color: AppColors.textColor000000,
+                        fontsize: 14.sp,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        height: 1,
+                        margin: EdgeInsets.only(right: 7.w),
+                        decoration: const BoxDecoration(
+                          color: AppColors.textColor000000,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                /// =================================> Social Icon ===========================>
+                SizedBox(height: 18.h),
+
+                Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.bgColorWhite,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Assets.icons.google.svg(width: 40.w, height: 40.h),
+                        const SizedBox(width: 8),
+                        CustomText(
+                          text: 'Sign in with Google',
+                          color: AppColors.textColor000000,
+                          fontsize: 14.sp,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
 
                 SizedBox(height: 16.h),
 
@@ -400,7 +389,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         fontWeight: FontWeight.w400,
                       ),
                       GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           context.pushNamed(AppRoutes.signInScreen);
                         },
                         child: CustomText(
@@ -408,14 +397,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           color: AppColors.textColor85424D,
                           fontsize: 14.sp,
                           fontWeight: FontWeight.w400,
-
                         ),
                       ),
                     ],
                   ),
                 ),
 
-                SizedBox(height: 70.h)
+                SizedBox(height: 70.h),
               ],
             ),
           ),
@@ -442,7 +430,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController phoneCtrl = TextEditingController();
   final TextEditingController addressCtrl = TextEditingController();
 
-
   final TextEditingController passWordCtrl = TextEditingController();
 
   final TextEditingController confirmPassWordCtrl = TextEditingController();
@@ -450,75 +437,70 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   RxBool isChecked = false.obs;
 
-
-
   void showImagePickerOption(BuildContext context) {
     showModalBottomSheet(
-        backgroundColor: Colors.white.withOpacity(.5),
-        elevation: 3,
-        context: context,
-        builder: (builder) {
-          return Container(
-            decoration: BoxDecoration(
-              border: const Border(
-                  top: BorderSide(color: AppColors.primaryColorC79235, width: 0.25)),
-              borderRadius: BorderRadius.circular(20.r),
+      backgroundColor: Colors.white.withOpacity(.5),
+      elevation: 3,
+      context: context,
+      builder: (builder) {
+        return Container(
+          decoration: BoxDecoration(
+            border: const Border(
+              top: BorderSide(color: AppColors.primaryColorC79235, width: 0.25),
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(18.0),
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height / 9.2,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Expanded(
-                      child: InkWell(
-                        onTap: () {
-                          _pickImageFromGallery();
-                        },
-                        child: SizedBox(
-                          child: Column(
-                            children: [
-                              Icon(
-                                Icons.image,
-                                size: 50.w,
-                              ),
-                              CustomText(text: 'Gallery')
-                            ],
-                          ),
+            borderRadius: BorderRadius.circular(20.r),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(18.0),
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height / 9.2,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        _pickImageFromGallery();
+                      },
+                      child: SizedBox(
+                        child: Column(
+                          children: [
+                            Icon(Icons.image, size: 50.w),
+                            CustomText(text: 'Gallery'),
+                          ],
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: InkWell(
-                        onTap: () {
-                          _pickImageFromCamera();
-                        },
-                        child: SizedBox(
-                          child: Column(
-                            children: [
-                              Icon(
-                                Icons.camera_alt,
-                                size: 50.w,
-                              ),
-                              CustomText(text: 'Camera')
-                            ],
-                          ),
+                  ),
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        _pickImageFromCamera();
+                      },
+                      child: SizedBox(
+                        child: Column(
+                          children: [
+                            Icon(Icons.camera_alt, size: 50.w),
+                            CustomText(text: 'Camera'),
+                          ],
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 
   Future<void> _pickImageFromGallery() async {
-    final pickedFile =
-    await ImagePicker().pickImage(source: ImageSource.gallery);
+    final pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );
     if (pickedFile != null) {
       Navigator.pop(context);
       selectedImage = File(pickedFile.path);
@@ -527,15 +509,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future<void> _pickImageFromCamera() async {
-    final pickedFile =
-    await ImagePicker().pickImage(source: ImageSource.camera);
+    final pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.camera,
+    );
     if (pickedFile != null) {
       Navigator.pop(context);
       selectedImage = File(pickedFile.path);
       setState(() {});
     }
   }
-
 
   String? selectedGender;
   File? selectedImage;
