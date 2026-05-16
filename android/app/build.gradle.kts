@@ -45,15 +45,6 @@ android {
         versionName = flutter.versionName
     }
 
-    signingConfigs {
-        create("release") {
-            keyAlias = "rabbitholeGame"
-            keyPassword = "rabbitholeGame321"
-            storeFile = file("../app-release-key.jks")
-            storePassword = "rabbitholeGame321"
-        }
-    }
-
     buildTypes {
         release {
             signingConfig = signingConfigs.getByName("release")

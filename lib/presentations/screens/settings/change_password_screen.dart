@@ -59,6 +59,7 @@ class _ChangePasswordModalContentState extends State<ChangePasswordModalContent>
         final success = await widget.authController.changePassword(
           currentPassWordCtrl.text,
           newPassWordCtrl.text,
+          confirmNewPassWordCtrl.text,
         );
 
         if (success && mounted) {

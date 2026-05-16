@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -17,6 +18,7 @@ class AuthController extends GetxController {
   bool isCheckboxError = false;
   RxBool isObscure = true.obs;
   RxBool isObscureConfirmPassword = true.obs;
+  RxString loginError = ''.obs;
   var logger = Logger();
 
   toggleIsObscure() {
@@ -151,6 +153,7 @@ class AuthController extends GetxController {
     required BuildContext context,
   }) async {
     logInLoading.value = true;
+    loginError.value = '';
 
     var headers = {'Content-Type': 'application/json'};
     var body = {"email": email, "password": password};
@@ -206,8 +209,10 @@ class AuthController extends GetxController {
             "We've sent an OTP to your email. Please verify your email.",
           );
         } else if (message == "⛔ Wrong password! ⛔") {
+          loginError.value = 'Wrong password. Please try again.';
           ToastMessageHelper.showToastMessage(message);
         } else {
+          loginError.value = message ?? 'Login failed. Please try again.';
           ToastMessageHelper.showToastMessage(message, title: 'attention');
         }
       }
@@ -253,136 +258,128 @@ class AuthController extends GetxController {
     }
   }
 
-  // ///===============Set Password================<>
-  //
-  // RxBool setPasswordLoading = false.obs;
-  //
-  // setPassword(
-  //     String password,
-  //     String confirmpassword,
-  //     {required BuildContext context}) async {
-  //   setPasswordLoading(true);
-  //   var body = {
-  //     "password": password.toString().trim(),
-  //     "confirmpassword": confirmpassword.toString().trim()
-  //   };
-  //
-  //   var response = await ApiClient.postData(
-  //       ApiConstants.resetPasswordEndPoint, jsonEncode(body));
-  //
-  //   if (response.statusCode == 200 || response.statusCode == 201) {
-  //     context.pushNamed(AppRoutes.logInScreen);
-  //     ToastMessageHelper.showToastMessage('${response.body["message"]}',title: 'success');
-  //     print("======>>> successful");
-  //     setPasswordLoading(false);
-  //   } else if (response.statusCode == 1) {
-  //     setPasswordLoading(false);
-  //     ToastMessageHelper.showToastMessage("Server error! \n Please try later");
-  //   } else {
-  //     setPasswordLoading(false);
-  //     ToastMessageHelper.showToastMessage(
-  //         '${response.body["message"]}', title: 'attention');
-  //   }
-  // }
-  //
-  //
-  // ///===============Resend================<>
-  //
-  // RxBool resendLoading = false.obs;
-  //
-  //
-  // reSendOtp(String email) async {
-  //   resendLoading(true);
-  //
-  //   String token = await PrefsHelper.getString(AppConstants.bearerToken);
-  //
-  //   var headers = {
-  //     'Content-Type': 'application/json',
-  //     'Authorization': token,
-  //   };
-  //
-  //   var body = {
-  //     "email": email,
-  //   };
-  //
-  //   var response = await ApiClient.postData(
-  //     ApiConstants.resendOtpEndPoint,
-  //     jsonEncode(body),
-  //     headers: headers,
-  //   );
-  //
-  //   resendLoading(false);
-  //
-  //   if (response.statusCode == 200 || response.statusCode == 201) {
-  //     final attributes = response.body["data"]["attributes"];
-  //
-  //     final newToken =
-  //         attributes["resetPasswordToken"] ?? attributes["verificationToken"];
-  //
-  //     if (newToken != null) {
-  //       await PrefsHelper.setString(AppConstants.bearerToken, newToken);
-  //       debugPrint("✅ New token saved: $newToken");
-  //     } else {
-  //       debugPrint("❌ Token missing in resendOtp response.");
-  //     }
-  //
-  //     ToastMessageHelper.showToastMessage(
-  //         "✅ OTP sent successfully to your email.");
-  //   } else {
-  //     ToastMessageHelper.showToastMessage(
-  //       response.body["message"] ?? "❌ Failed to resend OTP",
-  //       title: "Error",
-  //     );
-  //   }
-  // }
-  //
-  //
-  // final RxInt countdown = 60.obs;
-  // final RxBool isCountingDown = false.obs;
-  //
-  //
-  // void startCountdown() {
-  //   isCountingDown.value = true;
-  //   countdown.value = 60;
-  //   update();
-  //   Timer.periodic(const Duration(seconds: 1), (timer) {
-  //     if (countdown.value > 0) {
-  //       countdown.value--;
-  //       update();
-  //     } else {
-  //       timer.cancel();
-  //       isCountingDown.value = false;
-  //       update();
-  //     }
-  //   });
-  // }
+  ///===============Set Password================<>
+
+  RxBool setPasswordLoading = false.obs;
+
+  setPassword(
+      String email,
+      String password,
+      String confirmpassword,
+      {required BuildContext context}) async {
+    setPasswordLoading(true);
+    var body = {
+      "email": email.toString().trim(),
+      "password": password.toString().trim(),
+      "confirmpassword": confirmpassword.toString().trim()
+    };
+
+    var response = await ApiClient.postData(
+        ApiConstants.resetPasswordEndPoint, jsonEncode(body));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      context.go(AppRoutes.signInScreen);
+      ToastMessageHelper.showToastMessage('${response.body["message"]}', title: 'success');
+      setPasswordLoading(false);
+    } else if (response.statusCode == 1) {
+      setPasswordLoading(false);
+      ToastMessageHelper.showToastMessage("Server error! \n Please try later");
+    } else {
+      setPasswordLoading(false);
+      ToastMessageHelper.showToastMessage(
+          '${response.body["message"]}', title: 'attention');
+    }
+  }
+
+  ///===============Resend================<>
+
+  RxBool resendLoading = false.obs;
+
+  Future<String?> reSendOtp(String email) async {
+    resendLoading(true);
+
+    String token = await PrefsHelper.getString(AppConstants.bearerToken);
+
+    var headers = {
+      'Content-Type': 'application/json',
+      'Authorization': token,
+    };
+
+    var body = {"email": email};
+
+    var response = await ApiClient.postData(
+      ApiConstants.resendOtpEndPoint,
+      jsonEncode(body),
+      headers: headers,
+    );
+
+    resendLoading(false);
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final attributes = response.body["data"]["attributes"];
+      final newToken =
+          attributes["resetPasswordToken"] ?? attributes["verificationToken"];
+
+      if (newToken != null) {
+        await PrefsHelper.setString(AppConstants.bearerToken, newToken);
+      }
+
+      ToastMessageHelper.showToastMessage("OTP sent successfully to your email.");
+      return newToken;
+    } else {
+      ToastMessageHelper.showToastMessage(
+        response.body["message"] ?? "Failed to resend OTP",
+        title: "Error",
+      );
+      return null;
+    }
+  }
+
+  final RxInt countdown = 60.obs;
+  final RxBool isCountingDown = false.obs;
+
+  void startCountdown() {
+    isCountingDown.value = true;
+    countdown.value = 60;
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (countdown.value > 0) {
+        countdown.value--;
+      } else {
+        timer.cancel();
+        isCountingDown.value = false;
+      }
+    });
+  }
 
   ///===============Change Password================<>
 
-  // RxBool changePasswordLoading = false.obs;
-  // changePassword(String currentPassword, password ,confirmPassword ) async {
-  //   changePasswordLoading(true);
-  //   var body = {
-  //     "currentPassword": "$currentPassword",
-  //     "password": "$password",
-  //     "confirmPassword" : "$confirmPassword"
-  //   };
-  //
-  //   var response =
-  //   await ApiClient.postData(ApiConstants.changePassword, jsonEncode(body));
-  //
-  //   if (response.statusCode == 200 || response.statusCode == 201) {
-  //     ToastMessageHelper.showToastMessage('Password Changed Successful');
-  //     print("======>>> successful");
-  //     changePasswordLoading(false);
-  //   } else if(response.statusCode == 1){
-  //     changePasswordLoading(false);
-  //     ToastMessageHelper.showToastMessage("Server error! \n Please try later");
-  //   } else {
-  //     ToastMessageHelper.showToastMessage(response.body['message']);
-  //     changePasswordLoading(false);
-  //   }
-  // }
+  RxBool changePasswordLoading = false.obs;
+
+  Future<bool> changePassword(String currentPassword, String password, String confirmPassword) async {
+    changePasswordLoading(true);
+    var body = {
+      "currentPassword": currentPassword,
+      "password": password,
+      "confirmPassword": confirmPassword,
+    };
+
+    var response =
+        await ApiClient.postData(ApiConstants.changePassword, jsonEncode(body));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      ToastMessageHelper.showToastMessage('Password Changed Successfully');
+      changePasswordLoading(false);
+      return true;
+    } else if (response.statusCode == 1) {
+      changePasswordLoading(false);
+      ToastMessageHelper.showToastMessage("Server error! \n Please try later");
+      return false;
+    } else {
+      ToastMessageHelper.showToastMessage(response.body['message']);
+      changePasswordLoading(false);
+      return false;
+    }
+  }
 
   ///=============== Delete Account ================<>
 

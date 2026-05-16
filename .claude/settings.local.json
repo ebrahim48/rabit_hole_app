@@ -6,7 +6,9 @@
       "Bash(flutter build:*)",
       "Bash(taskkill /F /IM \"java.exe\" /T)",
       "Bash(taskkill /F /IM \"javaw.exe\" /T)",
-      "Bash(cmd:*)"
+      "Bash(cmd:*)",
+      "Bash(flutter pub *)",
+      "Bash(key\")"
     ]
   }
 }

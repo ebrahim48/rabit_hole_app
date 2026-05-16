@@ -20,11 +20,9 @@ class IAPService extends GetxController {
   StreamSubscription<List<PurchaseDetails>>? _subscription;
 
   // ─── Play Store product IDs (must match exactly what's in Play Console) ───
-  // Index 0 → cheapest carrot pack, Index 1 → medium, Index 2 → largest
   static const List<String> carrotPackProductIds = [
-    'rabbithole_weekly',
-    'rabbithole_monthly',
-    'rabbithole_yearly',
+    'coinsmall2',
+    'coinsmall1',
   ];
 
   @override
@@ -156,7 +154,7 @@ class IAPService extends GetxController {
     try {
       final PurchaseParam purchaseParam =
           PurchaseParam(productDetails: product);
-      await _iap.buyNonConsumable(purchaseParam: purchaseParam);
+      await _iap.buyConsumable(purchaseParam: purchaseParam);
       return true;
     } catch (e) {
       error.value = e.toString();

@@ -315,65 +315,65 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 SizedBox(height: 27.h),
+                //
+                // /// ===================================> Divider =============================>
+                // Row(
+                //   children: [
+                //     Expanded(
+                //       child: Container(
+                //         height: 1,
+                //         margin: EdgeInsets.only(left: 7.w),
+                //         decoration: const BoxDecoration(
+                //           color: AppColors.textColor000000,
+                //         ),
+                //       ),
+                //     ),
+                //     Padding(
+                //       padding: EdgeInsets.symmetric(horizontal: 8.w),
+                //       child: CustomText(
+                //         text: 'Or Sign in with',
+                //         color: AppColors.textColor000000,
+                //         fontsize: 14.sp,
+                //         fontWeight: FontWeight.w400,
+                //       ),
+                //     ),
+                //     Expanded(
+                //       child: Container(
+                //         height: 1,
+                //         margin: EdgeInsets.only(right: 7.w),
+                //         decoration: const BoxDecoration(
+                //           color: AppColors.textColor000000,
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
 
-                /// ===================================> Divider =============================>
-                Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        height: 1,
-                        margin: EdgeInsets.only(left: 7.w),
-                        decoration: const BoxDecoration(
-                          color: AppColors.textColor000000,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.w),
-                      child: CustomText(
-                        text: 'Or Sign in with',
-                        color: AppColors.textColor000000,
-                        fontsize: 14.sp,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        height: 1,
-                        margin: EdgeInsets.only(right: 7.w),
-                        decoration: const BoxDecoration(
-                          color: AppColors.textColor000000,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-
-                /// =================================> Social Icon ===========================>
-                SizedBox(height: 18.h),
-
-                Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.bgColorWhite,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Assets.icons.google.svg(width: 40.w, height: 40.h),
-                        const SizedBox(width: 8),
-                        CustomText(
-                          text: 'Sign in with Google',
-                          color: AppColors.textColor000000,
-                          fontsize: 14.sp,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                // /// =================================> Social Icon ===========================>
+                // SizedBox(height: 18.h),
+                //
+                // Container(
+                //   decoration: BoxDecoration(
+                //     color: AppColors.bgColorWhite,
+                //     borderRadius: BorderRadius.circular(8),
+                //   ),
+                //   child: Padding(
+                //     padding: const EdgeInsets.symmetric(vertical: 4.0),
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.center,
+                //       children: [
+                //         Assets.icons.google.svg(width: 40.w, height: 40.h),
+                //         const SizedBox(width: 8),
+                //         CustomText(
+                //           text: 'Sign in with Google',
+                //           color: AppColors.textColor000000,
+                //           fontsize: 14.sp,
+                //           fontWeight: FontWeight.w400,
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
 
                 SizedBox(height: 16.h),
 
