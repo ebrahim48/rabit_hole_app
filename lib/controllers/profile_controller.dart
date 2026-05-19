@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
-import '../helpers/toast_message_helper.dart';
 import '../models/gaming_dashboard_model.dart';
 import '../models/user_profile_model.dart';
 import '../services/api_client.dart';
@@ -54,18 +53,8 @@ class ProfileController extends GetxController {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        ToastMessageHelper.showToastMessage(
-            'Game progress saved!',
-            title: 'Success'
-        );
-        // Update profile - mark as played
         await getProfile();
         await getGamingDashBoard();
-      } else {
-        ToastMessageHelper.showToastMessage(
-            'Failed to save progress',
-            title: 'Error'
-        );
       }
     } catch (e) {
       print('Create Dashboard error: $e');
@@ -96,10 +85,6 @@ class ProfileController extends GetxController {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        ToastMessageHelper.showToastMessage(
-            'Game progress updated!',
-            title: 'Success'
-        );
         await getGamingDashBoard();
       }
     } catch (e) {
@@ -119,14 +104,12 @@ class ProfileController extends GetxController {
       await getGamingDashBoard();
 
       if (gamingDashBoard.value.gameDashboard == null) {
-        print('🆕 Creating new dashboard...');
         await createGamingDashboard(
             totalCarrots: totalCarrots,
             highScoreInFt: highScoreInFt,
             context: context
         );
       } else {
-        print('🔄 Updating existing dashboard...');
         await updateGamingDashboard(
             totalCarrots: totalCarrots,
             highScoreInFt: highScoreInFt,
@@ -135,10 +118,6 @@ class ProfileController extends GetxController {
       }
     } catch (e) {
       print('Error in saveGameProgress: $e');
-      ToastMessageHelper.showToastMessage(
-          'Failed to save progress',
-          title: 'Error'
-      );
     }
   }
 
@@ -150,7 +129,6 @@ class ProfileController extends GetxController {
     shareSkinLoading.value = true;
 
     try {
-      // Share message with app link
       const String appLink = 'https://play.google.com/store/apps/details?id=com.rabbithole.game';
       const String shareMessage = '''
 🐰 Carrot Chase - Rabbit Hole Game! 🥕
@@ -161,68 +139,26 @@ Fall down the rabbit hole and collect carrots!
 Download: $appLink
     ''';
 
-      // Share the link
       await Share.share(shareMessage);
 
-      // Small delay to ensure share dialog was shown
       await Future.delayed(const Duration(milliseconds: 500));
 
-      // Call API to get skin reward
       var response = await ApiClient.postData(
           ApiConstants.shareSkinDashboardEndPoint,
           '{}'
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        ToastMessageHelper.showToastMessage(
-            '🎉 Thank you for sharing! You got a new skin!',
-            title: 'Success'
-        );
-
         await getGamingDashBoard();
         await getProfile();
-      } else {
-        ToastMessageHelper.showToastMessage(
-            response.body['message'] ?? 'Failed to get skin',
-            title: 'Error'
-        );
       }
     } catch (e) {
       print('Share error: $e');
-      ToastMessageHelper.showToastMessage(
-          'Failed to share',
-          title: ''
-      );
     } finally {
       shareSkinLoading.value = false;
     }
   }
 
-  /// ================================>  Share App Link  ==============================>
-  Future<void> _shareAppLink() async {
-    try {
-      const String appLink = 'https://play.google.com/store/apps/details?id=com.rabbithole.game'; // Replace with your actual app link
-      const String message = '''
-🐰 Carrot Chase - Rabbit Hole Game! 🥕
-
-Play this amazing game and collect carrots! 
-Fall down the rabbit hole and see how far you can go!
-
-🎁 Share this link and get a FREE SKIN! 🎁
-
-Download now: $appLink
-
-#CarrotChase #RabbitHole #FreeGame
-    ''';
-
-      await Share.share(
-        message,
-        subject: 'Try Carrot Chase - Get Free Skin!',
-      );
-    } catch (e) {
-      print('Share error: $e');
-    }
-  }
   /// ================================>  Watch Ads & Get Carrots  ==============================>
   RxBool watchAdsLoading = false.obs;
 
@@ -230,7 +166,7 @@ Download now: $appLink
     watchAdsLoading.value = true;
 
     var body = {
-      "adsWatched": 2 // Fixed value as per API requirement
+      "adsWatched": 2
     };
 
     try {
@@ -240,29 +176,11 @@ Download now: $appLink
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        // Get updated carrots count
-        int totalCarrots = response.body['data']?['attributes']?['totalCarrots'] ?? 0;
-
-        ToastMessageHelper.showToastMessage(
-            'Game Dashboard updated successfully! +20 Carrots',
-            title: 'Success'
-        );
-
-        // Refresh dashboard and profile
         await getGamingDashBoard();
         await getProfile();
-      } else {
-        ToastMessageHelper.showToastMessage(
-            response.body['message'] ?? 'Failed to get carrots',
-            title: ''
-        );
       }
     } catch (e) {
       print('Watch Ads error: $e');
-      ToastMessageHelper.showToastMessage(
-          'Failed to watch ad',
-          title: ''
-      );
     } finally {
       watchAdsLoading.value = false;
     }
@@ -290,7 +208,6 @@ Download now: $appLink
 
 
 
-
   /// ================================> Update Profile ==============================>
   var updateProfileLoading = false.obs;
 
@@ -306,19 +223,16 @@ Download now: $appLink
     try {
       List<MultipartBody> multipartBody = [];
 
-      // Add image file if provided
       if (file != null) {
         multipartBody.add(MultipartBody("profileImage", file));
       }
 
-      // Prepare body data
       var body = {
         "fullName": fullName.trim(),
         "address": address.trim(),
         "phone": phone.trim(),
       };
 
-      // Call API
       var response = await ApiClient.patchMultipartData(
         ApiConstants.updateProfileEndPoint,
         body,
@@ -326,30 +240,14 @@ Download now: $appLink
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        ToastMessageHelper.showToastMessage(
-            response.body["message"] ?? "Profile updated successfully",
-            title: 'Success'
-        );
-
-        // Refresh profile data
         await getProfile();
 
-        // Navigate back
         if (context.mounted) {
           context.pop();
         }
-      } else {
-        ToastMessageHelper.showToastMessage(
-            response.body["message"] ?? "Failed to update profile",
-            title: 'Error'
-        );
       }
     } catch (e) {
       print('Update Profile error: $e');
-      ToastMessageHelper.showToastMessage(
-          "Failed to update profile",
-          title: 'Error'
-      );
     } finally {
       updateProfileLoading(false);
       update();

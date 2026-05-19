@@ -8,7 +8,8 @@
       "Bash(taskkill /F /IM \"javaw.exe\" /T)",
       "Bash(cmd:*)",
       "Bash(flutter pub *)",
-      "Bash(key\")"
+      "Bash(key\")",
+      "PowerShell(& \"C:\\\\Users\\\\ebu\\\\fvm\\\\cache.git\\\\bin\\\\flutter.bat\" pub run flutter_launcher_icons 2>&1)"
     ]
   }
 }

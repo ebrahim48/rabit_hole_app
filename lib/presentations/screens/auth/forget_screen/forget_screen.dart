@@ -43,7 +43,9 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: Column(
+          child: Form(
+            key: _logKey,
+            child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(height: 42.h),
@@ -83,24 +85,36 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
               /// ============================================ Button ====================================>
 
 
-              Obx(()=>
-                  CustomButton(
+              Obx(() {
+                final error = authController.forgotError.value;
+                return Column(
+                  children: [
+                    if (error.isNotEmpty)
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 8.h),
+                        child: Text(
+                          error,
+                          style: TextStyle(color: Colors.red, fontSize: 12.sp),
+                        ),
+                      ),
+                    CustomButton(
                       loading: authController.forgotLoading.value,
                       title: "Get Verification Code",
                       onpress: () {
-                        if(_logKey.currentState?.validate()??true){
+                        if (_logKey.currentState?.validate() ?? false) {
                           authController.handleForgot(
-                              emailCtrl.text,
-                              "forgot",
-                              context: context);
+                              emailCtrl.text, "forgot", context: context);
                         }
-
-                      }),),
-
+                      },
+                    ),
+                  ],
+                );
+              }),
 
               SizedBox(height: 27.h),
 
             ],
+          ),
           ),
         ),
       ),

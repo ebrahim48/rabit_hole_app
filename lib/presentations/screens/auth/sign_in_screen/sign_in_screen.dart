@@ -7,7 +7,7 @@ import '../../../../../global/custom_assets/assets.gen.dart';
 import '../../../../controllers/auth-controller.dart';
 import '../../../../core/config/app_routes/app_routes.dart';
 import '../../../../core/constants/app_colors.dart';
-import '../../../../helpers/toast_message_helper.dart';
+import '../../../../core/app_constants/app_constants.dart';
 import '../../../widgets/custom_app_bar.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_text.dart';
@@ -22,8 +22,9 @@ class SignInScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  const CustomAppBar(
+      appBar: const CustomAppBar(
         title: 'Login',
+        showLeading: false,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -124,10 +125,11 @@ class SignInScreen extends StatelessWidget {
                           ),
                           GestureDetector(
                             onTap: (){
-                              if(emailCtrl.text.isEmpty){
-                                ToastMessageHelper.showToastMessage("Please enter your email",title: 'Attention');
+                              final email = emailCtrl.text.trim();
+                              if(email.isEmpty || !AppConstants.emailValidate.hasMatch(email)){
+                                _logKey.currentState?.validate();
                               }else{
-                                context.pushNamed(AppRoutes.forgetPasswordScreen, extra: emailCtrl.text);
+                                context.pushNamed(AppRoutes.forgetPasswordScreen, extra: email);
                               }
                             },
                             child: CustomText(
@@ -154,7 +156,7 @@ class SignInScreen extends StatelessWidget {
                         loading: authController.logInLoading.value,
                         title: "Login",
                         onpress: (){
-                          if (_logKey.currentState?.validate()?? true) {
+                          if (_logKey.currentState?.validate() ?? false) {
                             authController.handleLogIn(
                                 emailCtrl.text, passWordCtrl.text.trim(),
                                 context: context);

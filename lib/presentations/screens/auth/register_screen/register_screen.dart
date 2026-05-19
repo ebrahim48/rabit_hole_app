@@ -298,7 +298,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     loading: authController.signUpLoading.value,
                     title: "Register",
                     onpress: () {
-                      if (formKey.currentState?.validate() ?? true) {
+                      if (formKey.currentState?.validate() ?? false) {
                         authController.handleSignUp(
                           email: emailCtrl.text,
                           fullName: nameCtrl.text.trim(),

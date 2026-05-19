@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import '../../../../../global/custom_assets/assets.gen.dart';
 import '../../../../controllers/auth-controller.dart';
 import '../../../../core/constants/app_colors.dart';
-import '../../../../helpers/toast_message_helper.dart';
 import '../../../widgets/custom_app_bar.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_text.dart';
@@ -33,6 +32,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
   String _otpValue = '';
 
   late String currentToken;
+  String _otpError = '';
 
   @override
   void initState() {
@@ -147,32 +147,53 @@ class _VerifyScreenState extends State<VerifyScreen> {
 
               SizedBox(height: 27.h),
 
-              /// Verify Button
-              Obx(() => CustomButton(
-                loading: authController.verifyLoading.value,
-                title: "Verify",
-                onpress: () {
-                  if (_otpValue.isEmpty) {
-                    ToastMessageHelper.showToastMessage("Please enter OTP");
-                    return;
-                  }
+              if (_otpError.isNotEmpty)
+                Padding(
+                  padding: EdgeInsets.only(bottom: 8.h),
+                  child: Text(
+                    _otpError,
+                    style: TextStyle(color: Colors.red, fontSize: 12.sp),
+                  ),
+                ),
 
-                  if (_otpValue.length != 6) {
-                    ToastMessageHelper.showToastMessage("Please enter valid 6-digit OTP");
-                    return;
-                  }
-
-                  // Use currentToken instead of widget.token
-                  authController.verfyEmail(
-                    _otpValue,
-                    widget.email,
-                    currentToken,
-                    screenType: widget.screenType,
-                    type: widget.screenType == "signup" ? "Sign Up" : "Forgot",
-                    context: context,
-                  );
-                },
-              )),
+              Obx(() {
+                final serverError = authController.verifyError.value;
+                return Column(
+                  children: [
+                    if (serverError.isNotEmpty)
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 8.h),
+                        child: Text(
+                          serverError,
+                          style: TextStyle(color: Colors.red, fontSize: 12.sp),
+                        ),
+                      ),
+                    CustomButton(
+                      loading: authController.verifyLoading.value,
+                      title: "Verify",
+                      onpress: () {
+                        if (_otpValue.isEmpty) {
+                          setState(() => _otpError = 'Please enter OTP');
+                          return;
+                        }
+                        if (_otpValue.length != 6) {
+                          setState(() => _otpError = 'Please enter valid 6-digit OTP');
+                          return;
+                        }
+                        setState(() => _otpError = '');
+                        authController.verfyEmail(
+                          _otpValue,
+                          widget.email,
+                          currentToken,
+                          screenType: widget.screenType,
+                          type: widget.screenType == "signup" ? "Sign Up" : "Forgot",
+                          context: context,
+                        );
+                      },
+                    ),
+                  ],
+                );
+              }),
               SizedBox(height: 27.h),
             ],
           ),
