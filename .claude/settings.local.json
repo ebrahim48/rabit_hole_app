@@ -9,7 +9,8 @@
       "Bash(cmd:*)",
       "Bash(flutter pub *)",
       "Bash(key\")",
-      "PowerShell(& \"C:\\\\Users\\\\ebu\\\\fvm\\\\cache.git\\\\bin\\\\flutter.bat\" pub run flutter_launcher_icons 2>&1)"
+      "PowerShell(& \"C:\\\\Users\\\\ebu\\\\fvm\\\\cache.git\\\\bin\\\\flutter.bat\" pub run flutter_launcher_icons 2>&1)",
+      "PowerShell(Get-Content *)"
     ]
   }
 }
