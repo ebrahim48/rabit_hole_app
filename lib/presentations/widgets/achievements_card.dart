@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../core/constants/app_colors.dart';
 import 'custom_text.dart';
@@ -45,23 +46,23 @@ class AchievementsListCard extends StatelessWidget {
             // Dynamic Image from URL
             ClipRRect(
               borderRadius: BorderRadius.circular(8.r),
-              child: CachedNetworkImage(
+              child: (imageUrl.isNotEmpty &&
+                      (imageUrl.startsWith('http://') ||
+                          imageUrl.startsWith('https://')))
+                  ? CachedNetworkImage(
                 imageUrl: imageUrl,
                 width: 42.w,
                 height: 42.h,
                 fit: BoxFit.cover,
-                placeholder: (context, url) => Container(
-                  width: 42.w,
-                  height: 42.h,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
-                  child: Center(
-                    child: SizedBox(
-                      width: 20.w,
-                      height: 20.h,
-                      child: const CircularProgressIndicator(strokeWidth: 2),
+                placeholder: (context, url) => Shimmer.fromColors(
+                  baseColor: Colors.grey.withOpacity(0.6),
+                  highlightColor: Colors.grey.withOpacity(0.3),
+                  child: Container(
+                    width: 42.w,
+                    height: 42.h,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(8.r),
                     ),
                   ),
                 ),
@@ -78,7 +79,16 @@ class AchievementsListCard extends StatelessWidget {
                     color: Colors.grey[600],
                   ),
                 ),
-              ),
+              )
+                  : Container(
+                      width: 42.w,
+                      height: 42.h,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                      child: Icon(Icons.emoji_events, size: 24.sp, color: Colors.grey[600]),
+                    ),
             ),
             SizedBox(width: 6.w),
             Expanded(

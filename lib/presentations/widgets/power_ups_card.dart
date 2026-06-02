@@ -46,7 +46,10 @@ class PowerUpsListCard extends StatelessWidget {
             // Dynamic Image from URL
             ClipRRect(
               borderRadius: BorderRadius.circular(6.r),
-              child: CachedNetworkImage(
+              child: (imageUrl.isNotEmpty &&
+                      (imageUrl.startsWith('http://') ||
+                          imageUrl.startsWith('https://')))
+                  ? CachedNetworkImage(
                 imageUrl: imageUrl,
                 width: 32.w,
                 height: 32.h,
@@ -76,7 +79,16 @@ class PowerUpsListCard extends StatelessWidget {
                     color: Colors.grey[600],
                   ),
                 ),
-              ),
+              )
+                  : Container(
+                      width: 32.w,
+                      height: 32.h,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(6.r),
+                      ),
+                      child: Icon(Icons.power_settings_new, size: 18.sp, color: Colors.grey[600]),
+                    ),
             ),
             SizedBox(width: 15.w),
 

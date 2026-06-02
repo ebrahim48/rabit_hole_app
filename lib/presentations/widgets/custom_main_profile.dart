@@ -72,7 +72,21 @@ class _CustomMainProfileImageState extends State<CustomMainProfileImage> {
           child: ClipOval(
             child: _pickedImage != null
                 ? Image.file(_pickedImage!, fit: BoxFit.cover)
-                : Image.network(widget.imageUrl, fit: BoxFit.cover),
+                : (widget.imageUrl.isNotEmpty &&
+                        (widget.imageUrl.startsWith('http://') ||
+                            widget.imageUrl.startsWith('https://')))
+                    ? Image.network(
+                        widget.imageUrl,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => Container(
+                          color: Colors.grey.shade300,
+                          child: const Icon(Icons.person),
+                        ),
+                      )
+                    : Container(
+                        color: Colors.grey.shade300,
+                        child: const Icon(Icons.person),
+                      ),
           ),
         ),
 
