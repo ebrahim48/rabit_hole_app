@@ -19,6 +19,7 @@ class ApiClient extends GetxService {
   static const int timeoutInSeconds = 20;
   static String bearerToken = "";
 
+
 //==========================================> Get Data <======================================
   static Future<Response> getData(String uri,
       {Map<String, dynamic>? query, Map<String, String>? headers}) async {
